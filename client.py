@@ -73,8 +73,13 @@ class Config(object):
 
         #### IPpools section
         if key.lower() == "ippools":
-            url = {"base": urljoin(self.api_url, "v3" + "/"),
+            url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["ip_pools"]}
+            modified = True
+
+        if "addressvalidate" in key.lower():
+            url = {"base": urljoin(self.api_url, "v4" + "/address/validate"),
+                   "keys": key.split('_')}
             modified = True
 
         if not modified:
@@ -177,7 +182,7 @@ def api_call(auth, method, url, headers, data=None, filters=None, params=None, r
         # print(params)
         response = req_method(url, data=data, params=filters, headers=headers, auth=auth,
                               timeout=timeout, files=files, verify=True, stream=False)
-        # print(response.url)
+        print(response.url)
         # print(response.text)
         # print(response.content)
         # print(response.status_code)
@@ -288,9 +293,65 @@ def build_url(url, domain=None, method=None, **kwargs):
             url = url["base"] + domain + final_keys + "/" + kwargs["unsubscribe_address"]
         else:
             url = url["base"] + domain + final_keys
+    elif "complaints" in url["keys"]:
+        final_keys = convert_keys(url["keys"])
+        if "complaint_address" in kwargs:
+            url = url["base"] + domain + final_keys + "/" + kwargs["complaint_address"]
+        else:
+            url = url["base"] + domain + final_keys
+    elif "whitelists" in url["keys"]:
+        final_keys = convert_keys(url["keys"])
+        if "whitelist_address" in kwargs:
+            url = url["base"] + domain + final_keys + "/" + kwargs["whitelist_address"]
+        else:
+            url = url["base"] + domain + final_keys
     elif "routes" in url["keys"]:
         final_keys = convert_keys(url["keys"])
-        url = url["base"][:-1] + final_keys
+        if "rout_id" in kwargs:
+            url = url["base"][:-1] + final_keys + "/" + kwargs["rout_id"]
+        else:
+            url = url["base"][:-1] + final_keys
+    elif "lists" in url["keys"]:
+        final_keys = convert_keys(url["keys"])
+        if "validate" in kwargs:
+            url = url["base"][:-1] + final_keys + "/" + kwargs["address"] + "/" + "validate"
+        elif "multiple" in kwargs and "address" in kwargs:
+            if kwargs["multiple"]:
+                url = url["base"][:-1] + "/lists/" + kwargs["address"] + "/members.json"
+        elif "members" in final_keys and "address" in kwargs:
+            members_keys = convert_keys(url["keys"][1:])
+            if "member_address" in kwargs:
+                url = url["base"][:-1] + "/lists/" + kwargs["address"] + members_keys + \
+                      "/" + kwargs["member_address"]
+            else:
+                url = url["base"][:-1] + "/lists/" + kwargs["address"] + members_keys
+        elif "address" in kwargs and not "validate" in kwargs:
+            url = url["base"][:-1] + final_keys + "/" + kwargs["address"]
+
+        else:
+            url = url["base"][:-1] + final_keys
+    elif "templates" in url["keys"]:
+        final_keys = convert_keys(url["keys"])
+        if "template_name" in kwargs:
+            if "versions" in kwargs:
+                if kwargs["versions"]:
+                    if "tag" in kwargs:
+                        url = url["base"] + domain + final_keys + "/" + \
+                              kwargs["template_name"] + "/versions/" + kwargs["tag"]
+                    else:
+                        url = url["base"] + domain + final_keys + "/" + kwargs["template_name"] + "/versions"
+                else:
+                    raise ApiError("Versions should be True or absent")
+            else:
+                url = url["base"] + domain + final_keys + "/" + kwargs["template_name"]
+        else:
+            url = url["base"] + domain + final_keys
+    elif "addressvalidate" in url["keys"]:
+        final_keys = convert_keys(url["keys"][1:])
+        if "list_name" in kwargs:
+            url = url["base"] + final_keys + "/" + kwargs["list_name"]
+        else:
+            url = url["base"] + final_keys
     else:
         if not domain:
             raise ApiError("Domain is missing!")
