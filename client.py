@@ -114,7 +114,7 @@ class Endpoint(object):
         elif headers:
             if headers == 'application/json':
                 data = json.dumps(data)
-                print(data)
+                # print(data)
                 self.headers['Content-type'] = 'application/json'
             elif headers == 'multipart/form-data':
                 self.headers['Content-type'] = 'multipart/form-data'
@@ -174,7 +174,7 @@ def api_call(auth, method, url, headers, data=None, filters=None, params=None, r
         if filters:
             filters_str = "&".join("%s=%s" % (k, v) for k, v in filters.items())
 
-        print(url)
+        # print(url)
         # print(data)
         # print(headers)
         # print(auth)
@@ -182,7 +182,7 @@ def api_call(auth, method, url, headers, data=None, filters=None, params=None, r
         # print(params)
         response = req_method(url, data=data, params=filters, headers=headers, auth=auth,
                               timeout=timeout, files=files, verify=True, stream=False)
-        print(response.url)
+        # print(response.url)
         # print(response.text)
         # print(response.content)
         # print(response.status_code)
@@ -210,7 +210,7 @@ def api_call(auth, method, url, headers, data=None, filters=None, params=None, r
 #     return headers
 
 def convert_keys(keys):
-    print(len(keys))
+    # print(len(keys))
 
     final_keys = ""
     if len(keys) == 1:
@@ -307,8 +307,8 @@ def build_url(url, domain=None, method=None, **kwargs):
             url = url["base"] + domain + final_keys
     elif "routes" in url["keys"]:
         final_keys = convert_keys(url["keys"])
-        if "rout_id" in kwargs:
-            url = url["base"][:-1] + final_keys + "/" + kwargs["rout_id"]
+        if "route_id" in kwargs:
+            url = url["base"][:-1] + final_keys + "/" + kwargs["route_id"]
         else:
             url = url["base"][:-1] + final_keys
     elif "lists" in url["keys"]:
@@ -352,6 +352,28 @@ def build_url(url, domain=None, method=None, **kwargs):
             url = url["base"] + final_keys + "/" + kwargs["list_name"]
         else:
             url = url["base"] + final_keys
+
+    elif "inbox" in url["keys"]:
+        final_keys = convert_keys(url["keys"])
+        if "test_id" in kwargs:
+            if "counters" in kwargs:
+                if kwargs["counters"]:
+                    url = url["base"][:-1] + final_keys + "/" + kwargs["test_id"] + "/counters"
+                else:
+                    raise ApiError("Counters option should be True or absent")
+            elif "checks" in kwargs:
+                if kwargs["checks"]:
+                    if "address" in kwargs:
+                        url = url["base"][:-1] + final_keys + "/" + \
+                              kwargs["test_id"] + "/checks/" + kwargs["address"]
+                    else:
+                        url = url["base"][:-1] + final_keys + "/" + kwargs["test_id"] + "/checks"
+                else:
+                    raise ApiError("Checks option should be True or absent")
+            else:
+                url = url["base"][:-1] + final_keys + "/" + kwargs["test_id"]
+        else:
+            url = url["base"][:-1] + final_keys
     else:
         if not domain:
             raise ApiError("Domain is missing!")
