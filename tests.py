@@ -48,6 +48,33 @@ class DomainTests(unittest.TestCase):
             "password": "test_new_creds"
         }
 
+        self.put_domain_connections_data = {
+            "require_tls": "false",
+            "skip_verification": "false"
+        }
+
+        self.put_domain_tracking_data = {
+            "active": "yes",
+            "skip_verification": "false"
+        }
+        self.put_domain_unsubscribe_data = {
+            "active": "yes",
+            "html_footer": "\n<br>\n<p><a href=\"%unsubscribe_url%\">UnSuBsCrIbE</a></p>\n",
+            "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
+        }
+
+        self.put_domain_dkim_authority_data = {
+            "self": "false"
+        }
+
+        self.put_domain_webprefix_data = {
+            "web_prefix": "python"
+        }
+
+        self.put_dkim_selector_data = {
+            "dkim_selector": "s"
+        }
+
     def test_get_domain_list(self):
         req = self.client.domainlist.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
@@ -96,6 +123,51 @@ class DomainTests(unittest.TestCase):
                                                          login="alice_bob")
 
         self.assertEqual(request.status_code, 200)
+
+    def test_put_domain_connections(self):
+        request = self.client.domains_connection.put(domain=self.domain,
+                                                     data=self.put_domain_connections_data)
+
+        self.assertEqual(request.status_code, 200)
+        self.assertIn("message", request.json())
+
+    def test_put_domain_tracking_open(self):
+        request = self.client.domains_tracking_open.put(domain=self.domain,
+                                                        data=self.put_domain_tracking_data)
+        print(request)
+        self.assertEqual(request.status_code, 200)
+        self.assertIn("message", request.json())
+
+    def test_put_domain_tracking_click(self):
+        request = self.client.domains_tracking_click.put(domain=self.domain,
+                                                        data=self.put_domain_tracking_data)
+        print(request.json())
+        self.assertEqual(request.status_code, 200)
+        self.assertIn("message", request.json())
+
+    def test_put_domain_unsubscribe(self):
+        request = self.client.domains_tracking_unsubscribe.put(domain=self.domain,
+                                                               data=self.put_domain_unsubscribe_data)
+        self.assertEqual(request.status_code, 200)
+        self.assertIn("message", request.json())
+
+    def test_put_dkim_authority(self):
+        self.client.domains.create(data=self.post_domain_data)
+        request = self.client.domains_dkimauthority.put(domain=self.test_domain,
+                                                        data=self.put_domain_dkim_authority_data)
+        self.assertIn("message", request.json())
+
+    def test_put_webprefix(self):
+        self.client.domains.create(data=self.post_domain_data)
+        request = self.client.domains_webprefix.put(domain=self.test_domain,
+                                                    data=self.put_domain_webprefix_data)
+        self.assertIn("message", request.json())
+
+    def test_put_dkim_selector(self):
+        self.client.domains.create(data=self.post_domain_data)
+        request = self.client.domains_dkimselector.put(domain=self.domain,
+                                                   data=self.put_dkim_selector_data)
+        self.assertIn("message", request.json())
 
 
 class IpTests(unittest.TestCase):
@@ -254,18 +326,18 @@ class BouncesTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = "2048.zeefarmer.com"
         self.bounces_data = {
-            "address": "test@gmail.com",
+            "address": "test30@gmail.com",
             "code": 550,
             "error": "Test error"
             }
 
         self.bounces_json_data = [{
-            "address": "test1@gmail.com",
+            "address": "test40@gmail.com",
             "code": "550",
             "error": "Test error2312"
         },
             {
-                "address": "test2@gmail.com",
+                "address": "test50@gmail.com",
                 "code": "550",
                 "error": "Test error"
             }]
@@ -762,6 +834,266 @@ class MailingListsTest(unittest.TestCase):
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
+
+
+class TemplatesTest(unittest.TestCase):
+    def setUp(self):
+        self.auth = (
+            "api",
+            os.environ["APIKEY"]
+        )
+        self.client = Client(auth=self.auth)
+        self.domain = os.environ["DOMAIN"]
+        self.post_template_data = {'name': 'template.name10',
+                                   'description': 'template description',
+                                   'template': '{{fname}} {{lname}}',
+                                   'engine': 'handlebars',
+                                   'comment': 'version comment'}
+
+        self.put_template_data = {'description': 'new template description'}
+
+        self.post_template_version_data = {'tag': 'v11',
+                                           'template': '{{fname}} {{lname}}',
+                                           'engine': 'handlebars',
+                                           'active': 'no'
+                                           }
+        self.put_template_version_data = {
+            'template': '{{fname}} {{lname}}',
+            'comment': 'Updated version comment',
+            'active': 'no'
+        }
+
+        self.put_template_version = 'v11'
+
+    def test_create_template(self):
+        self.client.templates.delete(domain=self.domain,
+                                     template_name=self.post_template_data["name"])
+
+        req = self.client.templates.create(data=self.post_template_data,
+                                           domain=self.domain)
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_get_template(self):
+        params = {"active": "yes"}
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+        req = self.client.templates.get(domain=self.domain,
+                                        filters=params,
+                                        template_name=self.post_template_data["name"])
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_put_template(self):
+        self.client.templates.create(data=self.post_template_data,
+                                    domain=self.domain)
+        req = self.client.templates.put(domain=self.domain,
+                                        data=self.put_template_data,
+                                        template_name=self.post_template_data["name"])
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_delete_template(self):
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+        req = self.client.templates.delete(domain=self.domain,
+                                        template_name=self.post_template_data["name"])
+
+        self.assertEqual(req.status_code, 200)
+
+    def test_post_version_template(self):
+
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+
+        self.client.templates.delete(domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True,
+                                     tag=self.put_template_version)
+
+        req = self.client.templates.create(data=self.post_template_version_data,
+                                           domain=self.domain,
+                                           template_name=self.post_template_data["name"],
+                                           versions=True)
+        print(req.json())
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_get_version_template(self):
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+
+        self.client.templates.create(data=self.post_template_version_data,
+                                           domain=self.domain,
+                                           template_name=self.post_template_data["name"],
+                                           versions=True)
+
+        req = self.client.templates.get(domain=self.domain,
+                                   template_name=self.post_template_data["name"],
+                                   versions=True)
+
+        print(req.json())
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_put_version_template(self):
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+
+        self.client.templates.create(data=self.post_template_version_data,
+                                     domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True)
+
+        req = self.client.templates.put(domain=self.domain,
+                                    data=self.put_template_version_data,
+                                    template_name=self.post_template_data["name"],
+                                    versions=True,
+                                    tag=self.put_template_version)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("template", req.json())
+
+    def test_delete_version_template(self):
+        self.client.templates.create(data=self.post_template_data,
+                                     domain=self.domain)
+
+        self.post_template_version_data["tag"] = 'v0'
+        self.post_template_version_data["active"] = 'no'
+        self.client.templates.create(data=self.post_template_version_data,
+                                     domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True)
+
+        req = self.client.templates.delete(domain=self.domain,
+                                           template_name=self.post_template_data["name"],
+                                           versions=True,
+                                           tag='v0')
+
+        re = self.client.templates.delete(domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True,
+                                     tag=self.put_template_version)
+
+        self.assertEqual(req.status_code, 200)
+
+
+class EmailValidationTest(unittest.TestCase):
+    def setUp(self):
+        self.auth = (
+            "api",
+            os.environ["APIKEY"]
+        )
+        self.client = Client(auth=self.auth)
+        self.domain = os.environ["DOMAIN"]
+        self.validation_address_1 = os.environ["VALIDATION_ADDRESS_1"]
+        self.validation_address_2 = os.environ["VALIDATION_ADDRESS_2"]
+
+        self.get_params_address_validate = {
+            "address": self.validation_address_1,
+            "provider_lookup": "false"
+        }
+
+        self.post_params_address_validate = {
+            "provider_lookup": "false"
+        }
+        self.post_address_validate = {"address": self.validation_address_1}
+
+    def test_post_address_validate(self):
+        req = self.client.addressvalidate.create(domain=self.domain,
+                                                 data=self.post_address_validate,
+                                                 filters=self.post_params_address_validate)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("address", req.json())
+
+    def test_get_address_validate(self):
+        req = self.client.addressvalidate.get(domain=self.domain,
+                                              filters=self.get_params_address_validate)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("address", req.json())
+
+    def test_get_bulk_address_validate_status(self):
+        params = {"limit": 1}
+        req = self.client.addressvalidate_bulk.get(domain=self.domain,
+                                                   filters=params)
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("jobs", req.json())
+
+
+class InboxPlacementTest(unittest.TestCase):
+    def setUp(self):
+        self.auth = (
+            "api",
+            os.environ["APIKEY"]
+        )
+        self.client = Client(auth=self.auth)
+        self.domain = os.environ["DOMAIN"]
+
+        self.post_inbox_test = {
+            'domain': 'domain.com',
+            'from': 'user@sending_domain.com',
+            'subject': 'testSubject',
+            'html': '<html>HTML version of the body</html>'
+        }
+
+    def test_post_inbox_tests(self):
+        req = self.client.inbox_tests.create(domain=self.domain,
+                                             data=self.post_inbox_test)
+
+        self.assertEqual(req.status_code, 201)
+        self.assertIn("tid", req.json())
+
+    def test_get_inbox_tests(self):
+        self.client.inbox_tests.create(domain=self.domain,
+                                       data=self.post_inbox_test)
+        req = self.client.inbox_tests.get(domain=self.domain)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("tests", req.json())
+
+    def test_get_simple_inbox_tests(self):
+        test_id = self.client.inbox_tests.create(domain=self.domain,
+                                                data=self.post_inbox_test)
+        req = self.client.inbox_tests.get(domain=self.domain,
+                                          test_id=test_id.json()["tid"])
+
+        self.assertEqual(req.status_code, 200)
+        self.assertEqual(req.json()["tid"], test_id.json()["tid"])
+
+    def test_delete_inbox_tests(self):
+        test_id = self.client.inbox_tests.create(domain=self.domain,
+                                                 data=self.post_inbox_test)
+
+        req = self.client.inbox_tests.delete(domain=self.domain,
+                                             test_id=test_id.json()["tid"])
+
+        self.assertEqual(req.status_code, 200)
+
+    def test_get_counters_inbox_tests(self):
+        test_id = self.client.inbox_tests.create(domain=self.domain,
+                                                 data=self.post_inbox_test)
+
+        req = self.client.inbox_tests.get(domain=self.domain,
+                                          test_id=test_id.json()["tid"],
+                                          counters=True)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("counters", req.json())
+
+    def test_get_checks_inbox_tests(self):
+        test_id = self.client.inbox_tests.create(domain=self.domain,
+                                                 data=self.post_inbox_test)
+
+        req = self.client.inbox_tests.get(domain=self.domain,
+                                          test_id=test_id.json()["tid"],
+                                          checks=True)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("checks", req.json())
 
 
 if __name__ == '__main__':
