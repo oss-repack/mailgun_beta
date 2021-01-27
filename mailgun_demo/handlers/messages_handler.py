@@ -1,4 +1,4 @@
-from error_handler import ApiError
+from .error_handler import ApiError
 
 
 def handle_resend_message(url,domain,method,**kwargs):
