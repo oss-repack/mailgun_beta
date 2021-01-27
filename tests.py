@@ -185,7 +185,15 @@ class IpTests(unittest.TestCase):
     def test_get_ip_from_domain(self):
 
         req = self.client.ips.get(domain=self.domain, params={"dedicated": "true"})
+        print(req.text)
         self.assertIn("items", req.json())
+        self.assertEqual(req.status_code, 200)
+
+    def test_get_ip_by_address(self):
+        self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
+        req = self.client.ips.get(domain=self.domain,
+                                  ip=self.ip_data["ip"])
+        self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
     def test_create_ip(self):
@@ -209,7 +217,8 @@ class IpPoolsTests(unittest.TestCase):
         self.domain = "2048.zeefarmer.com"
         self.data = {
             "name" : "test_pool",
-            "description": "Test"
+            "description": "Test",
+            "add_ip": os.environ["DOMAINS_DEDICATED_IP"]
         }
         self.patch_data = {
             "name" : "test_pool1",
@@ -218,26 +227,38 @@ class IpPoolsTests(unittest.TestCase):
         self.ippool_id = ""
 
     def test_get_ippools(self):
+        self.client.ippools.create(domain=self.domain,
+                                   data=self.data)
         req = self.client.ippools.get(domain=self.domain)
         self.assertIn("ip_pools", req.json())
         self.assertEqual(req.status_code, 200)
-
-    def test_post_ippool(self):
-
-        req = self.client.ippools.create(domain=self.domain,
-                                         data=self.data)
-        self.assertEqual("success", req.json()["message"])
-        self.assertEqual(req.status_code, 200)
-        self.ippool_id = req.json()["pool_id"]
 
     def test_patch_ippool(self):
         req_post = self.client.ippools.create(domain=self.domain,
                                          data=self.data)
         self.ippool_id = req_post.json()["pool_id"]
 
-        req = self.client.ippools.patch(domain=self.domain, data=self.patch_data, pool_id=self.ippool_id)
+        req = self.client.ippools.patch(domain=self.domain,
+                                        data=self.patch_data,
+                                        pool_id=self.ippool_id)
         self.assertEqual("success", req.json()["message"])
         self.assertEqual(req.status_code, 200)
+
+    def test_link_domain_ippool(self):
+        pool_create = self.client.ippools.create(domain=self.domain,
+                                                 data=self.data)
+        self.ippool_id = pool_create.json()["pool_id"]
+        self.client.ippools.patch(domain=self.domain,
+                                  data=self.patch_data,
+                                  pool_id=self.ippool_id)
+        data = {
+            "pool_id": self.ippool_id
+        }
+        req = self.client.domains_ips.create(domain=self.domain,
+                                             data=data)
+
+
+        self.assertIn("message", req.json())
 
     def test_delete_ippool(self):
         req = self.client.ippools.create(domain=self.domain,
@@ -303,6 +324,12 @@ class TagsTests(unittest.TestCase):
         self.data = {
             "description" : "Tests running"
         }
+        self.put_tags_data = {
+            "description": "Python testtt"
+        }
+        self.stats_params = {
+            "event": "accepted"
+        }
         self.tag_name = "Python test"
 
     def test_get_tags(self):
@@ -315,6 +342,37 @@ class TagsTests(unittest.TestCase):
                                    tag_name=self.tag_name)
         self.assertIn('tag', req.json())
         self.assertEqual(req.status_code, 200)
+
+    def test_tag_put(self):
+        req = self.client.tags.put(domain=self.domain,
+                                   tag_name=self.tag_name,
+                                   data=self.put_tags_data)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("message", req.json())
+
+    def test_tags_stats_get(self):
+        req = self.client.tags_stats.get(domain=self.domain,
+                                         filters=self.stats_params,
+                                         tag_name=self.tag_name)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("tag", req.json())
+
+    def test_tags_stats_agregate_get(self):
+
+        req = self.client.tags_stats_aggregates_devices.get(domain=self.domain,
+                                                            filters=self.stats_params,
+                                                            tag_name=self.tag_name)
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("tag", req.json())
+
+    # def test_delete_tags(self):
+    #     req = self.client.tags.delete(domain=self.domain,
+    #                                   tag_name=self.tag_name)
+    #
+    #     self.assertEqual(req.status_code, 200)
+    #     self.assertIn("message", req.json())
 
 
 class BouncesTests(unittest.TestCase):
@@ -350,12 +408,11 @@ class BouncesTests(unittest.TestCase):
     def test_bounces_create(self):
         req = self.client.bounces.create(data=self.bounces_data,
                                          domain=self.domain)
-        print(req.json())
         self.assertEqual(req.status_code, 200)
         self.assertIn('address', req.json())
 
     def test_bounces_get_address(self):
-        req_post = self.client.bounces.create(data=self.bounces_data,
+        self.client.bounces.create(data=self.bounces_data,
                                          domain=self.domain)
         req = self.client.bounces.get(domain=self.domain,
                                       bounce_address=self.bounces_data["address"])
@@ -370,7 +427,7 @@ class BouncesTests(unittest.TestCase):
         self.assertIn('message', req.json())
 
     def test_bounces_delete_single(self):
-        req_post = self.client.bounces.create(data=self.bounces_data,
+        self.client.bounces.create(data=self.bounces_data,
                                          domain=self.domain)
         req = self.client.bounces.delete(domain=self.domain,
                                          bounce_address=self.bounces_data["address"])
@@ -567,7 +624,7 @@ class RoutesTest(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.routes_data = {
             "priority": 0,
             "description": "Sample route",
@@ -636,7 +693,7 @@ class WebhooksTest(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.webhooks_data = {
             'id': 'clicked',
             'url': ['https://i.ua']
@@ -844,7 +901,7 @@ class TemplatesTest(unittest.TestCase):
         )
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
-        self.post_template_data = {'name': 'template.name10',
+        self.post_template_data = {'name': 'template.name20',
                                    'description': 'template description',
                                    'template': '{{fname}} {{lname}}',
                                    'engine': 'handlebars',

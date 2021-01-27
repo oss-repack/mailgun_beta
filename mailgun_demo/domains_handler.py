@@ -53,6 +53,8 @@ def handle_domains(url,domain,method,**kwargs):
             url = urljoin(url["base"], domain + final_keys + "/" + kwargs["login"])
         elif "ip" in kwargs:
             url = urljoin(url["base"], domain + final_keys + "/" + kwargs["ip"])
+        elif "unlink_pool" in kwargs:
+            url = urljoin(url["base"], domain + final_keys + "/ip_pool")
         elif "api_storage_url" in kwargs:
             url = kwargs["api_storage_url"]
         else:
@@ -65,5 +67,4 @@ def handle_domains(url,domain,method,**kwargs):
                 url = url["base"][:-1]
         else:
             url = urljoin(url["base"], domain)
-
     return url
