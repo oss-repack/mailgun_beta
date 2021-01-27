@@ -1,6 +1,6 @@
 import unittest
 import os
-from client import Client
+from mailgun_demo.client import Client
 
 
 class MessagesTests(unittest.TestCase):
@@ -40,7 +40,7 @@ class DomainTests(unittest.TestCase):
             "name": self.test_domain,
         }
         self.post_domain_creds = {
-            "login": "alice_bob@2048.zeefarmer.com",
+            "login": "alice_bob@{domain}".format(domain=self.domain),
             "password": "test_new_creds123"
         }
 
@@ -96,7 +96,6 @@ class DomainTests(unittest.TestCase):
 
     def test_get_smtp_creds(self):
         request = self.client.domains_credentials.get(domain=self.domain)
-        print(request.json())
         self.assertEqual(request.status_code, 200)
         self.assertIn("items", request.json())
 
@@ -134,14 +133,12 @@ class DomainTests(unittest.TestCase):
     def test_put_domain_tracking_open(self):
         request = self.client.domains_tracking_open.put(domain=self.domain,
                                                         data=self.put_domain_tracking_data)
-        print(request)
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
     def test_put_domain_tracking_click(self):
         request = self.client.domains_tracking_click.put(domain=self.domain,
-                                                        data=self.put_domain_tracking_data)
-        print(request.json())
+                                                         data=self.put_domain_tracking_data)
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
@@ -185,7 +182,6 @@ class IpTests(unittest.TestCase):
     def test_get_ip_from_domain(self):
 
         req = self.client.ips.get(domain=self.domain, params={"dedicated": "true"})
-        print(req.text)
         self.assertIn("items", req.json())
         self.assertEqual(req.status_code, 200)
 
@@ -214,7 +210,7 @@ class IpPoolsTests(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.data = {
             "name" : "test_pool",
             "description": "Test",
@@ -235,7 +231,7 @@ class IpPoolsTests(unittest.TestCase):
 
     def test_patch_ippool(self):
         req_post = self.client.ippools.create(domain=self.domain,
-                                         data=self.data)
+                                              data=self.data)
         self.ippool_id = req_post.json()["pool_id"]
 
         req = self.client.ippools.patch(domain=self.domain,
@@ -257,7 +253,6 @@ class IpPoolsTests(unittest.TestCase):
         req = self.client.domains_ips.create(domain=self.domain,
                                              data=data)
 
-
         self.assertIn("message", req.json())
 
     def test_delete_ippool(self):
@@ -275,7 +270,7 @@ class EventsTests(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.params = {
             "event" : "rejected"
         }
@@ -300,7 +295,7 @@ class StatsTests(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.params = {
             "event" : ["accepted"],
             "duration": "1m"
@@ -320,7 +315,7 @@ class TagsTests(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.data = {
             "description" : "Tests running"
         }
@@ -382,7 +377,7 @@ class BouncesTests(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.bounces_data = {
             "address": "test30@gmail.com",
             "code": 550,
@@ -413,7 +408,7 @@ class BouncesTests(unittest.TestCase):
 
     def test_bounces_get_address(self):
         self.client.bounces.create(data=self.bounces_data,
-                                         domain=self.domain)
+                                   domain=self.domain)
         req = self.client.bounces.get(domain=self.domain,
                                       bounce_address=self.bounces_data["address"])
         self.assertEqual(req.status_code, 200)
@@ -447,7 +442,7 @@ class UnsubscribesTest(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.unsub_data = {
             "address": "test@gmail.com",
             "tag": "unsub_test_tag"
@@ -513,7 +508,7 @@ class ComplaintsTest(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.compl_data = {
             "address": "test@gmail.com",
             "tag": "compl_test_tag"
@@ -541,8 +536,8 @@ class ComplaintsTest(unittest.TestCase):
         self.assertIn('items', req.json())
 
     def test_compl_get_single(self):
-        req_post = self.client.complaints.create(data=self.compl_data,
-                                            domain=self.domain)
+        self.client.complaints.create(data=self.compl_data,
+                                      domain=self.domain)
         req = self.client.complaints.get(domain=self.domain,
                                          complaint_address=self.compl_data["address"])
         self.assertEqual(req.status_code, 200)
@@ -576,7 +571,7 @@ class WhiteListTest(unittest.TestCase):
             os.environ["APIKEY"]
         )
         self.client = Client(auth=self.auth)
-        self.domain = "2048.zeefarmer.com"
+        self.domain = os.environ["DOMAIN"]
         self.whitel_data = {
             "address": "test@gmail.com",
             "tag": "whitel_test"
@@ -599,7 +594,7 @@ class WhiteListTest(unittest.TestCase):
 
     def test_whitel_get_simple(self):
         req_post = self.client.whitelists.create(data=self.whitel_data,
-                                                domain=self.domain)
+                                                 domain=self.domain)
 
         req = self.client.whitelists.get(domain=self.domain,
                                          whitelist_address=self.whitel_data["address"])
@@ -648,7 +643,7 @@ class RoutesTest(unittest.TestCase):
 
     def test_routes_get_all(self):
         req_post = self.client.routes.create(domain=self.domain,
-                                        data=self.routes_data)
+                                             data=self.routes_data)
         req = self.client.routes.get(domain=self.domain,
                                      filters=self.routes_params)
 
@@ -657,7 +652,7 @@ class RoutesTest(unittest.TestCase):
 
     def test_get_route_by_id(self):
         req_post = self.client.routes.create(domain=self.domain,
-                                  data=self.routes_data)
+                                             data=self.routes_data)
         self.client.routes.create(domain=self.domain,
                                   data=self.routes_data)
         req = self.client.routes.get(domain=self.domain,
@@ -779,8 +774,6 @@ class MailingListsTest(unittest.TestCase):
                                                 'members': '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
                                                 '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'}
 
-
-
     def test_maillist_pages_get(self):
         req = self.client.lists_pages.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
@@ -797,7 +790,6 @@ class MailingListsTest(unittest.TestCase):
                                  address='python_sdk@{domain}'.format(domain=self.domain))
         req = self.client.lists.create(domain=self.domain,
                                        data=self.mailing_lists_data)
-        # print(req.json())
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
@@ -944,7 +936,7 @@ class TemplatesTest(unittest.TestCase):
 
     def test_put_template(self):
         self.client.templates.create(data=self.post_template_data,
-                                    domain=self.domain)
+                                     domain=self.domain)
         req = self.client.templates.put(domain=self.domain,
                                         data=self.put_template_data,
                                         template_name=self.post_template_data["name"])
@@ -955,7 +947,7 @@ class TemplatesTest(unittest.TestCase):
         self.client.templates.create(data=self.post_template_data,
                                      domain=self.domain)
         req = self.client.templates.delete(domain=self.domain,
-                                        template_name=self.post_template_data["name"])
+                                           template_name=self.post_template_data["name"])
 
         self.assertEqual(req.status_code, 200)
 
@@ -973,7 +965,6 @@ class TemplatesTest(unittest.TestCase):
                                            domain=self.domain,
                                            template_name=self.post_template_data["name"],
                                            versions=True)
-        print(req.json())
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
@@ -982,15 +973,13 @@ class TemplatesTest(unittest.TestCase):
                                      domain=self.domain)
 
         self.client.templates.create(data=self.post_template_version_data,
-                                           domain=self.domain,
-                                           template_name=self.post_template_data["name"],
-                                           versions=True)
+                                     domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True)
 
         req = self.client.templates.get(domain=self.domain,
-                                   template_name=self.post_template_data["name"],
-                                   versions=True)
-
-        print(req.json())
+                                        template_name=self.post_template_data["name"],
+                                        versions=True)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
@@ -1005,10 +994,10 @@ class TemplatesTest(unittest.TestCase):
                                      versions=True)
 
         req = self.client.templates.put(domain=self.domain,
-                                    data=self.put_template_version_data,
-                                    template_name=self.post_template_data["name"],
-                                    versions=True,
-                                    tag=self.put_template_version)
+                                        data=self.put_template_version_data,
+                                        template_name=self.post_template_data["name"],
+                                        versions=True,
+                                        tag=self.put_template_version)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
@@ -1030,9 +1019,9 @@ class TemplatesTest(unittest.TestCase):
                                            tag='v0')
 
         re = self.client.templates.delete(domain=self.domain,
-                                     template_name=self.post_template_data["name"],
-                                     versions=True,
-                                     tag=self.put_template_version)
+                                          template_name=self.post_template_data["name"],
+                                          versions=True,
+                                          tag=self.put_template_version)
 
         self.assertEqual(req.status_code, 200)
 
