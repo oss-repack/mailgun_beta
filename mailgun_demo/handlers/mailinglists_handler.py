@@ -2,7 +2,7 @@
 MAILING LISTS HANDLER
 """
 from urllib.parse import urljoin, quote
-from error_handler import ApiError
+from .error_handler import ApiError
 
 
 def convert_keys(keys):
