@@ -1,12 +1,23 @@
-from setuptools import setup
+import setuptools
 
-setup(
-    name='mailgun_beta',
-    version='1.0.0',
-    packages=[''],
-    url='https://github.com/diskovod/mailgun_beta',
-    license='MIT',
-    author='diskovod',
-    author_email='spidlisn@gmail.com',
-    description='Mailgun Demo'
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
+    name='mailgun_beta', # Replace with your own username
+    version="1.0.0",
+    author="diskovod",
+    author_email="diskovodik@gmail.com",
+    description="Mailgun beta project",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url="https://github.com/diskovod/mailgun_beta",
+    packages=setuptools.find_packages(),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    install_requires=['requests>=2.25.0'],
+    python_requires='>=3.6',
 )
