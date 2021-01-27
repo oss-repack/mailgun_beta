@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='mailgunbeta', # Replace with your own username
-    version="1.0.1",
+    name='mailgun_demo', # Replace with your own username
+    version="1.0.0",
     author="diskovod",
     author_email="diskovodik@gmail.com",
     description="Mailgun beta project",
