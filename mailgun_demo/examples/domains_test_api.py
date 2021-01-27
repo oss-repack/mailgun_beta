@@ -1,4 +1,4 @@
-from client import Client
+from mailgun_demo.client import Client
 
 if __name__ == '__main__':
     key = "key-578f9790b7d06fd46a104f8156ed6995"
@@ -72,22 +72,22 @@ if __name__ == '__main__':
     # print(request)
 
     ##### Dkim authority
-    data = {
-        "self": "false"
-    }
-    request = client.domains_dkimauthority.put(domain="python.test.domain4", data=data)
-    print(request)
-
-    #### Dkim selector
-    data = {
-        "dkim_selector": "s"
-    }
-    request = client.domains_dkimselector.put(domain="python.test.domain4", data=data)
-    print(request)
-
-    ##### Web Prefix
-    data = {
-        "web_prefix": "python"
-    }
-    request = client.domains_webprefix.put(domain="python.test.domain4", data=data)
-    print(request)
+    # data = {
+    #     "self": "false"
+    # }
+    # request = client.domains_dkimauthority.put(domain="python.test.domain4", data=data)
+    # print(request)
+    #
+    # #### Dkim selector
+    # data = {
+    #     "dkim_selector": "s"
+    # }
+    # request = client.domains_dkimselector.put(domain="python.test.domain4", data=data)
+    # print(request)
+    #
+    # ##### Web Prefix
+    # data = {
+    #     "web_prefix": "python"
+    # }
+    # request = client.domains_webprefix.put(domain="python.test.domain4", data=data)
+    # print(request)

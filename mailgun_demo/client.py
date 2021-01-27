@@ -5,19 +5,19 @@ import json
 import requests
 from urllib.parse import urljoin
 
-from messages_handler import handle_resend_message
-from domains_handler import handle_domains, handle_domainlist
-from ips_handler import handle_ips
-from ip_pools_handler import handle_ippools
-from tags_handler import handle_tags
-from suppressions_handler import handle_bounces, handle_whitelists, \
+from mailgun_demo.handlers.messages_handler import handle_resend_message
+from mailgun_demo.handlers.domains_handler import handle_domains, handle_domainlist
+from mailgun_demo.handlers.ips_handler import handle_ips
+from mailgun_demo.handlers.ip_pools_handler import handle_ippools
+from mailgun_demo.handlers.tags_handler import handle_tags
+from mailgun_demo.handlers.suppressions_handler import handle_bounces, handle_whitelists, \
     handle_complaints, handle_unsubscribes
-from routes_handler import handle_routes
-from mailinglists_handler import handle_lists
-from templates_handler import handle_templates
-from email_validation_handler import handle_address_validate
-from inbox_placement_handler import handle_inbox
-from error_handler import ApiError
+from mailgun_demo.handlers.routes_handler import handle_routes
+from mailgun_demo.handlers.mailinglists_handler import handle_lists
+from mailgun_demo.handlers.templates_handler import handle_templates
+from mailgun_demo.handlers.email_validation_handler import handle_address_validate
+from mailgun_demo.handlers.inbox_placement_handler import handle_inbox
+from mailgun_demo.handlers.error_handler import ApiError
 
 
 requests.packages.urllib3.disable_warnings()
