@@ -8,7 +8,6 @@ from .error_handler import ApiError
 
 def handle_domainlist(url,domain,method,**kwargs):
     """
-
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
     :param method: Incoming request method
@@ -20,7 +19,6 @@ def handle_domainlist(url,domain,method,**kwargs):
 
 def handle_domains(url,domain,method,**kwargs):
     """
-
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
     :param method: Incoming request method
