@@ -57,5 +57,4 @@ def handle_domains(url,domain,method,**kwargs):
                 url = url["base"] + domain + "/verify"
             else:
                 url = urljoin(url["base"], domain)
-
     return url

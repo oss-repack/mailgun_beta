@@ -91,7 +91,7 @@ class DomainTests(unittest.TestCase):
 
     def test_get_single_domain(self):
         self.client.domains.create(data=self.post_domain_data)
-        req = self.client.domains.get(domain=self.domain, domain_name=self.post_domain_data["name"])
+        req = self.client.domains.get(domain_name=self.post_domain_data["name"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())

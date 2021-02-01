@@ -1,7 +1,8 @@
 Mailgun DEMO.
 Examples for all endpoints you will find under:
+````
 mailgun_demo/examples
-
+````
 To run tests and examples please use virtualenv with next template:
 ````
 DOMAIN="DOMAIN_NAME"
