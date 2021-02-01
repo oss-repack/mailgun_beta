@@ -20,7 +20,7 @@ https://test.pypi.org/project/mailgun-demo/1.0.4/
 
 After you will install this you can just import it like:
 ````
-from mailgun_demo.client import client
+from mailgun_demo.client import Client
 
 client = Client(auth=("api", key))
 ````
