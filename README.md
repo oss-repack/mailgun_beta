@@ -13,3 +13,15 @@ DOMAINS_DEDICATED_IP="127.0.0.1"
 MAILLIST_ADDRESS="everyone@mailgun.domain.com"
 VALIDATION_ADDRESS_1="test1@i.ua"
 VALIDATION_ADDRESS_2="test2@gmail.com"
+````
+
+Test library in Test PyPi
+https://test.pypi.org/project/mailgun-demo/1.0.4/
+
+After you will install this you can just import it like:
+````
+from mailgun_demo.client import client
+
+client = Client(auth=("api", key))
+````
+Check examples for more details
