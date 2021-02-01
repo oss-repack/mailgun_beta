@@ -18,12 +18,12 @@ from mailgun_demo.handlers.templates_handler import handle_templates
 from mailgun_demo.handlers.email_validation_handler import handle_address_validate
 from mailgun_demo.handlers.inbox_placement_handler import handle_inbox
 from mailgun_demo.handlers.error_handler import ApiError
+from mailgun_demo.handlers.default_handler import handle_default
 
-
-requests.packages.urllib3.disable_warnings()
+# requests.packages.urllib3.disable_warnings()
 
 HANDLERS = {"resendmessage": handle_resend_message,
-            "domains":handle_domains,
+            "domains": handle_domains,
             "domainlist": handle_domainlist,
             "dkim_authority": handle_domains,
             "dkim_selector": handle_domains,
@@ -39,14 +39,18 @@ HANDLERS = {"resendmessage": handle_resend_message,
             "lists": handle_lists,
             "templates": handle_templates,
             "addressvalidate": handle_address_validate,
-            "inbox": handle_inbox}
+            "inbox": handle_inbox,
+            "messages": handle_default,
+            "messages.mime": handle_default,
+            "events": handle_default,
+            "stats": handle_default}
 
 
 class Config(object):
     DEFAULT_API_URL = 'https://api.mailgun.net/'
     API_REF = 'https://documentation.mailgun.com/en/latest/api_reference.html'
     version = 'v3'
-    user_agent = 'mailgun-apiv3-python/v1' #+ get_version()
+    user_agent = 'mailgun-api-python/'
 
     def __init__(self, version=None, api_url=None):
         if version is not None:
@@ -61,7 +65,7 @@ class Config(object):
         url = urljoin(self.api_url, self.version + '/')
         headers = {'User-agent': self.user_agent}
         modified = False
-        #### Domains section
+        # Domains section
         if key.lower() == 'domainlist':
             url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["domainlist"]}
@@ -81,27 +85,24 @@ class Config(object):
             url = {"base": urljoin(self.api_url, self.version + "/domains/"),
                    "keys": final_keys}
             modified = True
-        #### Messages section
+        # Messages section
         if key.lower() == "messages":
             url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["messages"]}
-            self.ex_handler = False
         if key.lower() == "mimemessage":
             url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["messages.mime"]}
             modified = True
-            self.ex_handler = False
         if key.lower() == "resendmessage":
             url = {"keys": ["resendmessage"]}
-            self.ex_handler = True
             modified = True
 
-        #### IPpools section
+        # IPpools section
         if key.lower() == "ippools":
             url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["ip_pools"]}
             modified = True
-
+        # Email Validation section
         if "addressvalidate" in key.lower():
             url = {"base": urljoin(self.api_url, "v4" + "/address/validate"),
                    "keys": key.split('_')}
@@ -111,33 +112,87 @@ class Config(object):
             url = urljoin(self.api_url, self.version + '/')
             url = {"base": url,
                    "keys": key.split('_')}
-            if url["keys"][0] in HANDLERS:
-                self.ex_handler = True
-            else:
-                self.ex_handler = False
-        return url, headers, self.ex_handler
+        return url, headers
 
 
 class Endpoint(object):
 
-    def __init__(self, url, headers, auth, ex_handler, action=None):
+    def __init__(self, url, headers, auth):
         self._url = url
         self.headers = headers
         self._auth = auth
-        self.ex_handler = ex_handler
-        self.action = action
 
-    def __doc__(self):
-        return self._doc
+    def api_call(self, auth, method, url, headers, data=None, filters=None, timeout=60,
+                 files=None, domain=None, **kwargs):
+        """
 
-    def get(self, params=None, domain=None, action_id=None, id=None, **kwargs):
-        return api_call(self._auth, 'get', self._url, domain=domain,
-                        headers=self.headers, action=self.action,
-                        action_id=action_id, params=params,
-                        resource_id=id, ex_handler=self.ex_handler, **kwargs)
+        :param auth: auth data
+        :param method: request method
+        :param url: incoming url (base+keys)
+        :param headers: incoming headers
+        :param data: incoming post/put data
+        :param filters: incoming params
+        :param timeout: requested timeout (60-default)
+        :param files: incoming files
+        :param domain: incoming domain
+        :param kwargs: kwargs
+        :return: server response from API
+        """
 
-    def create(self, data=None, filters=None, id=None, domain=None,
-               headers=None, action_id=None, files=None, **kwargs):
+        url = self.build_url(url, domain=domain, method=method, **kwargs)
+        req_method = getattr(requests, method)
+
+        try:
+            response = req_method(url, data=data, params=filters, headers=headers, auth=auth,
+                                  timeout=timeout, files=files, verify=True, stream=False)
+
+            return response
+
+        except requests.exceptions.Timeout:
+            raise TimeoutError
+        except requests.RequestException as e:
+            raise ApiError(e)
+        except Exception as e:
+            raise e
+
+    def build_url(self, url, domain=None, method=None, **kwargs):
+        """
+        Build final request url using predefined handlers
+        :param url: incoming url (base+keys)
+        :param domain: incoming domain
+        :param method: requested method
+        :param kwargs: kwargs
+        :return: builded URL
+        """
+
+        url = HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
+
+        return url
+
+    def get(self, params=None, domain=None, **kwargs):
+        """
+        GET method for API calls
+        :param params: incoming params
+        :param domain: incoming domain
+        :param kwargs: kwargs
+        :return: api_call GET request
+        """
+        return self.api_call(self._auth, 'get', self._url,
+                             domain=domain,headers=self.headers,
+                             params=params, **kwargs)
+
+    def create(self, data=None, filters=None, domain=None,
+               headers=None, files=None, **kwargs):
+        """
+        POST method for API calls
+        :param data: incoming post data
+        :param filters: incoming params
+        :param domain: incoming domain
+        :param headers: incoming headers
+        :param files: incoming files
+        :param kwargs: kwargs
+        :return: api_call POST request
+        """
         if "Content-type" in self.headers:
             if self.headers['Content-type'] == 'application/json':
                 data = json.dumps(data)
@@ -147,33 +202,55 @@ class Endpoint(object):
                 self.headers['Content-type'] = 'application/json'
             elif headers == 'multipart/form-data':
                 self.headers['Content-type'] = 'multipart/form-data'
-        return api_call(self._auth, 'post', self._url, files=files,
-                        domain=domain, headers=self.headers, resource_id=id,
-                        data=data, action=self.action, action_id=action_id,
-                        filters=filters, ex_handler=self.ex_handler, **kwargs)
 
-    def put(self, data=None, filters=None, action_id=None, **kwargs):
+        return self.api_call(self._auth, 'post', self._url, files=files,
+                             domain=domain, headers=self.headers,
+                             data=data, filters=filters, **kwargs)
 
-        return api_call(self._auth, 'put', self._url, headers=self.headers,
-                        data=data, action=self.action, action_id=action_id,
-                        filters=filters, ex_handler=self.ex_handler, **kwargs)
+    def put(self, data=None, filters=None, **kwargs):
+        """
+        PUT method for API calls
+        :param data: incoming data
+        :param filters: incoming params
+        :param kwargs: kwargs
+        :return: api_call POST request
+        """
+        return self.api_call(self._auth, 'put', self._url, headers=self.headers,
+                             data=data, filters=filters, **kwargs)
 
-    def patch(self, data=None, filters=None, action_id=None, **kwargs):
+    def patch(self, data=None, filters=None, **kwargs):
+        """
+        PATCH method for API calls
+        :param data: incoming data
+        :param filters: incoming params
+        :param kwargs: kwargs
+        :return: api_call PATCH request
+        """
+        return self.api_call(self._auth, 'patch', self._url, headers=self.headers,
+                             data=data, filters=filters, **kwargs)
 
-        return api_call(self._auth, 'patch', self._url, headers=self.headers,
-                        data=data, action=self.action, action_id=action_id,
-                        filters=filters, ex_handler=self.ex_handler, **kwargs)
-
-    def update(self, id, data, filters=None, action_id=None, **kwargs):
+    def update(self, data, filters=None, **kwargs):
+        """
+        PUT method for API calls
+        :param data: incoming data
+        :param filters: incoming params
+        :param kwargs: kwargs
+        :return: api_call PUT request
+        """
         if self.headers['Content-type'] == 'application/json':
             data = json.dumps(data)
-        return api_call(self._auth, 'put', self._url, resource_id=id, headers=self.headers,
-                        data=data, action=self.action, action_id=action_id,
-                        filters=filters, ex_handler=self.ex_handler, **kwargs)
+        return self.api_call(self._auth, 'put', self._url, headers=self.headers,
+                             data=data, filters=filters, **kwargs)
 
     def delete(self, domain=None, **kwargs):
-        return api_call(self._auth, 'delete', self._url, action=self.action,
-                        headers=self.headers, domain=domain, ex_handler=self.ex_handler, **kwargs)
+        """
+        DELETE method for API calls
+        :param domain: incoming domain
+        :param kwargs: kwargs
+        :return: api_call DELETE request
+        """
+        return self.api_call(self._auth, 'delete', self._url,
+                             headers=self.headers, domain=domain, **kwargs)
 
 
 class Client(object):
@@ -186,62 +263,8 @@ class Client(object):
 
     def __getattr__(self, name):
         split = name.split('_')
-        #identify the resource
+        # identify the resource
         fname = split[0]
-        action = None
-        if (len(split) > 1):
-            #identify the sub resource (action)
-            action = split[1]
-            if action == 'csvdata':
-                action = 'csvdata/text:plain'
-            if action == 'csverror':
-                action = 'csverror/text:csv'
-        url, headers, ex_handler = self.config[name]
-        return type(fname, (Endpoint,), {})(url=url, headers=headers,
-                                            action=action, auth=self.auth, ex_handler=ex_handler)
+        url, headers = self.config[name]
+        return type(fname, (Endpoint,), {})(url=url, headers=headers, auth=self.auth)
 
-
-def api_call(auth, method, url, headers, ex_handler, data=None, filters=None,
-             params=None, resource_id=None, timeout=60, debug=False,
-             action=None, files=None, action_id=None, domain=None, **kwargs):
-
-    url = build_url(url, ex_handler, domain=domain, method=method, **kwargs)
-    req_method = getattr(requests, method)
-
-    try:
-        response = req_method(url, data=data, params=filters, headers=headers, auth=auth,
-                              timeout=timeout, files=files, verify=True, stream=False)
-
-        return response
-
-    except requests.exceptions.Timeout:
-        raise TimeoutError
-    except requests.RequestException as e:
-        raise ApiError(e)
-    except Exception as e:
-        raise e
-
-
-def convert_keys(keys):
-
-    final_keys = ""
-    if len(keys) == 1:
-        final_keys = "/" + keys[0]
-    else:
-        for k in keys:
-            final_keys += "/" + k
-
-    return final_keys
-
-
-def build_url(url, ex_handler, domain=None, method=None, **kwargs):
-    if ex_handler:
-        url = HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
-    else:
-        if not domain:
-            raise ApiError("Domain is missing!")
-
-        final_keys = convert_keys(url["keys"])
-        url = url["base"] + domain + final_keys
-
-    return url

@@ -1,28 +1,21 @@
 """
 TEMPLATES HANDLER
 """
+from os import path
 from urllib.parse import urljoin, quote
 from .error_handler import ApiError
 
 
-def convert_keys(keys):
-    """
-    Generate path base on incoming keys
-    :param keys: url keys
-    :return: part of url path
-    """
-    final_keys = ""
-    if len(keys) == 1:
-        final_keys = "/" + keys[0]
-    else:
-        for k in keys:
-            final_keys += "/" + k
-
-    return final_keys
-
-
 def handle_templates(url,domain,method,**kwargs):
-    final_keys = convert_keys(url["keys"])
+    """
+    Handle Templates
+    :param url: Incoming URL dictionary
+    :param domain: Incoming domain
+    :param method: Incoming request method
+    :param kwargs: kwargs
+    :return: final url for Templates endpoint
+    """
+    final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
     if "template_name" in kwargs:
         if "versions" in kwargs:
             if kwargs["versions"]:

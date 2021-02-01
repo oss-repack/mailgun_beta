@@ -84,9 +84,24 @@ class DomainTests(unittest.TestCase):
 
         #  ### Problem with smtp_password!!!!
         #
+        self.client.domains.delete(domain=self.test_domain)
         request = self.client.domains.create(data=self.post_domain_data)
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain has been created", request.json()["message"])
+
+    def test_get_single_domain(self):
+        self.client.domains.create(data=self.post_domain_data)
+        req = self.client.domains.get(domain=self.domain, domain_name=self.post_domain_data["name"])
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("domain", req.json())
+
+    def test_verify_domain(self):
+        self.client.domains.create(data=self.post_domain_data)
+        req = self.client.domains.put(domain=self.post_domain_data["name"],
+                                      verify=True)
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("domain", req.json())
 
     def test_delete_domain(self):
         self.client.domains.create(data=self.post_domain_data)
@@ -475,9 +490,9 @@ class UnsubscribesTest(unittest.TestCase):
 
     def test_unsub_get_single(self):
         req = self.client.unsubscribes.get(domain=self.domain,
-                                           bounce_address=self.unsub_data["address"])
+                                           unsubscribe_address=self.unsub_data["address"])
         self.assertEqual(req.status_code, 200)
-        self.assertIn("items", req.json())
+        self.assertIn("address", req.json())
 
     def test_unsub_create_multiple(self):
         req = self.client.unsubscribes.create(data=self.unsub_json_data,
@@ -552,6 +567,9 @@ class ComplaintsTest(unittest.TestCase):
         self.assertIn("message", req.json())
 
     def test_compl_delete_single(self):
+        self.client.complaints.create(data=self.compl_json_data,
+                                      domain=self.domain,
+                                      headers='application/json')
         req = self.client.complaints.delete(domain=self.domain,
                                             unsubscribe_address=self.compl_data["address"])
 

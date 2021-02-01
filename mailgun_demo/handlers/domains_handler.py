@@ -1,24 +1,9 @@
 """
 DOMAINS HANDLER
 """
+from os import path
 from urllib.parse import urljoin
 from .error_handler import ApiError
-
-
-def convert_keys(keys):
-    """
-    Generate path base on incoming keys
-    :param keys: url keys
-    :return: part of url path
-    """
-    final_keys = ""
-    if len(keys) == 1:
-        final_keys = "/" + keys[0]
-    else:
-        for k in keys:
-            final_keys += "/" + k
-
-    return final_keys
 
 
 def handle_domainlist(url,domain,method,**kwargs):
@@ -46,7 +31,7 @@ def handle_domains(url,domain,method,**kwargs):
         domains_index = url["keys"].index("domains")
         url["keys"].pop(domains_index)
     if url["keys"]:
-        final_keys = convert_keys(url["keys"])
+        final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
         if not domain:
             raise ApiError("Domain is missing!")
         if "login" in kwargs:
@@ -61,10 +46,18 @@ def handle_domains(url,domain,method,**kwargs):
             url = urljoin(url["base"], domain + final_keys)
     else:
         if method in ["get", "post", "delete"]:
-            if method == "delete":
+            if "domain_name" in kwargs:
+                url = urljoin(url["base"], kwargs["domain_name"])
+            elif method == "delete":
                 url = urljoin(url["base"], domain)
             else:
                 url = url["base"][:-1]
         else:
-            url = urljoin(url["base"], domain)
+            if "verify" in kwargs:
+                if kwargs["verify"] is not True:
+                    raise ApiError("Verify option should be True or absent")
+                url = url["base"] + domain + "/verify"
+            else:
+                url = urljoin(url["base"], domain)
+
     return url

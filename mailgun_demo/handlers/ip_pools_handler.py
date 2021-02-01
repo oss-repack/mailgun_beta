@@ -1,29 +1,22 @@
 """
-IPS HANDLER
+IP_POOLS HANDLER
 """
+from os import path
 from urllib.parse import urljoin
 from .error_handler import ApiError
 
 
-def convert_keys(keys):
-    """
-    Generate path base on incoming keys
-    :param keys: url keys
-    :return: part of url path
-    """
-    final_keys = ""
-    if len(keys) == 1:
-        final_keys = "/" + keys[0]
-    else:
-        for k in keys:
-            final_keys += "/" + k
-
-    return final_keys
-
-
 def handle_ippools(url,domain,method,**kwargs):
+    """
+    Handle IP pools
+    :param url: Incoming URL dictionary
+    :param domain: Incoming domain
+    :param method: Incoming request method
+    :param kwargs: kwargs
+    :return: final url for IP pools endpoint
+    """
 
-    final_keys = convert_keys(url["keys"])
+    final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
     if "pool_id" in kwargs:
         url = url["base"][:-1] + final_keys + "/" + kwargs["pool_id"]
     else:
