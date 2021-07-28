@@ -2,16 +2,14 @@
 MAILING LISTS HANDLER
 """
 from os import path
-from urllib.parse import urljoin, quote
-from .error_handler import ApiError
 
 
-def handle_lists(url,domain,method,**kwargs):
+def handle_lists(url, _domain, _method, **kwargs):
     """
     Handle Mailing List
     :param url: Incoming URL dictionary
-    :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _domain: Incoming domain
+    :param _method: Incoming request method
     :param kwargs: kwargs
     :return: final url for mailinglist endpoint
     """
@@ -28,7 +26,7 @@ def handle_lists(url,domain,method,**kwargs):
                   "/" + kwargs["member_address"]
         else:
             url = url["base"][:-1] + "/lists/" + kwargs["address"] + members_keys
-    elif "address" in kwargs and not "validate" in kwargs:
+    elif "address" in kwargs and "validate" not in kwargs:
         url = url["base"][:-1] + final_keys + "/" + kwargs["address"]
 
     else:

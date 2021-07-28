@@ -2,16 +2,15 @@
 TEMPLATES HANDLER
 """
 from os import path
-from urllib.parse import urljoin, quote
 from .error_handler import ApiError
 
 
-def handle_templates(url,domain,method,**kwargs):
+def handle_templates(url, domain, _method, **kwargs):
     """
     Handle Templates
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but not used here)
     :param kwargs: kwargs
     :return: final url for Templates endpoint
     """

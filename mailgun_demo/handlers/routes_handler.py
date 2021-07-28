@@ -2,16 +2,14 @@
 ROUTES HANDLER
 """
 from os import path
-from urllib.parse import urljoin, quote
-from .error_handler import ApiError
 
 
-def handle_routes(url,domain,method,**kwargs):
+def handle_routes(url, _domain, _method, **kwargs):
     """
     Handle Routes
     :param url: Incoming URL dictionary
-    :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _domain: Incoming domain
+    :param _method: Incoming request method
     :param kwargs: kwargs
     :return: final url for Routes endpoint
     """

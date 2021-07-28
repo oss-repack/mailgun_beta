@@ -6,18 +6,18 @@ from urllib.parse import urljoin
 from .error_handler import ApiError
 
 
-def handle_domainlist(url,domain,method,**kwargs):
+def handle_domainlist(url, _domain, _method, **_):
     """
     :param url: Incoming URL dictionary
-    :param domain: Incoming domain
-    :param method: Incoming request method
-    :param kwargs: kwargs
+    :param _domain: Incoming domain
+    :param _method: Incoming request method
+    :param _: kwargs
     :return: final url for domainlist endpoint
     """
     return url["base"] + "domains"
 
 
-def handle_domains(url,domain,method,**kwargs):
+def handle_domains(url, domain, method, **kwargs):
     """
     :param url: Incoming URL dictionary
     :param domain: Incoming domain

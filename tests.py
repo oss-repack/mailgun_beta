@@ -12,11 +12,11 @@ class MessagesTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.data = {"from": os.environ["MESSAGES_FROM"],
-            "to": os.environ["MESSAGES_TO"],
-            "cc":  os.environ["MESSAGES_CC"],
-            "subject": "Hello Vasyl Bodaj",
-            "text": "Congratulations !!!!!, you just sent an email with Mailgun!  You are truly awesome!",
-            "o:tag": "Python test"}
+                     "to": os.environ["MESSAGES_TO"],
+                     "cc":  os.environ["MESSAGES_CC"],
+                     "subject": "Hello Vasyl Bodaj",
+                     "text": "Congratulations !!!!!, you just sent an email with Mailgun!  You are truly awesome!",
+                     "o:tag": "Python test"}
 
     def test_post_right_message(self):
         req = self.client.messages.create(data=self.data, domain=self.domain)
@@ -86,6 +86,7 @@ class DomainTests(unittest.TestCase):
         #
         self.client.domains.delete(domain=self.test_domain)
         request = self.client.domains.create(data=self.post_domain_data)
+        print(request.text)
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain has been created", request.json()["message"])
 
@@ -178,7 +179,7 @@ class DomainTests(unittest.TestCase):
     def test_put_dkim_selector(self):
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains_dkimselector.put(domain=self.domain,
-                                                   data=self.put_dkim_selector_data)
+                                                       data=self.put_dkim_selector_data)
         self.assertIn("message", request.json())
 
 
@@ -227,12 +228,12 @@ class IpPoolsTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.data = {
-            "name" : "test_pool",
+            "name": "test_pool",
             "description": "Test",
             "add_ip": os.environ["DOMAINS_DEDICATED_IP"]
         }
         self.patch_data = {
-            "name" : "test_pool1",
+            "name": "test_pool1",
             "description": "Test1"
         }
         self.ippool_id = ""
@@ -287,7 +288,7 @@ class EventsTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.params = {
-            "event" : "rejected"
+            "event": "rejected"
         }
 
     def test_events_get(self):
@@ -312,7 +313,7 @@ class StatsTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.params = {
-            "event" : ["accepted"],
+            "event": ["accepted"],
             "duration": "1m"
         }
 
@@ -332,7 +333,7 @@ class TagsTests(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.data = {
-            "description" : "Tests running"
+            "description": "Tests running"
         }
         self.put_tags_data = {
             "description": "Python testtt"
@@ -438,7 +439,7 @@ class BouncesTests(unittest.TestCase):
 
     def test_bounces_delete_single(self):
         self.client.bounces.create(data=self.bounces_data,
-                                         domain=self.domain)
+                                   domain=self.domain)
         req = self.client.bounces.delete(domain=self.domain,
                                          bounce_address=self.bounces_data["address"])
         self.assertEqual(req.status_code, 200)
@@ -468,11 +469,11 @@ class UnsubscribesTest(unittest.TestCase):
             "tags": ["some tag"],
             "error": "Test error2312"
         },
-        {
-            "address": "test2@gmail.com",
-            "code": ["*"],
-            "error": "Test error"
-        },
+            {
+                "address": "test2@gmail.com",
+                "code": ["*"],
+                "error": "Test error"
+            },
             {
                 "address": "test3@gmail.com"
             }]
@@ -599,10 +600,10 @@ class WhiteListTest(unittest.TestCase):
             "address": "test1@gmail.com",
             "domain": self.domain
         },
-        {
-            "address": "test3@gmail.com",
-            "domain": self.domain
-        }]
+            {
+                "address": "test3@gmail.com",
+                "domain": self.domain
+            }]
 
     def test_whitel_create(self):
         req = self.client.whitelists.create(data=self.whitel_data,
@@ -611,8 +612,8 @@ class WhiteListTest(unittest.TestCase):
         self.assertIn("message", req.json())
 
     def test_whitel_get_simple(self):
-        req_post = self.client.whitelists.create(data=self.whitel_data,
-                                                 domain=self.domain)
+        self.client.whitelists.create(data=self.whitel_data,
+                                      domain=self.domain)
 
         req = self.client.whitelists.get(domain=self.domain,
                                          whitelist_address=self.whitel_data["address"])
@@ -660,8 +661,8 @@ class RoutesTest(unittest.TestCase):
         self.assertIn("message", req.json())
 
     def test_routes_get_all(self):
-        req_post = self.client.routes.create(domain=self.domain,
-                                             data=self.routes_data)
+        self.client.routes.create(domain=self.domain,
+                                  data=self.routes_data)
         req = self.client.routes.get(domain=self.domain,
                                      filters=self.routes_params)
 
@@ -788,9 +789,11 @@ class MailingListsTest(unittest.TestCase):
             'vars': '{"age": 28}'
         }
 
-        self.mailing_lists_members_data_mult = {'upsert': True,
-                                                'members': '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
-                                                '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'}
+        self.mailing_lists_members_data_mult = {
+            'upsert': True,
+            'members': '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
+                       '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'
+        }
 
     def test_maillist_pages_get(self):
         req = self.client.lists_pages.get(domain=self.domain)
@@ -889,8 +892,8 @@ class MailingListsTest(unittest.TestCase):
                                          data=self.mailing_lists_members_data)
 
         req = self.client.lists_members.delete(domain=self.domain,
-                                          address=self.maillist_address,
-                                          member_address=self.mailing_lists_members_data["address"])
+                                               address=self.maillist_address,
+                                               member_address=self.mailing_lists_members_data["address"])
         self.assertEqual(req.status_code, 200)
 
     def test_maillists_lists_members_create_mult(self):
@@ -1036,10 +1039,10 @@ class TemplatesTest(unittest.TestCase):
                                            versions=True,
                                            tag='v0')
 
-        re = self.client.templates.delete(domain=self.domain,
-                                          template_name=self.post_template_data["name"],
-                                          versions=True,
-                                          tag=self.put_template_version)
+        self.client.templates.delete(domain=self.domain,
+                                     template_name=self.post_template_data["name"],
+                                     versions=True,
+                                     tag=self.put_template_version)
 
         self.assertEqual(req.status_code, 200)
 
@@ -1121,7 +1124,7 @@ class InboxPlacementTest(unittest.TestCase):
 
     def test_get_simple_inbox_tests(self):
         test_id = self.client.inbox_tests.create(domain=self.domain,
-                                                data=self.post_inbox_test)
+                                                 data=self.post_inbox_test)
         req = self.client.inbox_tests.get(domain=self.domain,
                                           test_id=test_id.json()["tid"])
 
