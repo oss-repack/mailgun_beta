@@ -155,7 +155,8 @@ class Endpoint(object):
         except Exception as e:
             raise e
 
-    def build_url(self, url, domain=None, method=None, **kwargs):
+    @staticmethod
+    def build_url(url, domain=None, method=None, **kwargs):
         """
         Build final request url using predefined handlers
         :param url: incoming url (base+keys)
@@ -178,7 +179,7 @@ class Endpoint(object):
         :return: api_call GET request
         """
         return self.api_call(self._auth, 'get', self._url,
-                             domain=domain,headers=self.headers,
+                             domain=domain, headers=self.headers,
                              params=params, **kwargs)
 
     def create(self, data=None, filters=None, domain=None,
@@ -267,4 +268,3 @@ class Client(object):
         fname = split[0]
         url, headers = self.config[name]
         return type(fname, (Endpoint,), {})(url=url, headers=headers, auth=self.auth)
-

@@ -2,17 +2,16 @@
 DEFAULT HANDLER
 """
 from os import path
-from urllib.parse import urljoin
 from .error_handler import ApiError
 
 
-def handle_default(url, domain, method, **kwargs):
+def handle_default(url, domain, _method, **_):
     """
     Default handler for endpoints with single url pattern
     (events, messages, stats)
-     :param url: Incoming URL dictionary
+    :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but it's not used for handle_default)
     :param kwargs: kwargs
     :return: final url for default endpoint
     """

@@ -2,16 +2,14 @@
 SUPPRESSION HANDLER
 """
 from os import path
-from urllib.parse import urljoin, quote
-from .error_handler import ApiError
 
 
-def handle_bounces(url,domain,method,**kwargs):
+def handle_bounces(url, domain, _method, **kwargs):
     """
     Handle Bounces
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but not used here)
     :param kwargs: kwargs
     :return: final url for Bounces endpoint
     """
@@ -23,12 +21,12 @@ def handle_bounces(url,domain,method,**kwargs):
     return url
 
 
-def handle_unsubscribes(url,domain,method,**kwargs):
+def handle_unsubscribes(url, domain, _method, **kwargs):
     """
     Handle Unsubscribes
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but not used here)
     :param kwargs: kwargs
     :return: final url for Unsubscribes endpoint
     """
@@ -40,12 +38,12 @@ def handle_unsubscribes(url,domain,method,**kwargs):
     return url
 
 
-def handle_complaints(url,domain,method,**kwargs):
+def handle_complaints(url, domain, _method, **kwargs):
     """
     Handle Complaints
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but not used here)
     :param kwargs: kwargs
     :return: final url for Complaints endpoint
     """
@@ -57,12 +55,12 @@ def handle_complaints(url,domain,method,**kwargs):
     return url
 
 
-def handle_whitelists(url,domain,method,**kwargs):
+def handle_whitelists(url, domain, _method, **kwargs):
     """
     Handle Whitelists
     :param url: Incoming URL dictionary
     :param domain: Incoming domain
-    :param method: Incoming request method
+    :param _method: Incoming request method (but not used here)
     :param kwargs: kwargs
     :return: final url for Whitelists endpoint
     """
