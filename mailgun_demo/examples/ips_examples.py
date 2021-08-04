@@ -11,7 +11,7 @@ def get_ips():
     GET /ips
     :return:
     """
-    req = client.ips.get(domain=domain, params={"dedicated": "true"})
+    req = client.ips.get(domain=domain, filters={"dedicated": "true"})
     print(req.json())
 
 def get_single_ip():
@@ -51,4 +51,4 @@ def delete_domain_ip():
 
 
 if __name__ == '__main__':
-    delete_domain_ip()
+    get_ips()

@@ -1,5 +1,6 @@
 """
 SUPPRESSION HANDLER
+Doc: https://documentation.mailgun.com/en/latest/api-suppressions.html
 """
 from os import path
 
@@ -8,8 +9,11 @@ def handle_bounces(url, domain, _method, **kwargs):
     """
     Handle Bounces
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
-    :param _method: Incoming request method (but not used here)
+    :type domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for Bounces endpoint
     """
@@ -25,8 +29,11 @@ def handle_unsubscribes(url, domain, _method, **kwargs):
     """
     Handle Unsubscribes
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
-    :param _method: Incoming request method (but not used here)
+    :type domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for Unsubscribes endpoint
     """
@@ -42,8 +49,11 @@ def handle_complaints(url, domain, _method, **kwargs):
     """
     Handle Complaints
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
-    :param _method: Incoming request method (but not used here)
+    :type domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for Complaints endpoint
     """
@@ -59,8 +69,11 @@ def handle_whitelists(url, domain, _method, **kwargs):
     """
     Handle Whitelists
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
-    :param _method: Incoming request method (but not used here)
+    :type domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for Whitelists endpoint
     """
