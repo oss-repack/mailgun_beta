@@ -47,12 +47,22 @@ HANDLERS = {"resendmessage": handle_resend_message,
 
 
 class Config(object):
+    """
+    Config class. Configure client with basic (urls, version, headers)
+    """
     DEFAULT_API_URL = 'https://api.mailgun.net/'
     API_REF = 'https://documentation.mailgun.com/en/latest/api_reference.html'
     version = 'v3'
     user_agent = 'mailgun-api-python/'
 
     def __init__(self, version=None, api_url=None):
+        """
+        Set version and api_url
+        :param version: API version (default: v3)
+        :type version: str
+        :param api_url: API base url
+        :type api_url: str
+        """
         if version is not None:
             self.version = version
 
@@ -60,6 +70,14 @@ class Config(object):
         self.api_url = api_url or self.DEFAULT_API_URL
 
     def __getitem__(self, key):
+        """
+        Parse incoming splitted attr name, check it and prepare endpoint url.
+        Most urls generated here can't be generated dynamically as we are doing this
+        in build_url() method under Endpoint class.
+        :param key: incoming attr name
+        :type key: str
+        :return: url, headers
+        """
         # Append version to URL.
         # Forward slash is ignored if present in self.version.
         url = urljoin(self.api_url, self.version + '/')
@@ -116,8 +134,18 @@ class Config(object):
 
 
 class Endpoint(object):
-
+    """
+    Generate request and return response
+    """
     def __init__(self, url, headers, auth):
+        """
+        :param url: URL dict with pairs {"base": "keys"}
+        :type url: dict
+        :param headers: Headers dict
+        :type headers: dict
+        :param auth: requests auth tuple
+        :type auth: tuple
+        """
         self._url = url
         self.headers = headers
         self._auth = auth
@@ -125,20 +153,28 @@ class Endpoint(object):
     def api_call(self, auth, method, url, headers, data=None, filters=None, timeout=60,
                  files=None, domain=None, **kwargs):
         """
-
+        Build URL and make a request
         :param auth: auth data
+        :type auth: tuple
         :param method: request method
+        :type method: str
         :param url: incoming url (base+keys)
+        :type url: dict
         :param headers: incoming headers
+        :type headers: dict
         :param data: incoming post/put data
+        :type data: dict
         :param filters: incoming params
+        :type filters: dict
         :param timeout: requested timeout (60-default)
+        :type timeout: int
         :param files: incoming files
+        :type files: dict
         :param domain: incoming domain
+        :type domain: str
         :param kwargs: kwargs
         :return: server response from API
         """
-
         url = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)
 
@@ -158,10 +194,14 @@ class Endpoint(object):
     @staticmethod
     def build_url(url, domain=None, method=None, **kwargs):
         """
-        Build final request url using predefined handlers
+        Build final request url using predefined handlers.
+        Note: Some urls are being built in Config class, as they can't be generated dynamically.
         :param url: incoming url (base+keys)
+        :type url: dict
         :param domain: incoming domain
+        :type domain: str
         :param method: requested method
+        :type method: str
         :param kwargs: kwargs
         :return: builded URL
         """
@@ -170,27 +210,34 @@ class Endpoint(object):
 
         return url
 
-    def get(self, params=None, domain=None, **kwargs):
+    def get(self, filters=None, domain=None, **kwargs):
         """
         GET method for API calls
-        :param params: incoming params
+        :param filters: incoming params
+        :type filters: dict
         :param domain: incoming domain
+        :type domain: str
         :param kwargs: kwargs
         :return: api_call GET request
         """
         return self.api_call(self._auth, 'get', self._url,
                              domain=domain, headers=self.headers,
-                             params=params, **kwargs)
+                             filters=filters, **kwargs)
 
     def create(self, data=None, filters=None, domain=None,
                headers=None, files=None, **kwargs):
         """
         POST method for API calls
         :param data: incoming post data
+        :type data: dict
         :param filters: incoming params
+        :type filters: dict
         :param domain: incoming domain
+        :type domain: str
         :param headers: incoming headers
+        :type headers: dict
         :param files: incoming files
+        :type files: file
         :param kwargs: kwargs
         :return: api_call POST request
         """
@@ -212,7 +259,9 @@ class Endpoint(object):
         """
         PUT method for API calls
         :param data: incoming data
+        :type data: dict
         :param filters: incoming params
+        :type filters: dict
         :param kwargs: kwargs
         :return: api_call POST request
         """
@@ -223,7 +272,9 @@ class Endpoint(object):
         """
         PATCH method for API calls
         :param data: incoming data
+        :type data: dict
         :param filters: incoming params
+        :type filters: dict
         :param kwargs: kwargs
         :return: api_call PATCH request
         """
@@ -234,7 +285,9 @@ class Endpoint(object):
         """
         PUT method for API calls
         :param data: incoming data
+        :type data: dict
         :param filters: incoming params
+        :type filters: dict
         :param kwargs: kwargs
         :return: api_call PUT request
         """
@@ -247,6 +300,7 @@ class Endpoint(object):
         """
         DELETE method for API calls
         :param domain: incoming domain
+        :type domain: str
         :param kwargs: kwargs
         :return: api_call DELETE request
         """
@@ -255,14 +309,27 @@ class Endpoint(object):
 
 
 class Client(object):
-
+    """
+    Client class
+    """
     def __init__(self, auth=None, **kwargs):
+        """
+        :param auth: auth set ("username", "APIKEY")
+        :type auth: set
+        :param kwargs: kwargs
+        """
         self.auth = auth
         version = kwargs.get('version', None)
         api_url = kwargs.get('api_url', None)
         self.config = Config(version=version, api_url=api_url)
 
     def __getattr__(self, name):
+        """
+        Get named attribute of an object, split it and execute
+        :param name: attribute name (Example: client.domains_ips. names: ["domains", "ips"])
+        :type name: str
+        :return: type object (executes existing handler)
+        """
         split = name.split('_')
         # identify the resource
         fname = split[0]

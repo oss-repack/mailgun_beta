@@ -1,5 +1,6 @@
 """
 TAGS HANDLER
+Doc: https://documentation.mailgun.com/en/latest/api-tags.html
 """
 from os import path
 from urllib.parse import quote
@@ -9,8 +10,11 @@ def handle_tags(url, domain, _method, **kwargs):
     """
     Handle Tags
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
+    :type domain: str
     :param _method: Incoming request method (but not used here)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for Tags endpoint
     """

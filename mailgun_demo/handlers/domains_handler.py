@@ -1,5 +1,6 @@
 """
 DOMAINS HANDLER
+Doc: https://documentation.mailgun.com/en/latest/api-domains.html#
 """
 from os import path
 from urllib.parse import urljoin
@@ -9,8 +10,11 @@ from .error_handler import ApiError
 def handle_domainlist(url, _domain, _method, **_):
     """
     :param url: Incoming URL dictionary
-    :param _domain: Incoming domain
-    :param _method: Incoming request method
+    :type url: dict
+    :param _domain: Incoming domain (it's not being used for this handler)
+    :type _domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param _: kwargs
     :return: final url for domainlist endpoint
     """
@@ -20,8 +24,11 @@ def handle_domainlist(url, _domain, _method, **_):
 def handle_domains(url, domain, method, **kwargs):
     """
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
+    :type domain: str
     :param method: Incoming request method
+    :type method: str
     :param kwargs: kwargs
     :return: final url for domain endpoint
     """

@@ -1,5 +1,8 @@
 """
 DEFAULT HANDLER
+Events doc: https://documentation.mailgun.com/en/latest/api-events.html
+Messages doc: https://documentation.mailgun.com/en/latest/api-sending.html
+Stats doc: https://documentation.mailgun.com/en/latest/api-stats.html
 """
 from os import path
 from .error_handler import ApiError
@@ -10,8 +13,11 @@ def handle_default(url, domain, _method, **_):
     Default handler for endpoints with single url pattern
     (events, messages, stats)
     :param url: Incoming URL dictionary
+    :type url: dict
     :param domain: Incoming domain
-    :param _method: Incoming request method (but it's not used for handle_default)
+    :type domain: str
+    :param _method: Incoming request method (it's not being used for this handler)
+    :type _method: str
     :param kwargs: kwargs
     :return: final url for default endpoint
     """
