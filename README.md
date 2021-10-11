@@ -3,7 +3,7 @@ Examples for all endpoints you will find under:
 ````
 mailgun/examples
 ````
-To run tests and examples please use virtualenv with next template:
+To run tests and examples please use virtualenv with next variables:
 ````
 DOMAIN="DOMAIN_NAME"
 APIKEY="API_KEY"
