@@ -1,6 +1,6 @@
 import unittest
 import os
-from mailgun_demo.client import Client
+from mailgun.client import Client
 
 
 class MessagesTests(unittest.TestCase):

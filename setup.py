@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='mailgun_demo1', # Replace with your own username
-    version="1.0.4",
+    version="1.0.5",
     author="diskovod",
     author_email="diskovodik@gmail.com",
     description="Mailgun beta project",
