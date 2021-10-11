@@ -5,20 +5,20 @@ import json
 import requests
 from urllib.parse import urljoin
 
-from mailgun_demo.handlers.messages_handler import handle_resend_message
-from mailgun_demo.handlers.domains_handler import handle_domains, handle_domainlist
-from mailgun_demo.handlers.ips_handler import handle_ips
-from mailgun_demo.handlers.ip_pools_handler import handle_ippools
-from mailgun_demo.handlers.tags_handler import handle_tags
-from mailgun_demo.handlers.suppressions_handler import handle_bounces, handle_whitelists, \
+from mailgun.handlers.messages_handler import handle_resend_message
+from mailgun.handlers.domains_handler import handle_domains, handle_domainlist
+from mailgun.handlers.ips_handler import handle_ips
+from mailgun.handlers.ip_pools_handler import handle_ippools
+from mailgun.handlers.tags_handler import handle_tags
+from mailgun.handlers.suppressions_handler import handle_bounces, handle_whitelists, \
     handle_complaints, handle_unsubscribes
-from mailgun_demo.handlers.routes_handler import handle_routes
-from mailgun_demo.handlers.mailinglists_handler import handle_lists
-from mailgun_demo.handlers.templates_handler import handle_templates
-from mailgun_demo.handlers.email_validation_handler import handle_address_validate
-from mailgun_demo.handlers.inbox_placement_handler import handle_inbox
-from mailgun_demo.handlers.error_handler import ApiError
-from mailgun_demo.handlers.default_handler import handle_default
+from mailgun.handlers.routes_handler import handle_routes
+from mailgun.handlers.mailinglists_handler import handle_lists
+from mailgun.handlers.templates_handler import handle_templates
+from mailgun.handlers.email_validation_handler import handle_address_validate
+from mailgun.handlers.inbox_placement_handler import handle_inbox
+from mailgun.handlers.error_handler import ApiError
+from mailgun.handlers.default_handler import handle_default
 
 # requests.packages.urllib3.disable_warnings()
 

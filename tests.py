@@ -28,6 +28,13 @@ class MessagesTests(unittest.TestCase):
 
 
 class DomainTests(unittest.TestCase):
+    """
+    All the tests of this part will work only on fresh setup, or you have to change
+    self.test_domain variable every time you're running this again. It's happening because
+    domain name is not deleting permanently after API call, so every new create will cause an error,
+    as that domain is still exists. Maybe in this case it's good to implement something like random name
+    generator to avoid this problems.
+    """
     def setUp(self):
         self.auth = (
             "api",
@@ -35,7 +42,7 @@ class DomainTests(unittest.TestCase):
         )
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
-        self.test_domain = "mailgun.wrapper.test"
+        self.test_domain = "mailgun.wrapper.test2"
         self.post_domain_data = {
             "name": self.test_domain,
         }
@@ -86,7 +93,6 @@ class DomainTests(unittest.TestCase):
         #
         self.client.domains.delete(domain=self.test_domain)
         request = self.client.domains.create(data=self.post_domain_data)
-        print(request.text)
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain has been created", request.json()["message"])
 
@@ -107,7 +113,7 @@ class DomainTests(unittest.TestCase):
     def test_delete_domain(self):
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains.delete(domain=self.test_domain)
-        self.assertEqual(request.json()["message"], "Domain has been deleted")
+        self.assertEqual(request.json()["message"], "Domain will be deleted on the background")
         self.assertEqual(request.status_code, 200)
 
     def test_get_smtp_creds(self):
