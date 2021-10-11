@@ -1,7 +1,7 @@
 Mailgun DEMO.
 Examples for all endpoints you will find under:
 ````
-mailgun_demo/examples
+mailgun/examples
 ````
 To run tests and examples please use virtualenv with next template:
 ````
@@ -17,11 +17,11 @@ VALIDATION_ADDRESS_2="test2@gmail.com"
 ````
 
 Test library in Test PyPi
-https://test.pypi.org/project/mailgun-demo/1.0.4/
+https://test.pypi.org/project/mailgun-demo1/
 
 After you will install this you can just import it like:
 ````
-from mailgun_demo.client import Client
+from mailgun.client import Client
 
 client = Client(auth=("api", key))
 ````
