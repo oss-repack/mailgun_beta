@@ -145,20 +145,29 @@ repos:
 #    rev: v1.1.390
 #    hooks:
 #    - id: pyright
-#
-#  - repo: https://github.com/PyCQA/bandit
-#    rev: 1.8.0
-#    hooks:
-#      - id: bandit
-#        args: ["-c", "pyproject.toml", "-r", "."]
-#        # ignore all tests, not just tests data
-#        exclude: ^tests/
-#        additional_dependencies: [".[toml]"]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.0
+    hooks:
+      - id: bandit
+        args: ["-c", "pyproject.toml", "-r", "."]
+        # ignore all tests, not just tests data
+        exclude: ^tests/
+        additional_dependencies: [".[toml]"]
 
   - repo: https://github.com/crate-ci/typos
     rev: v1.28.3
     hooks:
       - id: typos
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          # gfm = GitHub Flavored Markdown
+          - mdformat-gfm
+          - mdformat-black
 
 #  - repo: https://github.com/google/yapf
 #    rev: v0.40.2
@@ -171,15 +180,6 @@ repos:
 #      rev: '2023.5.8'
 #      hooks:
 #      -   id: pytype
-
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
-    hooks:
-      - id: mdformat
-        additional_dependencies:
-          # gfm = GitHub Flavored Markdown
-          - mdformat-gfm
-          - mdformat-black
 
 #  - repo: https://github.com/adrienverge/yamllint.git
 #    rev: v1.35.1
