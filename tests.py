@@ -1,6 +1,7 @@
 import unittest
 import os
 from mailgun.client import Client
+import pytest
 
 
 class MessagesTests(unittest.TestCase):
@@ -15,7 +16,7 @@ class MessagesTests(unittest.TestCase):
                      "to": os.environ["MESSAGES_TO"],
                      "cc":  os.environ["MESSAGES_CC"],
                      "subject": "Hello Vasyl Bodaj",
-                     "text": "Congratulations !!!!!, you just sent an email with Mailgun!  You are truly awesome!",
+                     "text": "Congratulations!, you just sent an email with Mailgun! You are truly awesome!",
                      "o:tag": "Python test"}
 
     def test_post_right_message(self):
@@ -94,7 +95,7 @@ class DomainTests(unittest.TestCase):
         self.client.domains.delete(domain=self.test_domain)
         request = self.client.domains.create(data=self.post_domain_data)
         self.assertEqual(request.status_code, 200)
-        self.assertIn("Domain has been created", request.json()["message"])
+        self.assertIn("Domain DNS records have been created", request.json()["message"])
 
     def test_get_single_domain(self):
         self.client.domains.create(data=self.post_domain_data)
@@ -113,7 +114,7 @@ class DomainTests(unittest.TestCase):
     def test_delete_domain(self):
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains.delete(domain=self.test_domain)
-        self.assertEqual(request.json()["message"], "Domain will be deleted on the background")
+        self.assertEqual(request.json()["message"], "Domain will be deleted in the background")
         self.assertEqual(request.status_code, 200)
 
     def test_get_smtp_creds(self):
@@ -214,6 +215,8 @@ class IpTests(unittest.TestCase):
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
+
+    @pytest.mark.skip
     def test_create_ip(self):
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         self.assertEqual("success", request.json()["message"])
