@@ -182,7 +182,7 @@ class Endpoint:
         req_method = getattr(requests, method)
 
         try:
-            response = req_method(
+            return req_method(
                 url,
                 data=data,
                 params=filters,
@@ -193,7 +193,6 @@ class Endpoint:
                 verify=True,
                 stream=False)
 
-            return response
 
         except requests.exceptions.Timeout:
             raise TimeoutError
@@ -217,9 +216,8 @@ class Endpoint:
         :return: builded URL
         """
 
-        url = HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
+        return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
 
-        return url
 
     def get(self, filters=None, domain=None, **kwargs):
         """
