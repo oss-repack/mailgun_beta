@@ -21,3 +21,4 @@ def handle_resend_message(_url, _domain, _method, **kwargs):
         return kwargs["storage_url"]
     else:
         ApiError("Storage url is required")
+        return None
