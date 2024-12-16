@@ -3,6 +3,7 @@ INBOX PLACEMENT HANDLER
 Doc: https://documentation.mailgun.com/en/latest/api-inbox-placement.html
 """
 from os import path
+
 from .error_handler import ApiError
 
 

@@ -2,23 +2,28 @@
 # coding=utf-8
 
 import json
-import requests
 from urllib.parse import urljoin
 
-from mailgun.handlers.messages_handler import handle_resend_message
-from mailgun.handlers.domains_handler import handle_domains, handle_domainlist
-from mailgun.handlers.ips_handler import handle_ips
-from mailgun.handlers.ip_pools_handler import handle_ippools
-from mailgun.handlers.tags_handler import handle_tags
-from mailgun.handlers.suppressions_handler import handle_bounces, handle_whitelists, \
-    handle_complaints, handle_unsubscribes
-from mailgun.handlers.routes_handler import handle_routes
-from mailgun.handlers.mailinglists_handler import handle_lists
-from mailgun.handlers.templates_handler import handle_templates
-from mailgun.handlers.email_validation_handler import handle_address_validate
-from mailgun.handlers.inbox_placement_handler import handle_inbox
-from mailgun.handlers.error_handler import ApiError
+import requests
+
 from mailgun.handlers.default_handler import handle_default
+from mailgun.handlers.domains_handler import handle_domainlist
+from mailgun.handlers.domains_handler import handle_domains
+from mailgun.handlers.email_validation_handler import handle_address_validate
+from mailgun.handlers.error_handler import ApiError
+from mailgun.handlers.inbox_placement_handler import handle_inbox
+from mailgun.handlers.ip_pools_handler import handle_ippools
+from mailgun.handlers.ips_handler import handle_ips
+from mailgun.handlers.mailinglists_handler import handle_lists
+from mailgun.handlers.messages_handler import handle_resend_message
+from mailgun.handlers.routes_handler import handle_routes
+from mailgun.handlers.suppressions_handler import handle_bounces
+from mailgun.handlers.suppressions_handler import handle_complaints
+from mailgun.handlers.suppressions_handler import handle_unsubscribes
+from mailgun.handlers.suppressions_handler import handle_whitelists
+from mailgun.handlers.tags_handler import handle_tags
+from mailgun.handlers.templates_handler import handle_templates
+
 
 # requests.packages.urllib3.disable_warnings()
 

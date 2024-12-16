@@ -3,6 +3,7 @@ TEMPLATES HANDLER
 Doc: https://documentation.mailgun.com/en/latest/api-templates.html
 """
 from os import path
+
 from .error_handler import ApiError
 
 

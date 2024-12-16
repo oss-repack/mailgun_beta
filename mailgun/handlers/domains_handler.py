@@ -4,6 +4,7 @@ Doc: https://documentation.mailgun.com/en/latest/api-domains.html#
 """
 from os import path
 from urllib.parse import urljoin
+
 from .error_handler import ApiError
 
 

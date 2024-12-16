@@ -288,7 +288,7 @@ convention = "google"
 
 [tool.flake8]
 exclude = ["samples/*"]
-# TODO: D100 - create docstrings for modules test_client.py and test_version.py
+# TODO: D100 - create docstrings for modules
 ignore = ['E501', "D100"]
 extend-ignore = "W503"
 per-file-ignores = [

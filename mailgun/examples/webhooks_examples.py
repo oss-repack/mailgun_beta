@@ -1,5 +1,7 @@
 import os
+
 from mailgun.client import Client
+
 
 key = os.environ["APIKEY"]
 domain = os.environ["DOMAIN"]
