@@ -55,5 +55,5 @@ def events_rejected_or_failed():
     req = client.events.get(domain=domain, filters=params)
     print(req.json())
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     events_rejected_or_failed()

@@ -162,7 +162,7 @@ def put_unsub_tracking():
     """
     data = {
         "active": "yes",
-        "html_footer": "\n<br>\n<p><a href=\"%unsubscribe_url%\">UnSuBsCrIbE</a></p>\n",
+        "html_footer": '\n<br>\n<p><a href="%unsubscribe_url%">UnSuBsCrIbE</a></p>\n',
         "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
     }
     request = client.domains_tracking_unsubscribe.put(domain=domain, data=data)
@@ -202,5 +202,5 @@ def put_web_prefix():
     print(request.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     put_web_prefix()

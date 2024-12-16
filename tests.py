@@ -67,7 +67,7 @@ class DomainTests(unittest.TestCase):
         }
         self.put_domain_unsubscribe_data = {
             "active": "yes",
-            "html_footer": "\n<br>\n<p><a href=\"%unsubscribe_url%\">UnSuBsCrIbE</a></p>\n",
+            "html_footer": '\n<br>\n<p><a href="%unsubscribe_url%">UnSuBsCrIbE</a></p>\n',
             "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
         }
 
@@ -354,13 +354,13 @@ class TagsTests(unittest.TestCase):
 
     def test_get_tags(self):
         req = self.client.tags.get(domain=self.domain)
-        self.assertIn('items', req.json())
+        self.assertIn("items", req.json())
         self.assertEqual(req.status_code, 200)
 
     def test_tag_get_by_name(self):
         req = self.client.tags.get(domain=self.domain,
                                    tag_name=self.tag_name)
-        self.assertIn('tag', req.json())
+        self.assertIn("tag", req.json())
         self.assertEqual(req.status_code, 200)
 
     def test_tag_put(self):
@@ -423,13 +423,13 @@ class BouncesTests(unittest.TestCase):
     def test_bounces_get(self):
         req = self.client.bounces.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
-        self.assertIn('items', req.json())
+        self.assertIn("items", req.json())
 
     def test_bounces_create(self):
         req = self.client.bounces.create(data=self.bounces_data,
                                          domain=self.domain)
         self.assertEqual(req.status_code, 200)
-        self.assertIn('address', req.json())
+        self.assertIn("address", req.json())
 
     def test_bounces_get_address(self):
         self.client.bounces.create(data=self.bounces_data,
@@ -437,14 +437,14 @@ class BouncesTests(unittest.TestCase):
         req = self.client.bounces.get(domain=self.domain,
                                       bounce_address=self.bounces_data["address"])
         self.assertEqual(req.status_code, 200)
-        self.assertIn('address', req.json())
+        self.assertIn("address", req.json())
 
     def test_bounces_create_json(self):
         req = self.client.bounces.create(data=self.bounces_json_data,
                                          domain=self.domain,
-                                         headers='application/json')
+                                         headers="application/json")
         self.assertEqual(req.status_code, 200)
-        self.assertIn('message', req.json())
+        self.assertIn("message", req.json())
 
     def test_bounces_delete_single(self):
         self.client.bounces.create(data=self.bounces_data,
@@ -452,12 +452,12 @@ class BouncesTests(unittest.TestCase):
         req = self.client.bounces.delete(domain=self.domain,
                                          bounce_address=self.bounces_data["address"])
         self.assertEqual(req.status_code, 200)
-        self.assertIn('message', req.json())
+        self.assertIn("message", req.json())
 
     def test_bounces_delete_all(self):
         req = self.client.bounces.delete(domain=self.domain)
         self.assertEqual(req.status_code, 200)
-        self.assertIn('message', req.json())
+        self.assertIn("message", req.json())
 
 
 class UnsubscribesTest(unittest.TestCase):
@@ -507,7 +507,7 @@ class UnsubscribesTest(unittest.TestCase):
     def test_unsub_create_multiple(self):
         req = self.client.unsubscribes.create(data=self.unsub_json_data,
                                               domain=self.domain,
-                                              headers='application/json')
+                                              headers="application/json")
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -558,7 +558,7 @@ class ComplaintsTest(unittest.TestCase):
     def test_compl_get_all(self):
         req = self.client.complaints.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
-        self.assertIn('items', req.json())
+        self.assertIn("items", req.json())
 
     def test_compl_get_single(self):
         self.client.complaints.create(data=self.compl_data,
@@ -566,12 +566,12 @@ class ComplaintsTest(unittest.TestCase):
         req = self.client.complaints.get(domain=self.domain,
                                          complaint_address=self.compl_data["address"])
         self.assertEqual(req.status_code, 200)
-        self.assertIn('address', req.json())
+        self.assertIn("address", req.json())
 
     def test_compl_create_multiple(self):
         req = self.client.complaints.create(data=self.compl_json_data,
                                             domain=self.domain,
-                                            headers='application/json')
+                                            headers="application/json")
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -579,7 +579,7 @@ class ComplaintsTest(unittest.TestCase):
     def test_compl_delete_single(self):
         self.client.complaints.create(data=self.compl_json_data,
                                       domain=self.domain,
-                                      headers='application/json')
+                                      headers="application/json")
         req = self.client.complaints.delete(domain=self.domain,
                                             unsubscribe_address=self.compl_data["address"])
 
@@ -718,12 +718,12 @@ class WebhooksTest(unittest.TestCase):
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
         self.webhooks_data = {
-            'id': 'clicked',
-            'url': ['https://i.ua']
+            "id": "clicked",
+            "url": ["https://i.ua"]
         }
 
         self.webhooks_data_put = {
-            'url': 'https://twitter.com'
+            "url": "https://twitter.com"
         }
 
     def test_webhooks_create(self):
@@ -774,33 +774,33 @@ class MailingListsTest(unittest.TestCase):
         self.domain = os.environ["DOMAIN"]
         self.maillist_address = os.environ["MAILLIST_ADDRESS"]
         self.mailing_lists_data = {
-            'address': 'python_sdk@{domain}'.format(domain=self.domain),
-            'description': "Mailgun developers list"
+            "address": "python_sdk@{domain}".format(domain=self.domain),
+            "description": "Mailgun developers list"
         }
 
         self.mailing_lists_data_update = {
-            'description': "Mailgun developers list 121212"
+            "description": "Mailgun developers list 121212"
         }
 
         self.mailing_lists_members_data = {
-            'subscribed': True,
-            'address': 'bar@example.com',
-            'name': 'Bob Bar',
-            'description': 'Developer',
-            'vars': '{"age": 26}'
+            "subscribed": True,
+            "address": "bar@example.com",
+            "name": "Bob Bar",
+            "description": "Developer",
+            "vars": '{"age": 26}'
         }
 
         self.mailing_lists_members_put_data = {
-            'subscribed': True,
-            'address': 'bar@example.com',
-            'name': 'Bob Bar',
-            'description': 'Developer',
-            'vars': '{"age": 28}'
+            "subscribed": True,
+            "address": "bar@example.com",
+            "name": "Bob Bar",
+            "description": "Developer",
+            "vars": '{"age": 28}'
         }
 
         self.mailing_lists_members_data_mult = {
-            'upsert': True,
-            'members': '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
+            "upsert": True,
+            "members": '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
                        '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'
         }
 
@@ -817,7 +817,7 @@ class MailingListsTest(unittest.TestCase):
 
     def test_maillist_lists_create(self):
         self.client.lists.delete(domain=self.domain,
-                                 address='python_sdk@{domain}'.format(domain=self.domain))
+                                 address="python_sdk@{domain}".format(domain=self.domain))
         req = self.client.lists.create(domain=self.domain,
                                        data=self.mailing_lists_data)
         self.assertEqual(req.status_code, 200)
@@ -828,7 +828,7 @@ class MailingListsTest(unittest.TestCase):
                                  data=self.mailing_lists_data)
         req = self.client.lists.put(domain=self.domain,
                                     data=self.mailing_lists_data_update,
-                                    address='python_sdk@{domain}'.format(domain=self.domain))
+                                    address="python_sdk@{domain}".format(domain=self.domain))
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
@@ -836,7 +836,7 @@ class MailingListsTest(unittest.TestCase):
         self.client.lists.create(domain=self.domain,
                                  data=self.mailing_lists_data)
         req = self.client.lists.delete(domain=self.domain,
-                                       address='python_sdk@{domain}'.format(domain=self.domain))
+                                       address="python_sdk@{domain}".format(domain=self.domain))
         self.assertEqual(req.status_code, 200)
 
     def test_maillists_lists_validate_create(self):
@@ -923,26 +923,26 @@ class TemplatesTest(unittest.TestCase):
         )
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
-        self.post_template_data = {'name': 'template.name20',
-                                   'description': 'template description',
-                                   'template': '{{fname}} {{lname}}',
-                                   'engine': 'handlebars',
-                                   'comment': 'version comment'}
+        self.post_template_data = {"name": "template.name20",
+                                   "description": "template description",
+                                   "template": "{{fname}} {{lname}}",
+                                   "engine": "handlebars",
+                                   "comment": "version comment"}
 
-        self.put_template_data = {'description': 'new template description'}
+        self.put_template_data = {"description": "new template description"}
 
-        self.post_template_version_data = {'tag': 'v11',
-                                           'template': '{{fname}} {{lname}}',
-                                           'engine': 'handlebars',
-                                           'active': 'no'
+        self.post_template_version_data = {"tag": "v11",
+                                           "template": "{{fname}} {{lname}}",
+                                           "engine": "handlebars",
+                                           "active": "no"
                                            }
         self.put_template_version_data = {
-            'template': '{{fname}} {{lname}}',
-            'comment': 'Updated version comment',
-            'active': 'no'
+            "template": "{{fname}} {{lname}}",
+            "comment": "Updated version comment",
+            "active": "no"
         }
 
-        self.put_template_version = 'v11'
+        self.put_template_version = "v11"
 
     def test_create_template(self):
         self.client.templates.delete(domain=self.domain,
@@ -1036,8 +1036,8 @@ class TemplatesTest(unittest.TestCase):
         self.client.templates.create(data=self.post_template_data,
                                      domain=self.domain)
 
-        self.post_template_version_data["tag"] = 'v0'
-        self.post_template_version_data["active"] = 'no'
+        self.post_template_version_data["tag"] = "v0"
+        self.post_template_version_data["active"] = "no"
         self.client.templates.create(data=self.post_template_version_data,
                                      domain=self.domain,
                                      template_name=self.post_template_data["name"],
@@ -1046,7 +1046,7 @@ class TemplatesTest(unittest.TestCase):
         req = self.client.templates.delete(domain=self.domain,
                                            template_name=self.post_template_data["name"],
                                            versions=True,
-                                           tag='v0')
+                                           tag="v0")
 
         self.client.templates.delete(domain=self.domain,
                                      template_name=self.post_template_data["name"],
@@ -1110,10 +1110,10 @@ class InboxPlacementTest(unittest.TestCase):
         self.domain = os.environ["DOMAIN"]
 
         self.post_inbox_test = {
-            'domain': 'domain.com',
-            'from': 'user@sending_domain.com',
-            'subject': 'testSubject',
-            'html': '<html>HTML version of the body</html>'
+            "domain": "domain.com",
+            "from": "user@sending_domain.com",
+            "subject": "testSubject",
+            "html": "<html>HTML version of the body</html>"
         }
 
     def test_post_inbox_tests(self):
@@ -1172,5 +1172,5 @@ class InboxPlacementTest(unittest.TestCase):
         self.assertIn("checks", req.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

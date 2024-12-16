@@ -50,10 +50,10 @@ class Config(object):
     """
     Config class. Configure client with basic (urls, version, headers)
     """
-    DEFAULT_API_URL = 'https://api.mailgun.net/'
-    API_REF = 'https://documentation.mailgun.com/en/latest/api_reference.html'
-    version = 'v3'
-    user_agent = 'mailgun-api-python/'
+    DEFAULT_API_URL = "https://api.mailgun.net/"
+    API_REF = "https://documentation.mailgun.com/en/latest/api_reference.html"
+    version = "v3"
+    user_agent = "mailgun-api-python/"
 
     def __init__(self, version=None, api_url=None):
         """
@@ -80,18 +80,18 @@ class Config(object):
         """
         # Append version to URL.
         # Forward slash is ignored if present in self.version.
-        url = urljoin(self.api_url, self.version + '/')
-        headers = {'User-agent': self.user_agent}
+        url = urljoin(self.api_url, self.version + "/")
+        headers = {"User-agent": self.user_agent}
         modified = False
         # Domains section
-        if key.lower() == 'domainlist':
+        if key.lower() == "domainlist":
             url = {"base": urljoin(self.api_url, self.version + "/"),
                    "keys": ["domainlist"]}
             modified = True
-        if 'domains' in key.lower():
+        if "domains" in key.lower():
             splitted = [key.lower()]
             if "_" in key.lower():
-                splitted = key.split('_')
+                splitted = key.split("_")
             final_keys = splitted
             if "dkimauthority" in splitted:
                 final_keys = ["dkim_authority"]
@@ -123,13 +123,13 @@ class Config(object):
         # Email Validation section
         if "addressvalidate" in key.lower():
             url = {"base": urljoin(self.api_url, "v4" + "/address/validate"),
-                   "keys": key.split('_')}
+                   "keys": key.split("_")}
             modified = True
 
         if not modified:
-            url = urljoin(self.api_url, self.version + '/')
+            url = urljoin(self.api_url, self.version + "/")
             url = {"base": url,
-                   "keys": key.split('_')}
+                   "keys": key.split("_")}
         return url, headers
 
 
@@ -220,7 +220,7 @@ class Endpoint(object):
         :param kwargs: kwargs
         :return: api_call GET request
         """
-        return self.api_call(self._auth, 'get', self._url,
+        return self.api_call(self._auth, "get", self._url,
                              domain=domain, headers=self.headers,
                              filters=filters, **kwargs)
 
@@ -242,16 +242,16 @@ class Endpoint(object):
         :return: api_call POST request
         """
         if "Content-type" in self.headers:
-            if self.headers['Content-type'] == 'application/json':
+            if self.headers["Content-type"] == "application/json":
                 data = json.dumps(data)
         elif headers:
-            if headers == 'application/json':
+            if headers == "application/json":
                 data = json.dumps(data)
-                self.headers['Content-type'] = 'application/json'
-            elif headers == 'multipart/form-data':
-                self.headers['Content-type'] = 'multipart/form-data'
+                self.headers["Content-type"] = "application/json"
+            elif headers == "multipart/form-data":
+                self.headers["Content-type"] = "multipart/form-data"
 
-        return self.api_call(self._auth, 'post', self._url, files=files,
+        return self.api_call(self._auth, "post", self._url, files=files,
                              domain=domain, headers=self.headers,
                              data=data, filters=filters, **kwargs)
 
@@ -265,7 +265,7 @@ class Endpoint(object):
         :param kwargs: kwargs
         :return: api_call POST request
         """
-        return self.api_call(self._auth, 'put', self._url, headers=self.headers,
+        return self.api_call(self._auth, "put", self._url, headers=self.headers,
                              data=data, filters=filters, **kwargs)
 
     def patch(self, data=None, filters=None, **kwargs):
@@ -278,7 +278,7 @@ class Endpoint(object):
         :param kwargs: kwargs
         :return: api_call PATCH request
         """
-        return self.api_call(self._auth, 'patch', self._url, headers=self.headers,
+        return self.api_call(self._auth, "patch", self._url, headers=self.headers,
                              data=data, filters=filters, **kwargs)
 
     def update(self, data, filters=None, **kwargs):
@@ -291,9 +291,9 @@ class Endpoint(object):
         :param kwargs: kwargs
         :return: api_call PUT request
         """
-        if self.headers['Content-type'] == 'application/json':
+        if self.headers["Content-type"] == "application/json":
             data = json.dumps(data)
-        return self.api_call(self._auth, 'put', self._url, headers=self.headers,
+        return self.api_call(self._auth, "put", self._url, headers=self.headers,
                              data=data, filters=filters, **kwargs)
 
     def delete(self, domain=None, **kwargs):
@@ -304,7 +304,7 @@ class Endpoint(object):
         :param kwargs: kwargs
         :return: api_call DELETE request
         """
-        return self.api_call(self._auth, 'delete', self._url,
+        return self.api_call(self._auth, "delete", self._url,
                              headers=self.headers, domain=domain, **kwargs)
 
 
@@ -319,8 +319,8 @@ class Client(object):
         :param kwargs: kwargs
         """
         self.auth = auth
-        version = kwargs.get('version', None)
-        api_url = kwargs.get('api_url', None)
+        version = kwargs.get("version", None)
+        api_url = kwargs.get("api_url", None)
         self.config = Config(version=version, api_url=api_url)
 
     def __getattr__(self, name):
@@ -330,7 +330,7 @@ class Client(object):
         :type name: str
         :return: type object (executes existing handler)
         """
-        split = name.split('_')
+        split = name.split("_")
         # identify the resource
         fname = split[0]
         url, headers = self.config[name]

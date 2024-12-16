@@ -98,5 +98,5 @@ def resend_message():
     print(req.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     resend_message()

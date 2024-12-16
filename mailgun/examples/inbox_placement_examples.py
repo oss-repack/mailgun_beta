@@ -12,10 +12,10 @@ def post_inbox():
     :return:
     """
     data = {
-        'domain': 'domain.com',
-        'from': 'user@sending_domain.com',
-        'subject': 'testSubject',
-        'html': '<html>HTML version of the body</html>' }
+        "domain": "domain.com",
+        "from": "user@sending_domain.com",
+        "subject": "testSubject",
+        "html": "<html>HTML version of the body</html>" }
 
     req = client.inbox_tests.create(domain=domain, data=data)
     print(req.json())
@@ -75,7 +75,7 @@ def get_single_placement_check_test():
     print(req.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     get_single_placement_check_test()
 
 

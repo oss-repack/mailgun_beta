@@ -61,7 +61,7 @@ def delete_route():
     req = client.routes.delete(domain=domain, route_id="60142b357c90c3c9f228e0a6")
     print(req.json())
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delete_route()
 
 

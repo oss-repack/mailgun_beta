@@ -51,7 +51,7 @@ def add_multiple_bounces():
             "code": "550",
             "error": "Test error"
         }]
-    req = client.bounces.create(data=data, domain=domain, headers='application/json')
+    req = client.bounces.create(data=data, domain=domain, headers="application/json")
     print(req.json())
 
 def import_bounce_list():
@@ -101,8 +101,8 @@ def create_single_unsub():
     POST /<domain>/unsubscribes
     :return:
     """
-    data = {'address':'bob@example.com',
-            'tag': '*'}
+    data = {"address":"bob@example.com",
+            "tag": "*"}
     req = client.unsubscribes.create(data=data, domain=domain)
     print(req.json())
 
@@ -127,7 +127,7 @@ def create_multiple_unsub():
     ]
 
     req = client.unsubscribes.create(data=data, domain=domain,
-                                     headers='application/json')
+                                     headers="application/json")
     print(req.json())
 
 def import_list_unsubs():
@@ -194,7 +194,7 @@ def add_multiple_complaints():
         }
     ]
 
-    req = client.complaints.create(data=data, domain=domain, headers='application/json')
+    req = client.complaints.create(data=data, domain=domain, headers="application/json")
     print(req.json())
 
 def import_complaint_list():
@@ -270,6 +270,6 @@ def delete_single_whitelist():
     req = client.whitelists.delete(domain=domain, whitelist_address="bob@gmail.com")
     print(req.json())
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delete_single_whitelist()
 

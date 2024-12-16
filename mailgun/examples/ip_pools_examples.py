@@ -38,7 +38,7 @@ def update_ippool():
     }
     req = client.ippools.patch(domain=domain,
                                data=data,
-                               pool_id='60140bc1fee3e84dec5abeeb')
+                               pool_id="60140bc1fee3e84dec5abeeb")
     print(req.json())
 
 
@@ -47,7 +47,7 @@ def delete_ippool():
     DELETE /v1/ip_pools/{pool_id}
     :return:
     """
-    req = client.ippools.delete(domain=domain, pool_id='60140bc1fee3e84dec5abeeb')
+    req = client.ippools.delete(domain=domain, pool_id="60140bc1fee3e84dec5abeeb")
     print(req.json())
 
 def link_ippool():
@@ -66,7 +66,7 @@ def unlink_ippool():
     DELETE /v3/domains/{domain_name}/ips/ip_pool
     :return:
     """
-    data = {"pool_id": '5ff37204e5eb74149462c375'}
+    data = {"pool_id": "5ff37204e5eb74149462c375"}
 
     req = client.domains_ips.delete(domain=domain,
                                     filters=data,
@@ -74,5 +74,5 @@ def unlink_ippool():
     print(req.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unlink_ippool()

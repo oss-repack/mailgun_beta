@@ -43,7 +43,7 @@ def post_bulk_list_validate():
     POST /v4/address/validate/bulk/<list_id>
     :return:
     """
-    files = {'file': open('../doc_tests/files/email_validation.csv', 'rb')}
+    files = {"file": open("../doc_tests/files/email_validation.csv", "rb")}
     req = client.addressvalidate_bulk.create(domain=domain, files=files, list_name="python2_list")
     print(req.json())
 
@@ -79,7 +79,7 @@ def post_preview():
     POST /v4/address/validate/preview/<list_id>
     :return:
     """
-    files = {'file': open('../doc_tests/files/email_previews.csv', 'rb')}
+    files = {"file": open("../doc_tests/files/email_previews.csv", "rb")}
     req = client.addressvalidate_preview.create(domain=domain,
                                              files=files,
                                              list_name="python_list")
@@ -95,5 +95,5 @@ def delete_preview():
     print(req.text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delete_preview()

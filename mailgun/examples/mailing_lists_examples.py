@@ -28,8 +28,8 @@ def post_lists():
     :return:
     """
     data = {
-        'address': 'python_sdk2@{domain}'.format(domain=domain),
-        'description': "Mailgun developers list"}
+        "address": "python_sdk2@{domain}".format(domain=domain),
+        "description": "Mailgun developers list"}
 
     req = client.lists.create(domain=domain, data=data)
     print(req.json())
@@ -40,10 +40,10 @@ def put_lists():
     :return:
     """
     data = {
-        'description': "Mailgun developers list 121212"
+        "description": "Mailgun developers list 121212"
     }
 
-    req = client.lists.put(domain=domain, data=data, address='python_sdk2@{domain}'.format(domain=domain))
+    req = client.lists.put(domain=domain, data=data, address="python_sdk2@{domain}".format(domain=domain))
     print(req.json())
 
 
@@ -105,11 +105,11 @@ def post_member_list():
     POST /lists/<address>/members
     :return:
     """
-    data = {'subscribed': True,
-            'address': 'bar2@example.com',
-            'name': 'Bob Bar',
-            'description': 'Developer',
-            'vars': '{"age": 26}'}
+    data = {"subscribed": True,
+            "address": "bar2@example.com",
+            "name": "Bob Bar",
+            "description": "Developer",
+            "vars": '{"age": 26}'}
     req = client.lists_members.create(domain=domain, address="everyone@mailgun.zeefarmer.com", data=data)
     print(req.json())
 
@@ -118,11 +118,11 @@ def put_member_list():
     PUT /lists/<address>/members/<member_address>
     :return:
     """
-    data = {'subscribed': True,
-            'address': 'bar2@example.com',
-            'name': 'Bob Bar 2',
-            'description': 'Developer',
-            'vars': '{"age": 28}'}
+    data = {"subscribed": True,
+            "address": "bar2@example.com",
+            "name": "Bob Bar 2",
+            "description": "Developer",
+            "vars": '{"age": 28}'}
 
     req = client.lists_members.put(domain=domain, address="everyone@mailgun.zeefarmer.com", data=data,
                                    member_address="bar2@example.com")
@@ -135,8 +135,8 @@ def post_members_json():
     POST /lists/<address>/members.json
     :return:
     """
-    data = {'upsert': True,
-            'members': '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
+    data = {"upsert": True,
+            "members": '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
                        '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'}
 
     req = client.lists_members.create(domain=domain, address="everyone@mailgun.zeefarmer.com", data=data, multiple=True)
@@ -158,11 +158,11 @@ def delete_lists_address():
     DELETE /lists/<address>
     :return:
     """
-    req = client.lists.delete(domain=domain, address='python_sdk@{domain}'.format(domain=domain))
+    req = client.lists.delete(domain=domain, address="python_sdk@{domain}".format(domain=domain))
     print(req.json())
 
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delete_lists_address()
 

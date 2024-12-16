@@ -20,8 +20,8 @@ def create_webhook():
     :return:
     """
     data = {
-        'id':'clicked',
-        'url':[ 'https://facebook.com'
+        "id":"clicked",
+        "url":[ "https://facebook.com"
                 ]
     }
     #
@@ -34,9 +34,9 @@ def put_webhook():
     :return:
     """
     data = {
-        'id':'clicked',
-        'url':[ 'https://facebook.com',
-                'https://google.com'
+        "id":"clicked",
+        "url":[ "https://facebook.com",
+                "https://google.com"
                 ]
     }
 
@@ -51,5 +51,5 @@ def delete_webhook():
     req = client.domains_webhooks_clicked.delete(domain=domain)
     print(req.json())
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     delete_webhook()

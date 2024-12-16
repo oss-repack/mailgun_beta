@@ -82,6 +82,6 @@ def get_aggregate_devices():
     print(req.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     get_aggregate_devices()
 

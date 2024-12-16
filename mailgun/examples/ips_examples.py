@@ -50,5 +50,5 @@ def delete_domain_ip():
     print(request.json())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     get_ips()
