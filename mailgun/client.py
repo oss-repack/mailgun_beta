@@ -49,17 +49,19 @@ HANDLERS = {"resendmessage": handle_resend_message,
 
 
 class Config:
-    """
-    Config class. Configure client with basic (urls, version, headers)
-    """
+    """Config class. Configure client with basic (urls, version, headers)."""
+
     DEFAULT_API_URL = "https://api.mailgun.net/"
     API_REF = "https://documentation.mailgun.com/en/latest/api_reference.html"
     version = "v3"
     user_agent = "mailgun-api-python/"
 
     def __init__(self, version=None, api_url=None):
-        """
-        Set version and api_url
+        """Initialize a new Config instance with specified or default API settings.
+
+        This initializer sets the API version and base URL. If no version or URL
+        is provided, it defaults to the predefined class values.
+
         :param version: API version (default: v3)
         :type version: str
         :param api_url: API base url
@@ -72,8 +74,8 @@ class Config:
         self.api_url = api_url or self.DEFAULT_API_URL
 
     def __getitem__(self, key):
-        """
-        Parse incoming split attr name, check it and prepare endpoint url.
+        """Parse incoming split attr name, check it and prepare endpoint url.
+
         Most urls generated here can't be generated dynamically as we are doing this
         in build_url() method under Endpoint class.
         :param key: incoming attr name
@@ -136,12 +138,11 @@ class Config:
 
 
 class Endpoint:
-    """
-    Generate request and return response
-    """
+    """Generate request and return response."""
 
     def __init__(self, url, headers, auth):
-        """
+        """Initialize a new Endpoint instance.
+
         :param url: URL dict with pairs {"base": "keys"}
         :type url: dict
         :param headers: Headers dict
@@ -155,8 +156,8 @@ class Endpoint:
 
     def api_call(self, auth, method, url, headers, data=None, filters=None, timeout=60,
                  files=None, domain=None, **kwargs):
-        """
-        Build URL and make a request
+        """Build URL and make a request.
+
         :param auth: auth data
         :type auth: tuple
         :param method: request method
@@ -202,8 +203,8 @@ class Endpoint:
 
     @staticmethod
     def build_url(url, domain=None, method=None, **kwargs):
-        """
-        Build final request url using predefined handlers.
+        """Build final request url using predefined handlers.
+
         Note: Some urls are being built in Config class, as they can't be generated dynamically.
         :param url: incoming url (base+keys)
         :type url: dict
@@ -214,12 +215,11 @@ class Endpoint:
         :param kwargs: kwargs
         :return: built URL
         """
-
         return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
 
     def get(self, filters=None, domain=None, **kwargs):
-        """
-        GET method for API calls
+        """GET method for API calls.
+
         :param filters: incoming params
         :type filters: dict
         :param domain: incoming domain
@@ -233,8 +233,8 @@ class Endpoint:
 
     def create(self, data=None, filters=None, domain=None,
                headers=None, files=None, **kwargs):
-        """
-        POST method for API calls
+        """POST method for API calls.
+
         :param data: incoming post data
         :type data: dict
         :param filters: incoming params
@@ -263,8 +263,8 @@ class Endpoint:
                              data=data, filters=filters, **kwargs)
 
     def put(self, data=None, filters=None, **kwargs):
-        """
-        PUT method for API calls
+        """PUT method for API calls.
+
         :param data: incoming data
         :type data: dict
         :param filters: incoming params
@@ -276,8 +276,8 @@ class Endpoint:
                              data=data, filters=filters, **kwargs)
 
     def patch(self, data=None, filters=None, **kwargs):
-        """
-        PATCH method for API calls
+        """PATCH method for API calls.
+
         :param data: incoming data
         :type data: dict
         :param filters: incoming params
@@ -289,8 +289,8 @@ class Endpoint:
                              data=data, filters=filters, **kwargs)
 
     def update(self, data, filters=None, **kwargs):
-        """
-        PUT method for API calls
+        """PUT method for API calls.
+
         :param data: incoming data
         :type data: dict
         :param filters: incoming params
@@ -304,8 +304,8 @@ class Endpoint:
                              data=data, filters=filters, **kwargs)
 
     def delete(self, domain=None, **kwargs):
-        """
-        DELETE method for API calls
+        """DELETE method for API calls.
+
         :param domain: incoming domain
         :type domain: str
         :param kwargs: kwargs
@@ -316,12 +316,15 @@ class Endpoint:
 
 
 class Client:
-    """
-    Client class
-    """
+    """Client class."""
 
     def __init__(self, auth=None, **kwargs):
-        """
+        """Initialize a new Client instance for API interaction.
+
+        This method sets up API authentication and configuration. The `auth` parameter
+        provides a tuple with the API key and secret. Additional keyword arguments can
+        specify configuration options like API version and URL.
+
         :param auth: auth set ("username", "APIKEY")
         :type auth: set
         :param kwargs: kwargs
@@ -332,8 +335,8 @@ class Client:
         self.config = Config(version=version, api_url=api_url)
 
     def __getattr__(self, name):
-        """
-        Get named attribute of an object, split it and execute
+        """Get named attribute of an object, split it and execute.
+
         :param name: attribute name (Example: client.domains_ips. names: ["domains", "ips"])
         :type name: str
         :return: type object (executes existing handler)

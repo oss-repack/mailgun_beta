@@ -201,13 +201,13 @@ ignore = [
     "ARG001",  #  ARG001 Unused function argument: `debug`, `kwargs`, and `method` in class Client
     # TODO: Fix A001 Variable `TimeoutError` is shadowing a Python builtin
     "A001" ,
-    # TODO: Fix A002 Argument `id` is shadowing a Python builtin
-    "A002",
     "ANN401",  # ANN401 Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
     "B904",  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None`
     # pycodestyle (E, W)
     "CPY001",   # Missing copyright notice at top of file
     #"DOC501",  # DOC501 Raised exception `TimeoutError` and `ApiError` missing from docstring
+    # TODO: Fix D104 Missing docstring in public package
+    "D104",
     "E501",
     "FBT001",  # Boolean-typed positional argument in function definition
     "FBT002",  # Boolean default positional argument in function definition
@@ -288,8 +288,8 @@ convention = "google"
 
 [tool.flake8]
 exclude = ["mailgun/examples/*"]
-# TODO: D100 - create docstrings for modules
-ignore = ['E501', "D100"]
+# TODO: D100 - create docstrings for modules; D104 Missing docstring in public package
+ignore = ['E501', "D100", "D104"]
 extend-ignore = "W503"
 per-file-ignores = [
     '__init__.py:F401',

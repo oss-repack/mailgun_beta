@@ -1,5 +1,5 @@
-"""
-DOMAINS HANDLER
+"""DOMAINS HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-domains.html#
 """
 from os import path
@@ -9,7 +9,8 @@ from .error_handler import ApiError
 
 
 def handle_domainlist(url, _domain, _method, **_):
-    """
+    """Handle a list of domains.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)
@@ -23,7 +24,8 @@ def handle_domainlist(url, _domain, _method, **_):
 
 
 def handle_domains(url, domain, method, **kwargs):
-    """
+    """Handle a domain endpoint.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain

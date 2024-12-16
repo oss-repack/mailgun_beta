@@ -1,13 +1,13 @@
-"""
-MAILING LISTS HANDLER
+"""MAILING LISTS HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-mailinglists.html
 """
 from os import path
 
 
 def handle_lists(url, _domain, _method, **kwargs):
-    """
-    Handle Mailing List
+    """Handle Mailing List.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)

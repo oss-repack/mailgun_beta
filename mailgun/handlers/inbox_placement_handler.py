@@ -1,5 +1,5 @@
-"""
-INBOX PLACEMENT HANDLER
+"""INBOX PLACEMENT HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-inbox-placement.html
 """
 from os import path
@@ -8,8 +8,8 @@ from .error_handler import ApiError
 
 
 def handle_inbox(url, _domain, _method, **kwargs):
-    """
-    Handle inbox placement
+    """Handle inbox placement.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)

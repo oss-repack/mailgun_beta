@@ -91,16 +91,17 @@ repos:
           - --remove-all-unused-imports
           - --remove-unused-variable
           - --ignore-init-module-imports
-#
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 7.1.1
-#    hooks:
-#    -   id: flake8
-#        additional_dependencies:
-#          - radon
-#          - flake8-docstrings
-#          - Flake8-pyproject
-#        exclude: ^docs/
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+    -   id: flake8
+        additional_dependencies:
+          - radon
+          - flake8-docstrings
+          - Flake8-pyproject
+        # TODO: Remove tests.py when we will be ready to process tests
+        exclude: ^tests.py
 #
 #
 #  - repo: https://github.com/PyCQA/pylint

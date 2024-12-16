@@ -1,13 +1,13 @@
-"""
-IPS HANDLER
+"""IPS HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-ips.html
 """
 from os import path
 
 
 def handle_ips(url, _domain, _method, **kwargs):
-    """
-    Handle IPs
+    """Handle IPs.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)

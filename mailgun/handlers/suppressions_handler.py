@@ -1,13 +1,13 @@
-"""
-SUPPRESSION HANDLER
+"""SUPPRESSION HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-suppressions.html
 """
 from os import path
 
 
 def handle_bounces(url, domain, _method, **kwargs):
-    """
-    Handle Bounces
+    """Handle Bounces.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
@@ -26,8 +26,8 @@ def handle_bounces(url, domain, _method, **kwargs):
 
 
 def handle_unsubscribes(url, domain, _method, **kwargs):
-    """
-    Handle Unsubscribes
+    """Handle Unsubscribes.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
@@ -46,8 +46,8 @@ def handle_unsubscribes(url, domain, _method, **kwargs):
 
 
 def handle_complaints(url, domain, _method, **kwargs):
-    """
-    Handle Complaints
+    """Handle Complaints.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
@@ -66,8 +66,8 @@ def handle_complaints(url, domain, _method, **kwargs):
 
 
 def handle_whitelists(url, domain, _method, **kwargs):
-    """
-    Handle Whitelists
+    """Handle Whitelists.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
