@@ -102,20 +102,19 @@ repos:
           - Flake8-pyproject
         # TODO: Remove tests.py when we will be ready to process tests
         exclude: ^tests.py
-#
-#
-#  - repo: https://github.com/PyCQA/pylint
-#    rev: v3.3.2
-#    hooks:
-#      - id: pylint
-#        args:
-#          - --exit-zero
-#
-#  - repo: https://github.com/asottile/pyupgrade
-#    rev: v3.19.0
-#    hooks:
-#      - id: pyupgrade
-#        args: [--py38-plus, --keep-runtime-typing]
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: v3.3.2
+    hooks:
+      - id: pylint
+        args:
+          - --exit-zero
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.19.0
+    hooks:
+      - id: pyupgrade
+        args: [--py38-plus, --keep-runtime-typing]
 #
 #  - repo: https://github.com/charliermarsh/ruff-pre-commit
 #    # Ruff version.
@@ -126,11 +125,11 @@ repos:
 #        args: [--fix, --exit-non-zero-on-fix]
 #      # Run the formatter.
 #      - id: ruff-format
-#
-#  -   repo: https://github.com/dosisod/refurb
-#      rev: v2.0.0
-#      hooks:
-#      -   id: refurb
+
+  -   repo: https://github.com/dosisod/refurb
+      rev: v2.0.0
+      hooks:
+      -   id: refurb
 #
 #  - repo: https://github.com/pre-commit/mirrors-mypy
 #    rev: v1.13.0

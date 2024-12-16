@@ -53,7 +53,7 @@ def handle_domains(url, domain, method, **kwargs):
         else:
             url = urljoin(url["base"], domain + final_keys)
     else:
-        if method in ["get", "post", "delete"]:
+        if method in ("get", "post", "delete"):
             if "domain_name" in kwargs:
                 url = urljoin(url["base"], kwargs["domain_name"])
             elif method == "delete":
