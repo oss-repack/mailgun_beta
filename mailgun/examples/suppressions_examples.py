@@ -25,11 +25,7 @@ def post_bounces():
     POST /<domain>/bounces
     :return:
     """
-    data = {
-        "address": "test120@gmail.com",
-        "code": 550,
-        "error": "Test error"
-    }
+    data = {"address": "test120@gmail.com", "code": 550, "error": "Test error"}
     req = client.bounces.create(data=data, domain=domain)
     print(req.json())
 
@@ -48,16 +44,10 @@ def add_multiple_bounces():
     POST /<domain>/bounces, Content-Type: application/json
     :return:
     """
-    data = [{
-        "address": "test121@i.ua",
-        "code": "550",
-        "error": "Test error2312"
-    },
-        {
-            "address": "test122@gmail.com",
-            "code": "550",
-            "error": "Test error"
-    }]
+    data = [
+        {"address": "test121@i.ua", "code": "550", "error": "Test error2312"},
+        {"address": "test122@gmail.com", "code": "550", "error": "Test error"},
+    ]
     req = client.bounces.create(data=data, domain=domain, headers="application/json")
     print(req.json())
 
@@ -89,6 +79,7 @@ def delete_bounce_list():
     req = client.bounces.delete(domain=domain)
     print(req.json())
 
+
 # Unsubscribes
 
 
@@ -115,8 +106,7 @@ def create_single_unsub():
     POST /<domain>/unsubscribes
     :return:
     """
-    data = {"address": "bob@example.com",
-            "tag": "*"}
+    data = {"address": "bob@example.com", "tag": "*"}
     req = client.unsubscribes.create(data=data, domain=domain)
     print(req.json())
 
@@ -130,19 +120,18 @@ def create_multiple_unsub():
         {
             "address": "alice@example.com",
             "tags": ["some tag"],
-            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC"
+            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC",
         },
         {
             "address": "bob@example.com",
             "tags": ["*"],
         },
-        {
-            "address": "carol@example.com"
-        }
+        {"address": "carol@example.com"},
     ]
 
-    req = client.unsubscribes.create(data=data, domain=domain,
-                                     headers="application/json")
+    req = client.unsubscribes.create(
+        data=data, domain=domain, headers="application/json"
+    )
     print(req.json())
 
 
@@ -152,9 +141,8 @@ def import_list_unsubs():
     :return:
     """
     files = {
-        "unsubscribe2_csv": open(
-            "../doc_tests/files/mailgun_unsubscribes.csv",
-            "rb")}
+        "unsubscribe2_csv": open("../doc_tests/files/mailgun_unsubscribes.csv", "rb")
+    }
     req = client.unsubscribes_import.create(domain=domain, files=files)
     print(req.json())
 
@@ -165,7 +153,8 @@ def delete_single_unsub():
     :return:
     """
     req = client.unsubscribes.delete(
-        domain=domain, unsubscribe_address="alice@example.com")
+        domain=domain, unsubscribe_address="alice@example.com"
+    )
     print(req.json())
 
 
@@ -176,6 +165,7 @@ def delete_all_unsubs():
     """
     req = client.unsubscribes.delete(domain=domain)
     print(req.json())
+
 
 # Complaints
 
@@ -195,10 +185,7 @@ def add_complaints():
     POST /<domain>/complaints
     :return:
     """
-    data = {
-        "address": "bob@gmail.com",
-        "tag": "compl_test_tag"
-    }
+    data = {"address": "bob@gmail.com", "tag": "compl_test_tag"}
     req = client.complaints.create(data=data, domain=domain)
     print(req.json())
 
@@ -212,11 +199,9 @@ def add_multiple_complaints():
         {
             "address": "alice1@example.com",
             "tags": ["some tag"],
-            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC"
+            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC",
         },
-        {
-            "address": "carol1@example.com"
-        }
+        {"address": "carol1@example.com"},
     ]
 
     req = client.complaints.create(data=data, domain=domain, headers="application/json")
@@ -239,8 +224,8 @@ def delete_single_complaint():
     :return:
     """
     req = client.complaints.delete(
-        domain=domain,
-        complaint_address="carol1@example.com")
+        domain=domain, complaint_address="carol1@example.com"
+    )
     print(req.json())
 
 
@@ -251,6 +236,7 @@ def delete_all_complaints():
     """
     req = client.complaints.delete(domain=domain)
     print(req.json())
+
 
 # Whitelists
 
@@ -269,10 +255,7 @@ def create_whitelist():
     POST /<domain>/whitelists
     :return:
     """
-    data = {
-        "address": "bob@gmail.com",
-        "tag": "whitel_test"
-    }
+    data = {"address": "bob@gmail.com", "tag": "whitel_test"}
     req = client.whitelists.create(data=data, domain=domain)
     print(req.json())
 

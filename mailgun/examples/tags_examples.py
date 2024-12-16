@@ -32,9 +32,7 @@ def put_single_tag():
     PUT /<domain>/tags/<tag>
     :return:
     """
-    data = {
-        "description": "Python testtt"
-    }
+    data = {"description": "Python testtt"}
 
     req = client.tags.put(domain=domain, tag_name="Python test", data=data)
     print(req.json())
@@ -45,9 +43,7 @@ def get_tag_stats():
     GET /<domain>/tags/<tag>/stats
     :return:
     """
-    params = {
-        "event": "accepted"
-    }
+    params = {"event": "accepted"}
     req = client.tags_stats.get(domain=domain, filters=params, tag_name="Python test")
     print(req.json())
 
@@ -67,7 +63,8 @@ def get_aggregate_countries():
     :return:
     """
     req = client.tags_stats_aggregates_countries.get(
-        domain=domain, tag_name="September newsletter")
+        domain=domain, tag_name="September newsletter"
+    )
     print(req.json())
 
 
@@ -77,7 +74,8 @@ def get_aggregate_providers():
     :return:
     """
     req = client.tags_stats_aggregates_providers.get(
-        domain=domain, tag_name="September newsletter")
+        domain=domain, tag_name="September newsletter"
+    )
     print(req.json())
 
 
@@ -87,7 +85,8 @@ def get_aggregate_devices():
     :return:
     """
     req = client.tags_stats_aggregates_devices.get(
-        domain=domain, tag_name="September newsletter")
+        domain=domain, tag_name="September newsletter"
+    )
     print(req.json())
 
 

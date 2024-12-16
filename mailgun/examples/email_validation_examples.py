@@ -14,8 +14,7 @@ def get_single_validate():
     GET /v4/address/validate
     :return:
     """
-    params = {"address": "test@gmail.com",
-              "provider_lookup": "false"}
+    params = {"address": "test@gmail.com", "provider_lookup": "false"}
     req = client.addressvalidate.get(domain=domain, filters=params)
     print(req.json())
 
@@ -48,7 +47,8 @@ def post_bulk_list_validate():
     """
     files = {"file": open("../doc_tests/files/email_validation.csv", "rb")}
     req = client.addressvalidate_bulk.create(
-        domain=domain, files=files, list_name="python2_list")
+        domain=domain, files=files, list_name="python2_list"
+    )
     print(req.json())
 
 
@@ -85,9 +85,9 @@ def post_preview():
     :return:
     """
     files = {"file": open("../doc_tests/files/email_previews.csv", "rb")}
-    req = client.addressvalidate_preview.create(domain=domain,
-                                                files=files,
-                                                list_name="python_list")
+    req = client.addressvalidate_preview.create(
+        domain=domain, files=files, list_name="python_list"
+    )
     print(req.json())
 
 

@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-email-validation.html#email-validation
 """
+
 from os import path
 
 

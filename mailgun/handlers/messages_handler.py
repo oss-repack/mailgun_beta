@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-sending.html#
 """
+
 from .error_handler import ApiError
 
 
@@ -19,6 +20,5 @@ def handle_resend_message(_url, _domain, _method, **kwargs):
     """
     if "storage_url" in kwargs:
         return kwargs["storage_url"]
-    else:
-        ApiError("Storage url is required")
-        return None
+    ApiError("Storage url is required")
+    return None

@@ -16,6 +16,8 @@ def get_domains():
     """
     data = client.domainlist.get(domain=domain)
     print(data.json())
+
+
 # Get domain
 
 
@@ -35,8 +37,7 @@ def verify_domain():
     :return:
     """
     domain_name = "python.test.domain4"
-    data = client.domains.put(domain=domain_name,
-                              verify=True)
+    data = client.domains.put(domain=domain_name, verify=True)
     print(data.json())
 
 
@@ -82,12 +83,8 @@ def post_credentials():
     POST /domains/<domain>/credentials
     :return:
     """
-    data = {
-        "login": f"alice_bob@{domain}",
-        "password": "test_new_creds123"
-    }
-    request = client.domains_credentials.create(domain=domain,
-                                                data=data)
+    data = {"login": f"alice_bob@{domain}", "password": "test_new_creds123"}
+    request = client.domains_credentials.create(domain=domain, data=data)
     print(request.json())
 
 
@@ -96,11 +93,10 @@ def put_credentials():
     PUT /domains/<domain>/credentials/<login>
     :return:
     """
-    data = {
-        "password": "test_new_creds12356"
-    }
+    data = {"password": "test_new_creds12356"}
     request = client.domains_credentials.put(
-        domain=domain, data=data, login=f"alice_bob@{domain}")
+        domain=domain, data=data, login=f"alice_bob@{domain}"
+    )
     print(request.json())
 
 
@@ -110,7 +106,8 @@ def delete_credentials():
     :return:
     """
     request = client.domains_credentials.delete(
-        domain=domain, login=f"alice_bob@{domain}")
+        domain=domain, login=f"alice_bob@{domain}"
+    )
     print(request.json())
 
 
@@ -128,10 +125,7 @@ def put_connections():
     PUT /domains/<domain>/connection
     :return:
     """
-    data = {
-        "require_tls": "true",
-        "skip_verification": "false"
-    }
+    data = {"require_tls": "true", "skip_verification": "false"}
     request = client.domains_connection.put(domain=domain, data=data)
     print(request.json())
 
@@ -150,10 +144,7 @@ def put_open_tracking():
     PUT /domains/<domain>/tracking/open
     :return:
     """
-    data = {
-        "active": "yes",
-        "skip_verification": "false"
-    }
+    data = {"active": "yes", "skip_verification": "false"}
     request = client.domains_tracking_open.put(domain=domain, data=data)
     print(request.json())
 
@@ -178,7 +169,7 @@ def put_unsub_tracking():
     data = {
         "active": "yes",
         "html_footer": '\n<br>\n<p><a href="%unsubscribe_url%">UnSuBsCrIbE</a></p>\n',
-        "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
+        "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n",
     }
     request = client.domains_tracking_unsubscribe.put(domain=domain, data=data)
     print(request.json())
@@ -189,9 +180,7 @@ def put_dkim_authority():
     PUT /domains/<domain>/dkim_authority
     :return:
     """
-    data = {
-        "self": "false"
-    }
+    data = {"self": "false"}
     request = client.domains_dkimauthority.put(domain=domain, data=data)
     print(request.json())
 
@@ -201,9 +190,7 @@ def put_dkim_selector():
     PUT /domains/<domain>/dkim_selector
     :return:
     """
-    data = {
-        "dkim_selector": "s"
-    }
+    data = {"dkim_selector": "s"}
     request = client.domains_dkimselector.put(domain="python.test.domain4", data=data)
     print(request.json())
 
@@ -213,8 +200,7 @@ def put_web_prefix():
     PUT /domains/<domain>/web_prefix
     :return:
     """
-    data = {
-        "web_prefix": "python"}
+    data = {"web_prefix": "python"}
     request = client.domains_webprefix.put(domain="python.test.domain4", data=data)
     print(request.json())
 

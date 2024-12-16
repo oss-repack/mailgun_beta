@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-inbox-placement.html
 """
+
 from os import path
 
 from .error_handler import ApiError
@@ -23,18 +24,34 @@ def handle_inbox(url, _domain, _method, **kwargs):
     if "test_id" in kwargs:
         if "counters" in kwargs:
             if kwargs["counters"]:
-                url = url["base"][:-1] + final_keys + \
-                    "/" + kwargs["test_id"] + "/counters"
+                url = (
+                    url["base"][:-1]
+                    + final_keys
+                    + "/"
+                    + kwargs["test_id"]
+                    + "/counters"
+                )
             else:
                 raise ApiError("Counters option should be True or absent")
         elif "checks" in kwargs:
             if kwargs["checks"]:
                 if "address" in kwargs:
-                    url = url["base"][:-1] + final_keys + "/" + \
-                        kwargs["test_id"] + "/checks/" + kwargs["address"]
+                    url = (
+                        url["base"][:-1]
+                        + final_keys
+                        + "/"
+                        + kwargs["test_id"]
+                        + "/checks/"
+                        + kwargs["address"]
+                    )
                 else:
-                    url = url["base"][:-1] + final_keys + \
-                        "/" + kwargs["test_id"] + "/checks"
+                    url = (
+                        url["base"][:-1]
+                        + final_keys
+                        + "/"
+                        + kwargs["test_id"]
+                        + "/checks"
+                    )
             else:
                 raise ApiError("Checks option should be True or absent")
         else:

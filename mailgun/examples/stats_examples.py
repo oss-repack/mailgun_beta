@@ -10,8 +10,7 @@ client = Client(auth=("api", key))
 
 
 def get_stats_total():
-    params = {"event": ["accepted", "delivered", "failed"],
-              "duration": "1m"}
+    params = {"event": ["accepted", "delivered", "failed"], "duration": "1m"}
 
     req = client.stats_total.get(filters=params, domain=domain)
     print(req.json())

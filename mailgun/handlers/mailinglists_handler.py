@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-mailinglists.html
 """
+
 from os import path
 
 
@@ -26,8 +27,14 @@ def handle_lists(url, _domain, _method, **kwargs):
     elif "members" in final_keys and "address" in kwargs:
         members_keys = path.join("/", *url["keys"][1:]) if url["keys"][1:] else ""
         if "member_address" in kwargs:
-            url = url["base"][:-1] + "/lists/" + kwargs["address"] + members_keys + \
-                "/" + kwargs["member_address"]
+            url = (
+                url["base"][:-1]
+                + "/lists/"
+                + kwargs["address"]
+                + members_keys
+                + "/"
+                + kwargs["member_address"]
+            )
         else:
             url = url["base"][:-1] + "/lists/" + kwargs["address"] + members_keys
     elif "address" in kwargs and "validate" not in kwargs:

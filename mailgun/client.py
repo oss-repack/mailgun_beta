@@ -22,30 +22,30 @@ from mailgun.handlers.tags_handler import handle_tags
 from mailgun.handlers.templates_handler import handle_templates
 
 
-# requests.packages.urllib3.disable_warnings()
-
-HANDLERS = {"resendmessage": handle_resend_message,
-            "domains": handle_domains,
-            "domainlist": handle_domainlist,
-            "dkim_authority": handle_domains,
-            "dkim_selector": handle_domains,
-            "web_prefix": handle_domains,
-            "ips": handle_ips,
-            "ip_pools": handle_ippools,
-            "tags": handle_tags,
-            "bounces": handle_bounces,
-            "unsubscribes": handle_unsubscribes,
-            "whitelists": handle_whitelists,
-            "complaints": handle_complaints,
-            "routes": handle_routes,
-            "lists": handle_lists,
-            "templates": handle_templates,
-            "addressvalidate": handle_address_validate,
-            "inbox": handle_inbox,
-            "messages": handle_default,
-            "messages.mime": handle_default,
-            "events": handle_default,
-            "stats": handle_default}
+HANDLERS = {
+    "resendmessage": handle_resend_message,
+    "domains": handle_domains,
+    "domainlist": handle_domainlist,
+    "dkim_authority": handle_domains,
+    "dkim_selector": handle_domains,
+    "web_prefix": handle_domains,
+    "ips": handle_ips,
+    "ip_pools": handle_ippools,
+    "tags": handle_tags,
+    "bounces": handle_bounces,
+    "unsubscribes": handle_unsubscribes,
+    "whitelists": handle_whitelists,
+    "complaints": handle_complaints,
+    "routes": handle_routes,
+    "lists": handle_lists,
+    "templates": handle_templates,
+    "addressvalidate": handle_address_validate,
+    "inbox": handle_inbox,
+    "messages": handle_default,
+    "messages.mime": handle_default,
+    "events": handle_default,
+    "stats": handle_default,
+}
 
 
 class Config:
@@ -89,8 +89,10 @@ class Config:
         modified = False
         # Domains section
         if key.lower() == "domainlist":
-            url = {"base": urljoin(self.api_url, self.version + "/"),
-                   "keys": ["domainlist"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["domainlist"],
+            }
             modified = True
         if "domains" in key.lower():
             split = [key.lower()]
@@ -104,16 +106,22 @@ class Config:
             elif "webprefix" in split:
                 final_keys = ["web_prefix"]
 
-            url = {"base": urljoin(self.api_url, self.version + "/domains/"),
-                   "keys": final_keys}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/domains/"),
+                "keys": final_keys,
+            }
             modified = True
         # Messages section
         if key.lower() == "messages":
-            url = {"base": urljoin(self.api_url, self.version + "/"),
-                   "keys": ["messages"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["messages"],
+            }
         if key.lower() == "mimemessage":
-            url = {"base": urljoin(self.api_url, self.version + "/"),
-                   "keys": ["messages.mime"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["messages.mime"],
+            }
             modified = True
         if key.lower() == "resendmessage":
             url = {"keys": ["resendmessage"]}
@@ -121,19 +129,22 @@ class Config:
 
         # IPpools section
         if key.lower() == "ippools":
-            url = {"base": urljoin(self.api_url, self.version + "/"),
-                   "keys": ["ip_pools"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["ip_pools"],
+            }
             modified = True
         # Email Validation section
         if "addressvalidate" in key.lower():
-            url = {"base": urljoin(self.api_url, "v4" + "/address/validate"),
-                   "keys": key.split("_")}
+            url = {
+                "base": urljoin(self.api_url, "v4" + "/address/validate"),
+                "keys": key.split("_"),
+            }
             modified = True
 
         if not modified:
             url = urljoin(self.api_url, self.version + "/")
-            url = {"base": url,
-                   "keys": key.split("_")}
+            url = {"base": url, "keys": key.split("_")}
         return url, headers
 
 
@@ -154,8 +165,19 @@ class Endpoint:
         self.headers = headers
         self._auth = auth
 
-    def api_call(self, auth, method, url, headers, data=None, filters=None, timeout=60,
-                 files=None, domain=None, **kwargs):
+    def api_call(
+        self,
+        auth,
+        method,
+        url,
+        headers,
+        data=None,
+        filters=None,
+        timeout=60,
+        files=None,
+        domain=None,
+        **kwargs,
+    ):
         """Build URL and make a request.
 
         :param auth: auth data
@@ -192,7 +214,8 @@ class Endpoint:
                 timeout=timeout,
                 files=files,
                 verify=True,
-                stream=False)
+                stream=False,
+            )
 
         except requests.exceptions.Timeout:
             raise TimeoutError
@@ -227,12 +250,25 @@ class Endpoint:
         :param kwargs: kwargs
         :return: api_call GET request
         """
-        return self.api_call(self._auth, "get", self._url,
-                             domain=domain, headers=self.headers,
-                             filters=filters, **kwargs)
+        return self.api_call(
+            self._auth,
+            "get",
+            self._url,
+            domain=domain,
+            headers=self.headers,
+            filters=filters,
+            **kwargs,
+        )
 
-    def create(self, data=None, filters=None, domain=None,
-               headers=None, files=None, **kwargs):
+    def create(
+        self,
+        data=None,
+        filters=None,
+        domain=None,
+        headers=None,
+        files=None,
+        **kwargs,
+    ):
         """POST method for API calls.
 
         :param data: incoming post data
@@ -258,9 +294,17 @@ class Endpoint:
             elif headers == "multipart/form-data":
                 self.headers["Content-type"] = "multipart/form-data"
 
-        return self.api_call(self._auth, "post", self._url, files=files,
-                             domain=domain, headers=self.headers,
-                             data=data, filters=filters, **kwargs)
+        return self.api_call(
+            self._auth,
+            "post",
+            self._url,
+            files=files,
+            domain=domain,
+            headers=self.headers,
+            data=data,
+            filters=filters,
+            **kwargs,
+        )
 
     def put(self, data=None, filters=None, **kwargs):
         """PUT method for API calls.
@@ -272,8 +316,15 @@ class Endpoint:
         :param kwargs: kwargs
         :return: api_call POST request
         """
-        return self.api_call(self._auth, "put", self._url, headers=self.headers,
-                             data=data, filters=filters, **kwargs)
+        return self.api_call(
+            self._auth,
+            "put",
+            self._url,
+            headers=self.headers,
+            data=data,
+            filters=filters,
+            **kwargs,
+        )
 
     def patch(self, data=None, filters=None, **kwargs):
         """PATCH method for API calls.
@@ -285,8 +336,15 @@ class Endpoint:
         :param kwargs: kwargs
         :return: api_call PATCH request
         """
-        return self.api_call(self._auth, "patch", self._url, headers=self.headers,
-                             data=data, filters=filters, **kwargs)
+        return self.api_call(
+            self._auth,
+            "patch",
+            self._url,
+            headers=self.headers,
+            data=data,
+            filters=filters,
+            **kwargs,
+        )
 
     def update(self, data, filters=None, **kwargs):
         """PUT method for API calls.
@@ -300,8 +358,15 @@ class Endpoint:
         """
         if self.headers["Content-type"] == "application/json":
             data = json.dumps(data)
-        return self.api_call(self._auth, "put", self._url, headers=self.headers,
-                             data=data, filters=filters, **kwargs)
+        return self.api_call(
+            self._auth,
+            "put",
+            self._url,
+            headers=self.headers,
+            data=data,
+            filters=filters,
+            **kwargs,
+        )
 
     def delete(self, domain=None, **kwargs):
         """DELETE method for API calls.
@@ -311,8 +376,14 @@ class Endpoint:
         :param kwargs: kwargs
         :return: api_call DELETE request
         """
-        return self.api_call(self._auth, "delete", self._url,
-                             headers=self.headers, domain=domain, **kwargs)
+        return self.api_call(
+            self._auth,
+            "delete",
+            self._url,
+            headers=self.headers,
+            domain=domain,
+            **kwargs,
+        )
 
 
 class Client:
@@ -330,8 +401,8 @@ class Client:
         :param kwargs: kwargs
         """
         self.auth = auth
-        version = kwargs.get("version", None)
-        api_url = kwargs.get("api_url", None)
+        version = kwargs.get("version")
+        api_url = kwargs.get("api_url")
         self.config = Config(version=version, api_url=api_url)
 
     def __getattr__(self, name):

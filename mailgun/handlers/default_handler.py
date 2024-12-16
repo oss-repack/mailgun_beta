@@ -4,6 +4,7 @@ Events doc: https://documentation.mailgun.com/en/latest/api-events.html
 Messages doc: https://documentation.mailgun.com/en/latest/api-sending.html
 Stats doc: https://documentation.mailgun.com/en/latest/api-stats.html
 """
+
 from os import path
 
 from .error_handler import ApiError

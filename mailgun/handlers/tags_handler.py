@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-tags.html
 """
+
 from os import path
 from urllib.parse import quote
 

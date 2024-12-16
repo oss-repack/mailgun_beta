@@ -41,9 +41,7 @@ def post_domains_ip():
     POST /domains/<domain>/ips
     :return:
     """
-    ip_data = {
-        "ip": "161.38.194.10"
-    }
+    ip_data = {"ip": "161.38.194.10"}
     request = client.domains_ips.create(domain=domain, data=ip_data)
     print(request.json())
 

@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-domains.html#
 """
+
 from os import path
 from urllib.parse import urljoin
 
@@ -52,19 +53,17 @@ def handle_domains(url, domain, method, **kwargs):
             url = kwargs["api_storage_url"]
         else:
             url = urljoin(url["base"], domain + final_keys)
-    else:
-        if method in ("get", "post", "delete"):
-            if "domain_name" in kwargs:
-                url = urljoin(url["base"], kwargs["domain_name"])
-            elif method == "delete":
-                url = urljoin(url["base"], domain)
-            else:
-                url = url["base"][:-1]
+    elif method in ("get", "post", "delete"):
+        if "domain_name" in kwargs:
+            url = urljoin(url["base"], kwargs["domain_name"])
+        elif method == "delete":
+            url = urljoin(url["base"], domain)
         else:
-            if "verify" in kwargs:
-                if kwargs["verify"] is not True:
-                    raise ApiError("Verify option should be True or absent")
-                url = url["base"] + domain + "/verify"
-            else:
-                url = urljoin(url["base"], domain)
+            url = url["base"][:-1]
+    elif "verify" in kwargs:
+        if kwargs["verify"] is not True:
+            raise ApiError("Verify option should be True or absent")
+        url = url["base"] + domain + "/verify"
+    else:
+        url = urljoin(url["base"], domain)
     return url

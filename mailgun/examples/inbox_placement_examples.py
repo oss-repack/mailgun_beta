@@ -18,7 +18,8 @@ def post_inbox():
         "domain": "domain.com",
         "from": "user@sending_domain.com",
         "subject": "testSubject",
-        "html": "<html>HTML version of the body</html>"}
+        "html": "<html>HTML version of the body</html>",
+    }
 
     req = client.inbox_tests.create(domain=domain, data=data)
     print(req.json())
@@ -57,9 +58,8 @@ def inbox_placement_test_counters():
     :return:
     """
     req = client.inbox_tests.get(
-        domain=domain,
-        test_id="6017b5cf3c92d93bd1f810ea",
-        counters=True)
+        domain=domain, test_id="6017b5cf3c92d93bd1f810ea", counters=True
+    )
     print(req.json())
 
 
@@ -69,9 +69,8 @@ def get_inbox_placement_test_checks():
     :return:
     """
     req = client.inbox_tests.get(
-        domain=domain,
-        test_id="6017b5cf3c92d93bd1f810ea",
-        checks=True)
+        domain=domain, test_id="6017b5cf3c92d93bd1f810ea", checks=True
+    )
     print(req.json())
 
 
@@ -80,10 +79,12 @@ def get_single_placement_check_test():
     GET /v3/inbox/tests/<test_id>/checks/<address>
     :return:
     """
-    req = client.inbox_tests.get(domain=domain,
-                                 test_id="6017b5cf3c92d93bd1f810ea",
-                                 checks=True,
-                                 address="aa_ext_test03mg@comcast.net")
+    req = client.inbox_tests.get(
+        domain=domain,
+        test_id="6017b5cf3c92d93bd1f810ea",
+        checks=True,
+        address="aa_ext_test03mg@comcast.net",
+    )
     print(req.json())
 
 

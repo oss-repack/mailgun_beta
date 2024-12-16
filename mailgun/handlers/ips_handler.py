@@ -2,6 +2,7 @@
 
 Doc: https://documentation.mailgun.com/en/latest/api-ips.html
 """
+
 from os import path
 
 

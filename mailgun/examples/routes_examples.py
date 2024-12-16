@@ -14,10 +14,7 @@ def get_routes():
     GET /routes
     :return:
     """
-    params = {
-        "skip": 1,
-        "limit": 1
-    }
+    params = {"skip": 1, "limit": 1}
     req = client.routes.get(domain=domain, filters=params)
     print(req.json())
 
@@ -36,11 +33,12 @@ def post_routes():
     POST /routes
     :return:
     """
-    data = {"priority": 0,
-            "description": "Sample route",
-            "expression": f"match_recipient('.*@{domain}')",
-            "action": ["forward('http://myhost.com/messages/')", "stop()"]
-            }
+    data = {
+        "priority": 0,
+        "description": "Sample route",
+        "expression": f"match_recipient('.*@{domain}')",
+        "action": ["forward('http://myhost.com/messages/')", "stop()"],
+    }
     req = client.routes.create(domain=domain, data=data)
     print(req.json())
 
@@ -50,15 +48,15 @@ def put_route():
     PUT /routes/<id>
     :return:
     """
-    data = {"priority": 2,
-            "description": "Sample route",
-            "expression": f"match_recipient('.*@{domain}')",
-            "action": ["forward('http://myhost.com/messages/')", "stop()"]
-            }
+    data = {
+        "priority": 2,
+        "description": "Sample route",
+        "expression": f"match_recipient('.*@{domain}')",
+        "action": ["forward('http://myhost.com/messages/')", "stop()"],
+    }
     req = client.routes.put(
-        domain=domain,
-        data=data,
-        route_id="60142b357c90c3c9f228e0a6")
+        domain=domain, data=data, route_id="60142b357c90c3c9f228e0a6"
+    )
     print(req.json())
 
 
