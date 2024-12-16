@@ -99,14 +99,14 @@ class DomainTests(unittest.TestCase):
 
     def test_get_single_domain(self):
         self.client.domains.create(data=self.post_domain_data)
-        req = self.client.domains.get(domain_name=self.domain)
+        req = self.client.domains.get(domain_name=self.post_domain_data["name"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
 
     def test_verify_domain(self):
         self.client.domains.create(data=self.post_domain_data)
-        req = self.client.domains.put(domain=self.domain,
+        req = self.client.domains.put(domain=self.post_domain_data["name"],
                                       verify=True)
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
