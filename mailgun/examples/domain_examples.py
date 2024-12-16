@@ -83,7 +83,7 @@ def post_credentials():
     :return:
     """
     data = {
-        "login": "alice_bob@{domain}".format(domain=domain),
+        "login": f"alice_bob@{domain}",
         "password": "test_new_creds123"
     }
     request = client.domains_credentials.create(domain=domain,
@@ -100,7 +100,7 @@ def put_credentials():
         "password": "test_new_creds12356"
     }
     request = client.domains_credentials.put(
-        domain=domain, data=data, login="alice_bob@{domain}".format(domain=domain))
+        domain=domain, data=data, login=f"alice_bob@{domain}")
     print(request.json())
 
 
@@ -110,7 +110,7 @@ def delete_credentials():
     :return:
     """
     request = client.domains_credentials.delete(
-        domain=domain, login="alice_bob@{domain}".format(domain=domain))
+        domain=domain, login=f"alice_bob@{domain}")
     print(request.json())
 
 

@@ -52,7 +52,7 @@ class DomainTests(unittest.TestCase):
             "name": self.test_domain,
         }
         self.post_domain_creds = {
-            "login": "alice_bob@{domain}".format(domain=self.domain),
+            "login": f"alice_bob@{self.domain}",
             "password": "test_new_creds123"
         }
 
@@ -659,7 +659,7 @@ class RoutesTest(unittest.TestCase):
         self.routes_data = {
             "priority": 0,
             "description": "Sample route",
-            "expression": "match_recipient('.*@{domain_name}')".format(domain_name=self.domain),
+            "expression": f"match_recipient('.*@{self.domain}')",
             "action": ["forward('http://myhost.com/messages/')", "stop()"]
         }
         self.routes_params = {
@@ -782,7 +782,7 @@ class MailingListsTest(unittest.TestCase):
         self.domain = os.environ["DOMAIN"]
         self.maillist_address = os.environ["MAILLIST_ADDRESS"]
         self.mailing_lists_data = {
-            "address": "python_sdk@{domain}".format(domain=self.domain),
+            "address": f"python_sdk@{self.domain}",
             "description": "Mailgun developers list"
         }
 
@@ -824,7 +824,7 @@ class MailingListsTest(unittest.TestCase):
 
     def test_maillist_lists_create(self):
         self.client.lists.delete(domain=self.domain,
-                                 address="python_sdk@{domain}".format(domain=self.domain))
+                                 address=f"python_sdk@{self.domain}")
         req = self.client.lists.create(domain=self.domain,
                                        data=self.mailing_lists_data)
         self.assertEqual(req.status_code, 200)
@@ -835,7 +835,7 @@ class MailingListsTest(unittest.TestCase):
                                  data=self.mailing_lists_data)
         req = self.client.lists.put(domain=self.domain,
                                     data=self.mailing_lists_data_update,
-                                    address="python_sdk@{domain}".format(domain=self.domain))
+                                    address=f"python_sdk@{self.domain}")
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
@@ -843,7 +843,7 @@ class MailingListsTest(unittest.TestCase):
         self.client.lists.create(domain=self.domain,
                                  data=self.mailing_lists_data)
         req = self.client.lists.delete(
-            domain=self.domain, address="python_sdk@{domain}".format(domain=self.domain))
+            domain=self.domain, address=f"python_sdk@{self.domain}")
         self.assertEqual(req.status_code, 200)
 
     def test_maillists_lists_validate_create(self):

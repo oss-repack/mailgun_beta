@@ -38,7 +38,7 @@ def post_routes():
     """
     data = {"priority": 0,
             "description": "Sample route",
-            "expression": "match_recipient('.*@{domain_name}')".format(domain_name=domain),
+            "expression": f"match_recipient('.*@{domain}')",
             "action": ["forward('http://myhost.com/messages/')", "stop()"]
             }
     req = client.routes.create(domain=domain, data=data)
@@ -52,7 +52,7 @@ def put_route():
     """
     data = {"priority": 2,
             "description": "Sample route",
-            "expression": "match_recipient('.*@{domain_name}')".format(domain_name=domain),
+            "expression": f"match_recipient('.*@{domain}')",
             "action": ["forward('http://myhost.com/messages/')", "stop()"]
             }
     req = client.routes.put(

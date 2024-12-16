@@ -33,7 +33,7 @@ def post_lists():
     :return:
     """
     data = {
-        "address": "python_sdk2@{domain}".format(domain=domain),
+        "address": f"python_sdk2@{domain}",
         "description": "Mailgun developers list"}
 
     req = client.lists.create(domain=domain, data=data)
@@ -50,7 +50,7 @@ def put_lists():
     }
 
     req = client.lists.put(domain=domain, data=data,
-                           address="python_sdk2@{domain}".format(domain=domain))
+                           address=f"python_sdk2@{domain}")
     print(req.json())
 
 
@@ -60,7 +60,7 @@ def post_address_validate():
     :return:
     """
     req = client.lists.create(domain=domain,
-                              address="python_sdk2@{domain}".format(domain=domain),
+                              address=f"python_sdk2@{domain}",
                               validate=True)
     print(req.json())
 
@@ -71,7 +71,7 @@ def get_validate_address():
     :return:
     """
     req = client.lists.get(domain=domain,
-                           address="python_sdk2@{domain}".format(domain=domain),
+                           address=f"python_sdk2@{domain}",
                            validate=True)
     print(req.json())
 
@@ -82,7 +82,7 @@ def delete_validate_job():
     :return:
     """
     req = client.lists.delete(domain=domain,
-                              address="python_sdk2@{domain}".format(domain=domain),
+                              address=f"python_sdk2@{domain}",
                               validate=True)
     print(req.json())
 
@@ -182,7 +182,7 @@ def delete_lists_address():
     :return:
     """
     req = client.lists.delete(domain=domain,
-                              address="python_sdk@{domain}".format(domain=domain))
+                              address=f"python_sdk@{domain}")
     print(req.json())
 
 
