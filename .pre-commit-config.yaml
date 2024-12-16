@@ -75,21 +75,21 @@ repos:
     hooks:
       - id: autopep8
         exclude: ^docs/
-#
-#  - repo: https://github.com/akaihola/darker
-#    rev: v2.1.1
-#    hooks:
-#      - id: darker
-#
-#  - repo: https://github.com/PyCQA/autoflake
-#    rev: v2.3.1
-#    hooks:
-#      - id: autoflake
-#        args:
-#          - --in-place
-#          - --remove-all-unused-imports
-#          - --remove-unused-variable
-#          - --ignore-init-module-imports
+
+  - repo: https://github.com/akaihola/darker
+    rev: v2.1.1
+    hooks:
+      - id: darker
+
+  - repo: https://github.com/PyCQA/autoflake
+    rev: v2.3.1
+    hooks:
+      - id: autoflake
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --remove-unused-variable
+          - --ignore-init-module-imports
 #
 #  - repo: https://github.com/pycqa/flake8
 #    rev: 7.1.1
