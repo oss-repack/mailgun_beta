@@ -384,7 +384,7 @@ class TagsTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("tag", req.json())
 
-    def test_tags_stats_agregate_get(self):
+    def test_tags_stats_aggregate_get(self):
 
         req = self.client.tags_stats_aggregates_devices.get(domain=self.domain,
                                                             filters=self.stats_params,

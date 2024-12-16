@@ -154,11 +154,11 @@ repos:
 #        # ignore all tests, not just tests data
 #        exclude: ^tests/
 #        additional_dependencies: [".[toml]"]
-#
-#  - repo: https://github.com/crate-ci/typos
-#    rev: v1.28.3
-#    hooks:
-#      - id: typos
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.28.3
+    hooks:
+      - id: typos
 
 #  - repo: https://github.com/google/yapf
 #    rev: v0.40.2
