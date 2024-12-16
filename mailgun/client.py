@@ -48,7 +48,7 @@ HANDLERS = {"resendmessage": handle_resend_message,
             "stats": handle_default}
 
 
-class Config(object):
+class Config:
     """
     Config class. Configure client with basic (urls, version, headers)
     """
@@ -135,7 +135,7 @@ class Config(object):
         return url, headers
 
 
-class Endpoint(object):
+class Endpoint:
     """
     Generate request and return response
     """
@@ -319,7 +319,7 @@ class Endpoint(object):
                              headers=self.headers, domain=domain, **kwargs)
 
 
-class Client(object):
+class Client:
     """
     Client class
     """
