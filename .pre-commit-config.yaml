@@ -161,7 +161,7 @@ repos:
       - id: typos
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
+    rev: 0.7.19
     hooks:
       - id: mdformat
         additional_dependencies:
