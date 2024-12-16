@@ -192,7 +192,7 @@ select = ["ALL"]
 
 external = ["DOC", "PLR"]
 
-exclude = ["samples/*"]
+exclude = ["mailgun/examples/*"]
 
 #extend-select = ["W", "N", "UP", "B", "A", "C4", "PT", "SIM", "PD", "PLE", "RUF"]
 # Never enforce `E501` (line length violations).
@@ -287,7 +287,7 @@ ignore-overlong-task-comments = true
 convention = "google"
 
 [tool.flake8]
-exclude = ["samples/*"]
+exclude = ["mailgun/examples/*"]
 # TODO: D100 - create docstrings for modules
 ignore = ['E501', "D100"]
 extend-ignore = "W503"
@@ -340,7 +340,7 @@ strict_equality = true
 #    (^|/)test[^/]*\.py$    # files named "test*.py"
 #  )'''
 exclude = [
-    "samples",
+    "mailgun/examples",
 ]
 
 # Configuring error messages
@@ -352,7 +352,7 @@ disable_error_code = 'misc'
 
 [tool.pyright]
 include = ["mailgun"]
-exclude = ["samples/*", "**/__pycache__"]
+exclude = ["mailgun/examples/*", "**/__pycache__"]
 reportAttributeAccessIssue = false
 reportMissingImports = false
 
