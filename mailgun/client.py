@@ -193,7 +193,6 @@ class Endpoint:
                 verify=True,
                 stream=False)
 
-
         except requests.exceptions.Timeout:
             raise TimeoutError
         except requests.RequestException as e:
@@ -217,7 +216,6 @@ class Endpoint:
         """
 
         return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
-
 
     def get(self, filters=None, domain=None, **kwargs):
         """
