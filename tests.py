@@ -14,7 +14,7 @@ class MessagesTests(unittest.TestCase):
         self.domain = os.environ["DOMAIN"]
         self.data = {"from": os.environ["MESSAGES_FROM"],
                      "to": os.environ["MESSAGES_TO"],
-                     #"cc":  os.environ["MESSAGES_CC"],
+                     "cc":  os.environ["MESSAGES_CC"],
                      "subject": "Hello Vasyl Bodaj",
                      "text": "Congratulations!, you just sent an email with Mailgun! You are truly awesome!",
                      "o:tag": "Python test"}
