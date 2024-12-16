@@ -6,6 +6,7 @@ domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
 
+
 def get_single_validate():
     """
     GET /v4/address/validate
@@ -44,7 +45,8 @@ def post_bulk_list_validate():
     :return:
     """
     files = {"file": open("../doc_tests/files/email_validation.csv", "rb")}
-    req = client.addressvalidate_bulk.create(domain=domain, files=files, list_name="python2_list")
+    req = client.addressvalidate_bulk.create(
+        domain=domain, files=files, list_name="python2_list")
     print(req.json())
 
 
@@ -55,6 +57,7 @@ def get_bulk_list_validate():
     """
     req = client.addressvalidate_bulk.get(domain=domain, list_name="python2_list")
     print(req.json())
+
 
 def delete_bulk_list_validate():
     """
@@ -81,8 +84,8 @@ def post_preview():
     """
     files = {"file": open("../doc_tests/files/email_previews.csv", "rb")}
     req = client.addressvalidate_preview.create(domain=domain,
-                                             files=files,
-                                             list_name="python_list")
+                                                files=files,
+                                                list_name="python_list")
     print(req.json())
 
 

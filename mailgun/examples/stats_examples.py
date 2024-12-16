@@ -6,6 +6,7 @@ domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
 
+
 def get_stats_total():
     params = {"event": ["accepted", "delivered", "failed"],
               "duration": "1m"}

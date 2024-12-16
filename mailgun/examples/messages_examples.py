@@ -14,13 +14,14 @@ html = """<body style="margin: 0; padding: 0;">
 </body>"""
 client = Client(auth=("api", key))
 
+
 def post_message():
 
-    ### Messages
+    # Messages
     # POST /<domain>/messages
     data = {"from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
-            "cc":  os.environ["MESSAGES_CC"],
+            "cc": os.environ["MESSAGES_CC"],
             "subject": "Hello Vasyl Bodaj",
             "html": html,
             "o:tag": "Python test"}
@@ -31,23 +32,25 @@ def post_message():
     req = client.messages.create(data=data, files=files, domain=domain)
     print(req.json())
 
+
 def post_mime():
-    ### Mime messages
+    # Mime messages
     # POST /<domain>/messages.mime
     mime_data = {"from": os.environ["MESSAGES_FROM"],
                  "to": os.environ["MESSAGES_TO"],
-                 "cc":  os.environ["MESSAGES_CC"],
+                 "cc": os.environ["MESSAGES_CC"],
                  "subject": "Hello HELLO"}
     files = {"message": open("../doc_tests/files/test_mime.mime")}
 
     req = client.mimemessage.create(data=mime_data, files=files, domain=domain)
     print(req.json())
 
+
 def post_no_tracking():
     # Message no tracking
     data = {"from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
-            "cc":  os.environ["MESSAGES_CC"],
+            "cc": os.environ["MESSAGES_CC"],
             "subject": "Hello Vasyl Bodaj",
             "html": html,
             "o:tracking": False}
@@ -55,11 +58,12 @@ def post_no_tracking():
     req = client.messages.create(data=data, domain=domain)
     print(req.json())
 
+
 def post_scheduled():
     # Scheduled message
     data = {"from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
-            "cc":  os.environ["MESSAGES_CC"],
+            "cc": os.environ["MESSAGES_CC"],
             "subject": "Hello Vasyl Bodaj",
             "html": html,
             "o:deliverytime": "Thu Jan 28 2021 14:00:03 EST"}
@@ -67,11 +71,12 @@ def post_scheduled():
     req = client.messages.create(data=data, domain=domain)
     print(req.json())
 
+
 def post_message_tags():
-    #### Message Tags
+    # Message Tags
     data = {"from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
-            "cc":  os.environ["MESSAGES_CC"],
+            "cc": os.environ["MESSAGES_CC"],
             "subject": "Hello Vasyl Bodaj",
             "html": html,
             "o:tag": ["September newsletter", "newsletters"]}
@@ -92,9 +97,10 @@ def resend_message():
     req_ev = client.events.get(domain=domain, filters=params)
     print(req_ev.json())
 
-    req = client.resendmessage.create(data=data,
-                                      domain=domain,
-                                      storage_url=req_ev.json()["items"][0]["storage"]["url"])
+    req = client.resendmessage.create(
+        data=data,
+        domain=domain,
+        storage_url=req_ev.json()["items"][0]["storage"]["url"])
     print(req.json())
 
 

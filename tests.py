@@ -12,12 +12,13 @@ class MessagesTests(unittest.TestCase):
         )
         self.client = Client(auth=self.auth)
         self.domain = os.environ["DOMAIN"]
-        self.data = {"from": os.environ["MESSAGES_FROM"],
-                     "to": os.environ["MESSAGES_TO"],
-                     "cc":  os.environ["MESSAGES_CC"],
-                     "subject": "Hello Vasyl Bodaj",
-                     "text": "Congratulations!, you just sent an email with Mailgun! You are truly awesome!",
-                     "o:tag": "Python test"}
+        self.data = {
+            "from": os.environ["MESSAGES_FROM"],
+            "to": os.environ["MESSAGES_TO"],
+            "cc": os.environ["MESSAGES_CC"],
+            "subject": "Hello Vasyl Bodaj",
+            "text": "Congratulations!, you just sent an email with Mailgun! You are truly awesome!",
+            "o:tag": "Python test"}
 
     def test_post_right_message(self):
         req = self.client.messages.create(data=self.data, domain=self.domain)
@@ -36,6 +37,7 @@ class DomainTests(unittest.TestCase):
     as that domain is still exists. Maybe in this case it's good to implement something like random name
     generator to avoid this problems.
     """
+
     def setUp(self):
         self.auth = (
             "api",
@@ -68,8 +70,7 @@ class DomainTests(unittest.TestCase):
         self.put_domain_unsubscribe_data = {
             "active": "yes",
             "html_footer": '\n<br>\n<p><a href="%unsubscribe_url%">UnSuBsCrIbE</a></p>\n',
-            "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
-        }
+            "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"}
 
         self.put_domain_dkim_authority_data = {
             "self": "false"
@@ -114,7 +115,9 @@ class DomainTests(unittest.TestCase):
     def test_delete_domain(self):
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains.delete(domain=self.test_domain)
-        self.assertEqual(request.json()["message"], "Domain will be deleted in the background")
+        self.assertEqual(
+            request.json()["message"],
+            "Domain will be deleted in the background")
         self.assertEqual(request.status_code, 200)
 
     def test_get_smtp_creds(self):
@@ -147,34 +150,34 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
 
     def test_put_domain_connections(self):
-        request = self.client.domains_connection.put(domain=self.domain,
-                                                     data=self.put_domain_connections_data)
+        request = self.client.domains_connection.put(
+            domain=self.domain, data=self.put_domain_connections_data)
 
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
     def test_put_domain_tracking_open(self):
-        request = self.client.domains_tracking_open.put(domain=self.domain,
-                                                        data=self.put_domain_tracking_data)
+        request = self.client.domains_tracking_open.put(
+            domain=self.domain, data=self.put_domain_tracking_data)
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
     def test_put_domain_tracking_click(self):
-        request = self.client.domains_tracking_click.put(domain=self.domain,
-                                                         data=self.put_domain_tracking_data)
+        request = self.client.domains_tracking_click.put(
+            domain=self.domain, data=self.put_domain_tracking_data)
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
     def test_put_domain_unsubscribe(self):
-        request = self.client.domains_tracking_unsubscribe.put(domain=self.domain,
-                                                               data=self.put_domain_unsubscribe_data)
+        request = self.client.domains_tracking_unsubscribe.put(
+            domain=self.domain, data=self.put_domain_unsubscribe_data)
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
     def test_put_dkim_authority(self):
         self.client.domains.create(data=self.post_domain_data)
-        request = self.client.domains_dkimauthority.put(domain=self.test_domain,
-                                                        data=self.put_domain_dkim_authority_data)
+        request = self.client.domains_dkimauthority.put(
+            domain=self.test_domain, data=self.put_domain_dkim_authority_data)
         self.assertIn("message", request.json())
 
     def test_put_webprefix(self):
@@ -215,7 +218,6 @@ class IpTests(unittest.TestCase):
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
-
     @pytest.mark.skip
     def test_create_ip(self):
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
@@ -223,7 +225,8 @@ class IpTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
 
     def test_delete_ip(self):
-        request = self.client.domains_ips.delete(domain=self.domain, ip=self.ip_data["ip"])
+        request = self.client.domains_ips.delete(
+            domain=self.domain, ip=self.ip_data["ip"])
         self.assertEqual("success", request.json()["message"])
         self.assertEqual(request.status_code, 200)
 
@@ -407,7 +410,7 @@ class BouncesTests(unittest.TestCase):
             "address": "test30@gmail.com",
             "code": 550,
             "error": "Test error"
-            }
+        }
 
         self.bounces_json_data = [{
             "address": "test40@gmail.com",
@@ -418,7 +421,7 @@ class BouncesTests(unittest.TestCase):
                 "address": "test50@gmail.com",
                 "code": "550",
                 "error": "Test error"
-            }]
+        }]
 
     def test_bounces_get(self):
         req = self.client.bounces.get(domain=self.domain)
@@ -482,10 +485,10 @@ class UnsubscribesTest(unittest.TestCase):
                 "address": "test2@gmail.com",
                 "code": ["*"],
                 "error": "Test error"
-            },
+        },
             {
                 "address": "test3@gmail.com"
-            }]
+        }]
 
     def test_unsub_create(self):
         req = self.client.unsubscribes.create(data=self.unsub_data,
@@ -499,8 +502,9 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertIn("items", req.json())
 
     def test_unsub_get_single(self):
-        req = self.client.unsubscribes.get(domain=self.domain,
-                                           unsubscribe_address=self.unsub_data["address"])
+        req = self.client.unsubscribes.get(
+            domain=self.domain,
+            unsubscribe_address=self.unsub_data["address"])
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
@@ -546,7 +550,7 @@ class ComplaintsTest(unittest.TestCase):
         },
             {
                 "address": "test3@gmail.com"
-            }]
+        }]
 
     def test_compl_create(self):
         req = self.client.complaints.create(data=self.compl_data,
@@ -580,8 +584,9 @@ class ComplaintsTest(unittest.TestCase):
         self.client.complaints.create(data=self.compl_json_data,
                                       domain=self.domain,
                                       headers="application/json")
-        req = self.client.complaints.delete(domain=self.domain,
-                                            unsubscribe_address=self.compl_data["address"])
+        req = self.client.complaints.delete(
+            domain=self.domain,
+            unsubscribe_address=self.compl_data["address"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -612,7 +617,7 @@ class WhiteListTest(unittest.TestCase):
             {
                 "address": "test3@gmail.com",
                 "domain": self.domain
-            }]
+        }]
 
     def test_whitel_create(self):
         req = self.client.whitelists.create(data=self.whitel_data,
@@ -633,8 +638,9 @@ class WhiteListTest(unittest.TestCase):
     def test_whitel_delete_simple(self):
         self.client.whitelists.create(data=self.whitel_data,
                                       domain=self.domain)
-        req = self.client.whitelists.delete(domain=self.domain,
-                                            whitelist_address=self.whitel_data["address"])
+        req = self.client.whitelists.delete(
+            domain=self.domain,
+            whitelist_address=self.whitel_data["address"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -801,8 +807,7 @@ class MailingListsTest(unittest.TestCase):
         self.mailing_lists_members_data_mult = {
             "upsert": True,
             "members": '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
-                       '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'
-        }
+            '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]'}
 
     def test_maillist_pages_get(self):
         req = self.client.lists_pages.get(domain=self.domain)
@@ -835,8 +840,8 @@ class MailingListsTest(unittest.TestCase):
     def test_maillists_lists_delete(self):
         self.client.lists.create(domain=self.domain,
                                  data=self.mailing_lists_data)
-        req = self.client.lists.delete(domain=self.domain,
-                                       address="python_sdk@{domain}".format(domain=self.domain))
+        req = self.client.lists.delete(
+            domain=self.domain, address="python_sdk@{domain}".format(domain=self.domain))
         self.assertEqual(req.status_code, 200)
 
     def test_maillists_lists_validate_create(self):
@@ -872,9 +877,10 @@ class MailingListsTest(unittest.TestCase):
         self.assertIn("items", req.json())
 
     def test_maillists_lists_members_create(self):
-        self.client.lists_members.delete(domain=self.domain,
-                                         address=self.maillist_address,
-                                         member_address=self.mailing_lists_members_data["address"])
+        self.client.lists_members.delete(
+            domain=self.domain,
+            address=self.maillist_address,
+            member_address=self.mailing_lists_members_data["address"])
         req = self.client.lists_members.create(domain=self.domain,
                                                address=self.maillist_address,
                                                data=self.mailing_lists_members_data)
@@ -887,10 +893,11 @@ class MailingListsTest(unittest.TestCase):
                                          address=self.maillist_address,
                                          data=self.mailing_lists_members_data)
 
-        req = self.client.lists_members.put(domain=self.domain,
-                                            address=self.maillist_address,
-                                            data=self.mailing_lists_members_put_data,
-                                            member_address=self.mailing_lists_members_data["address"])
+        req = self.client.lists_members.put(
+            domain=self.domain,
+            address=self.maillist_address,
+            data=self.mailing_lists_members_put_data,
+            member_address=self.mailing_lists_members_data["address"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("member", req.json())
@@ -900,16 +907,18 @@ class MailingListsTest(unittest.TestCase):
                                          address=self.maillist_address,
                                          data=self.mailing_lists_members_data)
 
-        req = self.client.lists_members.delete(domain=self.domain,
-                                               address=self.maillist_address,
-                                               member_address=self.mailing_lists_members_data["address"])
+        req = self.client.lists_members.delete(
+            domain=self.domain,
+            address=self.maillist_address,
+            member_address=self.mailing_lists_members_data["address"])
         self.assertEqual(req.status_code, 200)
 
     def test_maillists_lists_members_create_mult(self):
-        req = self.client.lists_members.create(domain=self.domain,
-                                               address=self.maillist_address,
-                                               data=self.mailing_lists_members_data_mult,
-                                               multiple=True)
+        req = self.client.lists_members.create(
+            domain=self.domain,
+            address=self.maillist_address,
+            data=self.mailing_lists_members_data_mult,
+            multiple=True)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -976,8 +985,9 @@ class TemplatesTest(unittest.TestCase):
     def test_delete_template(self):
         self.client.templates.create(data=self.post_template_data,
                                      domain=self.domain)
-        req = self.client.templates.delete(domain=self.domain,
-                                           template_name=self.post_template_data["name"])
+        req = self.client.templates.delete(
+            domain=self.domain,
+            template_name=self.post_template_data["name"])
 
         self.assertEqual(req.status_code, 200)
 
@@ -991,10 +1001,11 @@ class TemplatesTest(unittest.TestCase):
                                      versions=True,
                                      tag=self.put_template_version)
 
-        req = self.client.templates.create(data=self.post_template_version_data,
-                                           domain=self.domain,
-                                           template_name=self.post_template_data["name"],
-                                           versions=True)
+        req = self.client.templates.create(
+            data=self.post_template_version_data,
+            domain=self.domain,
+            template_name=self.post_template_data["name"],
+            versions=True)
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
@@ -1043,10 +1054,11 @@ class TemplatesTest(unittest.TestCase):
                                      template_name=self.post_template_data["name"],
                                      versions=True)
 
-        req = self.client.templates.delete(domain=self.domain,
-                                           template_name=self.post_template_data["name"],
-                                           versions=True,
-                                           tag="v0")
+        req = self.client.templates.delete(
+            domain=self.domain,
+            template_name=self.post_template_data["name"],
+            versions=True,
+            tag="v0")
 
         self.client.templates.delete(domain=self.domain,
                                      template_name=self.post_template_data["name"],
@@ -1078,9 +1090,10 @@ class EmailValidationTest(unittest.TestCase):
         self.post_address_validate = {"address": self.validation_address_1}
 
     def test_post_address_validate(self):
-        req = self.client.addressvalidate.create(domain=self.domain,
-                                                 data=self.post_address_validate,
-                                                 filters=self.post_params_address_validate)
+        req = self.client.addressvalidate.create(
+            domain=self.domain,
+            data=self.post_address_validate,
+            filters=self.post_params_address_validate)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())

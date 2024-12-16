@@ -6,6 +6,7 @@ domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
 
+
 def get_domain_events():
     """
     GET /<domain>/events
@@ -13,6 +14,7 @@ def get_domain_events():
     """
     req = client.events.get(domain=domain)
     print(req.json())
+
 
 def view_message_with_storage_url():
     """
@@ -23,7 +25,8 @@ def view_message_with_storage_url():
         "limit": 1
     }
 
-    storage_url = client.events.get(domain=domain, filters=params).json()["items"][0]["storage"]["url"]
+    storage_url = client.events.get(domain=domain, filters=params).json()[
+        "items"][0]["storage"]["url"]
     req = client.domains_messages.get(domain=domain, api_storage_url=storage_url)
     print(req.json())
 
@@ -54,6 +57,7 @@ def events_rejected_or_failed():
     }
     req = client.events.get(domain=domain, filters=params)
     print(req.json())
+
 
 if __name__ == "__main__":
     events_rejected_or_failed()

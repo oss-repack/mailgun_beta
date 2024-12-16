@@ -6,6 +6,7 @@ domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
 
+
 def get_ippools():
     """
     GET /v1/ip_pools
@@ -14,18 +15,20 @@ def get_ippools():
     req = client.ippools.get(domain=domain)
     print(req.json())
 
+
 def create_ippool():
     """
     POST /v1/ip_pools
     :return:
     """
     post_data = {
-        "name" : "test_pool1",
+        "name": "test_pool1",
         "description": "Test",
         "ips": ["166.78.68.186"]
     }
     req_post = client.ippools.create(domain=domain, data=post_data)
     print(req_post.json())
+
 
 def update_ippool():
     """
@@ -33,7 +36,7 @@ def update_ippool():
     :return:
     """
     data = {
-        "name" : "test_pool3",
+        "name": "test_pool3",
         "description": "Test3",
     }
     req = client.ippools.patch(domain=domain,
@@ -50,6 +53,7 @@ def delete_ippool():
     req = client.ippools.delete(domain=domain, pool_id="60140bc1fee3e84dec5abeeb")
     print(req.json())
 
+
 def link_ippool():
     """
     POST /v3/domains/{domain_name}/ips
@@ -60,6 +64,7 @@ def link_ippool():
     }
     req = client.domains_ips.create(domain=domain, data=data)
     print(req.json())
+
 
 def unlink_ippool():
     """

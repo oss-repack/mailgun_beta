@@ -137,6 +137,7 @@ class Endpoint(object):
     """
     Generate request and return response
     """
+
     def __init__(self, url, headers, auth):
         """
         :param url: URL dict with pairs {"base": "keys"}
@@ -179,8 +180,16 @@ class Endpoint(object):
         req_method = getattr(requests, method)
 
         try:
-            response = req_method(url, data=data, params=filters, headers=headers, auth=auth,
-                                  timeout=timeout, files=files, verify=True, stream=False)
+            response = req_method(
+                url,
+                data=data,
+                params=filters,
+                headers=headers,
+                auth=auth,
+                timeout=timeout,
+                files=files,
+                verify=True,
+                stream=False)
 
             return response
 
@@ -312,6 +321,7 @@ class Client(object):
     """
     Client class
     """
+
     def __init__(self, auth=None, **kwargs):
         """
         :param auth: auth set ("username", "APIKEY")

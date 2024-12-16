@@ -6,6 +6,7 @@ domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
 
+
 def get_domains():
     """
     GET /domains
@@ -13,7 +14,8 @@ def get_domains():
     """
     data = client.domainlist.get(domain=domain)
     print(data.json())
-#### Get domain
+# Get domain
+
 
 def get_simple_domain():
     """
@@ -23,6 +25,7 @@ def get_simple_domain():
     domain_name = "python.test.domain4"
     data = client.domains.get(domain_name=domain_name)
     print(data.json())
+
 
 def verify_domain():
     """
@@ -34,31 +37,34 @@ def verify_domain():
                               verify=True)
     print(data.json())
 
+
 def add_domain():
     """
     POST /domains
     :return:
     """
-    ### Post domain
+    # Post domain
     data = {
         "name": "python.test.domain5",
         # "smtp_password": "cisco123456"
     }
-    ## Problem with smtp_password!!!!
+    # Problem with smtp_password!!!!
 
     request = client.domains.create(data=data)
     print(request.json())
     print(request.status_code)
+
 
 def delete_domain():
     """
     DELETE /domains/<domain>
     :return:
     """
-    ### Delete domain
+    # Delete domain
     request = client.domains.delete(domain="python.test.domain5")
     print(request.text)
     print(request.status_code)
+
 
 def get_credentials():
     """
@@ -67,6 +73,7 @@ def get_credentials():
     """
     request = client.domains_credentials.get(domain=domain)
     print(request.json())
+
 
 def post_credentials():
     """
@@ -81,6 +88,7 @@ def post_credentials():
                                                 data=data)
     print(request.json())
 
+
 def put_credentials():
     """
     PUT /domains/<domain>/credentials/<login>
@@ -89,19 +97,20 @@ def put_credentials():
     data = {
         "password": "test_new_creds12356"
     }
-    request = client.domains_credentials.put(domain=domain,
-                                                data=data,
-                                                login="alice_bob@{domain}".format(domain=domain))
+    request = client.domains_credentials.put(
+        domain=domain, data=data, login="alice_bob@{domain}".format(domain=domain))
     print(request.json())
+
 
 def delete_credentials():
     """
     DELETE /domains/<domain>/credentials/<login>
     :return:
     """
-    request = client.domains_credentials.delete(domain=domain,
-                                             login="alice_bob@{domain}".format(domain=domain))
+    request = client.domains_credentials.delete(
+        domain=domain, login="alice_bob@{domain}".format(domain=domain))
     print(request.json())
+
 
 def get_connections():
     """
@@ -110,6 +119,7 @@ def get_connections():
     """
     request = client.domains_connection.get(domain=domain)
     print(request.json())
+
 
 def put_connections():
     """
@@ -123,6 +133,7 @@ def put_connections():
     request = client.domains_connection.put(domain=domain, data=data)
     print(request.json())
 
+
 def get_tracking():
     """
     GET /domains/<domain>/tracking
@@ -130,6 +141,7 @@ def get_tracking():
     """
     request = client.domains_tracking.get(domain=domain)
     print(request.json())
+
 
 def put_open_tracking():
     """
@@ -155,6 +167,7 @@ def put_click_tracking():
     request = client.domains_tracking_click.put(domain=domain, data=data)
     print(request.json())
 
+
 def put_unsub_tracking():
     """
     PUT /domains/<domain>/tracking/unsubscribe
@@ -167,6 +180,7 @@ def put_unsub_tracking():
     }
     request = client.domains_tracking_unsubscribe.put(domain=domain, data=data)
     print(request.json())
+
 
 def put_dkim_authority():
     """
@@ -186,10 +200,11 @@ def put_dkim_selector():
     :return:
     """
     data = {
-    "dkim_selector": "s"
+        "dkim_selector": "s"
     }
     request = client.domains_dkimselector.put(domain="python.test.domain4", data=data)
     print(request.json())
+
 
 def put_web_prefix():
     """
@@ -197,7 +212,7 @@ def put_web_prefix():
     :return:
     """
     data = {
-    "web_prefix": "python"}
+        "web_prefix": "python"}
     request = client.domains_webprefix.put(domain="python.test.domain4", data=data)
     print(request.json())
 
