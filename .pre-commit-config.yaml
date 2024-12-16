@@ -54,21 +54,21 @@ repos:
       # Detects the presence of private keys
       - id: detect-private-key
 
-#  - repo: https://github.com/jorisroovers/gitlint
-#    rev: v0.19.1
-#    hooks:
-#      - id: gitlint
-#
-#  - repo: https://github.com/codespell-project/codespell
-#    rev: v2.3.0
-#    hooks:
-#      - id: codespell
-#        args: [--write]
-#
-#  - repo: https://github.com/python-jsonschema/check-jsonschema
-#    rev: 0.30.0
-#    hooks:
-#      - id: check-github-workflows
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: v0.19.1
+    hooks:
+      - id: gitlint
+
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+        args: [--write]
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.30.0
+    hooks:
+      - id: check-github-workflows
 #
   - repo: https://github.com/pre-commit/mirrors-autopep8
     rev: v2.0.4

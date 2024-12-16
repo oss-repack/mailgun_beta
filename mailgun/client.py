@@ -73,7 +73,7 @@ class Config:
 
     def __getitem__(self, key):
         """
-        Parse incoming splitted attr name, check it and prepare endpoint url.
+        Parse incoming split attr name, check it and prepare endpoint url.
         Most urls generated here can't be generated dynamically as we are doing this
         in build_url() method under Endpoint class.
         :param key: incoming attr name
@@ -91,15 +91,15 @@ class Config:
                    "keys": ["domainlist"]}
             modified = True
         if "domains" in key.lower():
-            splitted = [key.lower()]
+            split = [key.lower()]
             if "_" in key.lower():
-                splitted = key.split("_")
-            final_keys = splitted
-            if "dkimauthority" in splitted:
+                split = key.split("_")
+            final_keys = split
+            if "dkimauthority" in split:
                 final_keys = ["dkim_authority"]
-            elif "dkimselector" in splitted:
+            elif "dkimselector" in split:
                 final_keys = ["dkim_selector"]
-            elif "webprefix" in splitted:
+            elif "webprefix" in split:
                 final_keys = ["web_prefix"]
 
             url = {"base": urljoin(self.api_url, self.version + "/domains/"),
@@ -212,7 +212,7 @@ class Endpoint:
         :param method: requested method
         :type method: str
         :param kwargs: kwargs
-        :return: builded URL
+        :return: built URL
         """
 
         return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
