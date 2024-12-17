@@ -242,7 +242,7 @@ class IpTests(unittest.TestCase):
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
-    @pytest.mark.skip
+    @pytest.mark.skip(reason="TODO: check this test")
     def test_create_ip(self):
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         self.assertEqual("success", request.json()["message"])
