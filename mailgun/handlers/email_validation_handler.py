@@ -1,13 +1,14 @@
-"""
-EMAIL VALIDATION HANDLER
+"""EMAIL VALIDATION HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-email-validation.html#email-validation
 """
+
 from os import path
 
 
 def handle_address_validate(url, _domain, _method, **kwargs):
-    """
-    Handle email validation
+    """Handle email validation.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)

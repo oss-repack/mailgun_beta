@@ -64,17 +64,18 @@ repos:
     hooks:
       - id: codespell
         args: [--write]
+        exclude: ^tests.py
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
     hooks:
       - id: check-github-workflows
 
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v2.0.4
-    hooks:
-      - id: autopep8
-        exclude: ^docs/
+#  - repo: https://github.com/pre-commit/mirrors-autopep8
+#    rev: v2.0.4
+#    hooks:
+#      - id: autopep8
+#        exclude: ^docs/
 
   - repo: https://github.com/akaihola/darker
     rev: v2.1.1
@@ -99,8 +100,8 @@ repos:
           - radon
           - flake8-docstrings
           - Flake8-pyproject
-        exclude: ^docs/
-
+        # TODO: Remove tests.py when we will be ready to process tests
+        exclude: ^tests.py
 
   - repo: https://github.com/PyCQA/pylint
     rev: v3.3.2
@@ -117,7 +118,7 @@ repos:
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     # Ruff version.
-    rev: v0.8.2
+    rev: v0.8.3
     hooks:
       # Run the linter.
       - id: ruff
@@ -129,21 +130,22 @@ repos:
       rev: v2.0.0
       hooks:
       -   id: refurb
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
-    hooks:
-    -   id: mypy
-        args:
-          [
-            --config-file=./pyproject.toml,
-          ]
-        exclude: ^samples/
-
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.390
-    hooks:
-    - id: pyright
+          language_version: python3.12
+#
+#  - repo: https://github.com/pre-commit/mirrors-mypy
+#    rev: v1.13.0
+#    hooks:
+#    -   id: mypy
+#        args:
+#          [
+#            --config-file=./pyproject.toml,
+#          ]
+#        exclude: ^samples/
+#
+#  - repo: https://github.com/RobertCraigie/pyright-python
+#    rev: v1.1.390
+#    hooks:
+#    - id: pyright
 
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.0
@@ -155,9 +157,18 @@ repos:
         additional_dependencies: [".[toml]"]
 
   - repo: https://github.com/crate-ci/typos
-    rev: typos-dict-v0.11.37
+    rev: v1.28.3
     hooks:
       - id: typos
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.19
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          # gfm = GitHub Flavored Markdown
+          - mdformat-gfm
+          - mdformat-black
 
 #  - repo: https://github.com/google/yapf
 #    rev: v0.40.2
@@ -171,20 +182,11 @@ repos:
 #      hooks:
 #      -   id: pytype
 
-#  - repo: https://github.com/executablebooks/mdformat
-#    rev: 0.7.17
+#  - repo: https://github.com/adrienverge/yamllint.git
+#    rev: v1.35.1
 #    hooks:
-#      - id: mdformat
-#        additional_dependencies:
-#          # gfm = GitHub Flavored Markdown
-#          - mdformat-gfm
-#          - mdformat-black
-
-#    - repo: https://github.com/adrienverge/yamllint.git
-#      rev: v1.35.1
-#      hooks:
-#        - id: yamllint
-#          #args: [--strict]
-#          entry: yamllint
-#          language: python
-#          types: [ file, yaml ]
+#      - id: yamllint
+#        #args: [--strict]
+#        entry: yamllint
+#        language: python
+#        types: [ file, yaml ]

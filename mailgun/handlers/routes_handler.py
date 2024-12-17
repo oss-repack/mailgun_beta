@@ -1,13 +1,14 @@
-"""
-ROUTES HANDLER
+"""ROUTES HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-routes.html
 """
+
 from os import path
 
 
 def handle_routes(url, _domain, _method, **kwargs):
-    """
-    Handle Routes
+    """Handle Routes.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param _domain: Incoming domain (it's not being used for this handler)

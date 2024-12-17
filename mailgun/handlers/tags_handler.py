@@ -1,14 +1,15 @@
-"""
-TAGS HANDLER
+"""TAGS HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-tags.html
 """
+
 from os import path
 from urllib.parse import quote
 
 
 def handle_tags(url, domain, _method, **kwargs):
-    """
-    Handle Tags
+    """Handle Tags.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
@@ -18,7 +19,6 @@ def handle_tags(url, domain, _method, **kwargs):
     :param kwargs: kwargs
     :return: final url for Tags endpoint
     """
-
     final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
     base = url["base"] + domain + "/"
     keys_without_tags = url["keys"][1:]

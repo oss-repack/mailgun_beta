@@ -1,10 +1,13 @@
 import os
+
 from mailgun.client import Client
+
 
 key = os.environ["APIKEY"]
 domain = os.environ["DOMAIN"]
 
 client = Client(auth=("api", key))
+
 
 def get_domain_events():
     """
@@ -14,16 +17,17 @@ def get_domain_events():
     req = client.events.get(domain=domain)
     print(req.json())
 
+
 def view_message_with_storage_url():
     """
     https://sw.api.mailgun.net/v3/domains/2048.zeefarmer.com/messages/{storage_url}
     :return:
     """
-    params = {
-        "limit": 1
-    }
+    params = {"limit": 1}
 
-    storage_url = client.events.get(domain=domain, filters=params).json()["items"][0]["storage"]["url"]
+    storage_url = client.events.get(domain=domain, filters=params).json()["items"][0][
+        "storage"
+    ]["url"]
     req = client.domains_messages.get(domain=domain, api_storage_url=storage_url)
     print(req.json())
 
@@ -38,7 +42,7 @@ def events_by_recipient():
         "ascending": "yes",
         "limit": 10,
         "pretty": "yes",
-        "recipient": os.environ["VALIDATION_ADDRESS_1"]
+        "recipient": os.environ["VALIDATION_ADDRESS_1"],
     }
     req = client.events.get(domain=domain, filters=params)
     print(req.json())
@@ -49,11 +53,10 @@ def events_rejected_or_failed():
     GET /<domain>/events
     :return:
     """
-    params = {
-        "event": "rejected OR failed"
-    }
+    params = {"event": "rejected OR failed"}
     req = client.events.get(domain=domain, filters=params)
     print(req.json())
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     events_rejected_or_failed()

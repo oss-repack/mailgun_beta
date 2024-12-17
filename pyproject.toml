@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-# TODO: Move tests to the tests filder
+# TODO: Move tests to the 'tests' folder
 include = ["mailgun", "mailgun.handlers", "mailgun.*", "tests.py"]
 
 [tool.setuptools.package-data]
@@ -77,7 +77,7 @@ linting = [
     "pycodestyle",
     "pydocstyle",
     "pyupgrade",
-    "refurb",
+    "refurb",  # refurb doesn't support py39
     "pre-commit",
     "ruff",
     "mypy",
@@ -192,7 +192,7 @@ select = ["ALL"]
 
 external = ["DOC", "PLR"]
 
-exclude = ["samples/*"]
+exclude = ["mailgun/examples/*"]
 
 #extend-select = ["W", "N", "UP", "B", "A", "C4", "PT", "SIM", "PD", "PLE", "RUF"]
 # Never enforce `E501` (line length violations).
@@ -201,20 +201,22 @@ ignore = [
     "ARG001",  #  ARG001 Unused function argument: `debug`, `kwargs`, and `method` in class Client
     # TODO: Fix A001 Variable `TimeoutError` is shadowing a Python builtin
     "A001" ,
-    # TODO: Fix A002 Argument `id` is shadowing a Python builtin
-    "A002",
+    # TODO: Enable A, ANN, D, C901, TRY201, TRY003, EM101, PTH118, PLR0917 later
+    "A", "ANN", "D", "C901", "TRY201", "TRY003", "EM101", "PTH118", "PLR0912", "ERA001", "PLR0917", "TD002", "TD003", "FIX002",
     "ANN401",  # ANN401 Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
     "B904",  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None`
     # pycodestyle (E, W)
     "CPY001",   # Missing copyright notice at top of file
-    "DOC501",  # DOC501 Raised exception `TimeoutError` and `ApiError` missing from docstring
+    #"DOC501",  # DOC501 Raised exception `TimeoutError` and `ApiError` missing from docstring
+    # TODO: Fix D104 Missing docstring in public package
+    "D104",
     "E501",
     "FBT001",  # Boolean-typed positional argument in function definition
     "FBT002",  # Boolean default positional argument in function definition
     # TODO: Replace with http.HTTPStatus, see https://docs.python.org/3/library/http.html#http-status-codes
     "PLR2004",  # PLR2004 Magic value used in comparison, consider replacing `XXX` with a constant variable
     "PLR0913",  # PLR0913 Too many arguments in function definition (6 > 5)
-    "PLR0917",  # PLR0917 Too many positional arguments
+    #"PLR0917",  # PLR0917 Too many positional arguments
     "Q003",   # Checks for avoidable escaped quotes ("\"" -> '"')
     # TODO:" PT009 Use a regular `assert` instead of unittest-style `assertTrue`
     "PT009",
@@ -287,9 +289,9 @@ ignore-overlong-task-comments = true
 convention = "google"
 
 [tool.flake8]
-exclude = ["samples/*"]
-# TODO: D100 - create docstrings for modules test_client.py and test_version.py
-ignore = ['E501', "D100"]
+exclude = ["mailgun/examples/*"]
+# TODO: D100 - create docstrings for modules; D101 Missing docstring in public class; D102 Missing docstring in public method; D104 Missing docstring in public package
+ignore = ['E501', "D100", "D101", "D102", "D104"]
 extend-ignore = "W503"
 per-file-ignores = [
     '__init__.py:F401',
@@ -340,7 +342,7 @@ strict_equality = true
 #    (^|/)test[^/]*\.py$    # files named "test*.py"
 #  )'''
 exclude = [
-    "samples",
+    "mailgun/examples",
 ]
 
 # Configuring error messages
@@ -352,7 +354,7 @@ disable_error_code = 'misc'
 
 [tool.pyright]
 include = ["mailgun"]
-exclude = ["samples/*", "**/__pycache__"]
+exclude = ["mailgun/examples/*", "**/__pycache__"]
 reportAttributeAccessIssue = false
 reportMissingImports = false
 

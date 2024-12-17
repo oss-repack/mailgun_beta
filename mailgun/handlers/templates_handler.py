@@ -1,14 +1,16 @@
-"""
-TEMPLATES HANDLER
+"""TEMPLATES HANDLER.
+
 Doc: https://documentation.mailgun.com/en/latest/api-templates.html
 """
+
 from os import path
+
 from .error_handler import ApiError
 
 
 def handle_templates(url, domain, _method, **kwargs):
-    """
-    Handle Templates
+    """Handle Templates.
+
     :param url: Incoming URL dictionary
     :type url: dict
     :param domain: Incoming domain
@@ -23,10 +25,24 @@ def handle_templates(url, domain, _method, **kwargs):
         if "versions" in kwargs:
             if kwargs["versions"]:
                 if "tag" in kwargs:
-                    url = url["base"] + domain + final_keys + "/" + \
-                          kwargs["template_name"] + "/versions/" + kwargs["tag"]
+                    url = (
+                        url["base"]
+                        + domain
+                        + final_keys
+                        + "/"
+                        + kwargs["template_name"]
+                        + "/versions/"
+                        + kwargs["tag"]
+                    )
                 else:
-                    url = url["base"] + domain + final_keys + "/" + kwargs["template_name"] + "/versions"
+                    url = (
+                        url["base"]
+                        + domain
+                        + final_keys
+                        + "/"
+                        + kwargs["template_name"]
+                        + "/versions"
+                    )
             else:
                 raise ApiError("Versions should be True or absent")
         else:
