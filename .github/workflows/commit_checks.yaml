@@ -37,7 +37,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           channels: defaults
           show-channel-urls: true
-          environment-file: environment.yaml
+          environment-file: environment-dev.yaml
 
       - name: Install the package
         run: |
