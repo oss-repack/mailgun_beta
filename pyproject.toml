@@ -290,8 +290,8 @@ convention = "google"
 
 [tool.flake8]
 exclude = ["mailgun/examples/*"]
-# TODO: D100 - create docstrings for modules; D104 Missing docstring in public package
-ignore = ['E501', "D100", "D104"]
+# TODO: D100 - create docstrings for modules; D101 Missing docstring in public class; D102 Missing docstring in public method; D104 Missing docstring in public package
+ignore = ['E501', "D100", "D101", "D102", "D104"]
 extend-ignore = "W503"
 per-file-ignores = [
     '__init__.py:F401',

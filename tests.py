@@ -33,9 +33,9 @@ class MessagesTests(unittest.TestCase):
 
 
 class DomainTests(unittest.TestCase):
-    """All the tests of this part will work only on fresh setup, or you have to change
-    self.test_domain variable every time you're running this again. It's happening because
-    domain name is not deleting permanently after API call, so every new create will cause an error,
+    """All the tests of this part will work only on fresh setup, or you have to change self.test_domain variable every time you're running this again.
+
+    It's happening because domain name is not deleting permanently after API call, so every new create will cause an error,
     as that domain is still exists. Maybe in this case it's good to implement something like random name
     generator to avoid this problems.
     """
