@@ -11,5 +11,5 @@ dependencies:
   # tests
   - pytest >=7.0.0
   # other
-  - pre-commit
+  - conda-forge::pre-commit
   - toml
