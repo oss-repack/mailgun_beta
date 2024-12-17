@@ -53,7 +53,7 @@ def handle_domains(url, domain, method, **kwargs):
             url = kwargs["api_storage_url"]
         else:
             url = urljoin(url["base"], domain + final_keys)
-    elif method in ("get", "post", "delete"):
+    elif method in {"get", "post", "delete"}:
         if "domain_name" in kwargs:
             url = urljoin(url["base"], kwargs["domain_name"])
         elif method == "delete":
