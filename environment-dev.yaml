@@ -37,8 +37,7 @@ dependencies:
   - conda
   - conda-build
   - jsonschema
-  # TODO: replace it when it will be available on defaults
-  - conda-forge::pre-commit
+  - pre-commit
   - python-dotenv >=0.19.2
   - types-jsonschema
   - pip:
