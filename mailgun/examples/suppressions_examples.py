@@ -57,6 +57,7 @@ def import_bounce_list():
     POST /<domain>/bounces/import, Content-Type: multipart/form-data
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"bounce_csv": open("../doc_tests/files/mailgun_bounces_test.csv", "rb")}
     req = client.bounces_import.create(domain=domain, files=files)
     print(req.json())
@@ -140,6 +141,7 @@ def import_list_unsubs():
     POST /<domain>/unsubscribes/import, Content-Type: multipart/form-data
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {
         "unsubscribe2_csv": open("../doc_tests/files/mailgun_unsubscribes.csv", "rb")
     }
@@ -213,6 +215,7 @@ def import_complaint_list():
     POST /<domain>/complaints/import, Content-Type: multipart/form-data
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"complaints_csv": open("../doc_tests/files/mailgun_complaints.csv", "rb")}
     req = client.complaints_import.create(domain=domain, files=files)
     print(req.json())
@@ -275,6 +278,7 @@ def import_list_whitelists():
     POST /<domain>/whitelists/import, Content-Type: multipart/form-data
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"whitelist_csv": open("../doc_tests/files/mailgun_whitelists.csv", "rb")}
     req = client.whitelists_import.create(domain=domain, files=files)
     print(req.json())

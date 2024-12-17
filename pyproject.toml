@@ -77,7 +77,7 @@ linting = [
     "pycodestyle",
     "pydocstyle",
     "pyupgrade",
-    "refurb",
+    "refurb",  # refurb doesn't support py39
     "pre-commit",
     "ruff",
     "mypy",
@@ -202,7 +202,7 @@ ignore = [
     # TODO: Fix A001 Variable `TimeoutError` is shadowing a Python builtin
     "A001" ,
     # TODO: Enable A, ANN, D, C901, TRY201, TRY003, EM101, PTH118, PLR0917 later
-    "A", "ANN", "D", "C901", "TRY201", "TRY003", "EM101", "PTH118", "PLR0912", "ERA001", "PLR0917",
+    "A", "ANN", "D", "C901", "TRY201", "TRY003", "EM101", "PTH118", "PLR0912", "ERA001", "PLR0917", "TD002", "TD003", "FIX002",
     "ANN401",  # ANN401 Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
     "B904",  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None`
     # pycodestyle (E, W)

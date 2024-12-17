@@ -166,11 +166,13 @@ def put_unsub_tracking():
     PUT /domains/<domain>/tracking/unsubscribe
     :return:
     """
+    # fmt: off
     data = {
         "active": "yes",
-        "html_footer": '\n<br>\n<p><a href="%unsubscribe_url%">UnSuBsCrIbE</a></p>\n',
-        "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n",
+        "html_footer": "\n<br>\n<p><a href=\"%unsubscribe_url%\">UnSuBsCrIbE</a></p>\n",
+        "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n"
     }
+    # fmt: on
     request = client.domains_tracking_unsubscribe.put(domain=domain, data=data)
     print(request.json())
 

@@ -45,6 +45,7 @@ def post_bulk_list_validate():
     POST /v4/address/validate/bulk/<list_id>
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"file": open("../doc_tests/files/email_validation.csv", "rb")}
     req = client.addressvalidate_bulk.create(
         domain=domain, files=files, list_name="python2_list"
@@ -84,6 +85,7 @@ def post_preview():
     POST /v4/address/validate/preview/<list_id>
     :return:
     """
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"file": open("../doc_tests/files/email_previews.csv", "rb")}
     req = client.addressvalidate_preview.create(
         domain=domain, files=files, list_name="python_list"

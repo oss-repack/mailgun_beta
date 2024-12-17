@@ -29,6 +29,7 @@ def post_message():
         "o:tag": "Python test",
     }
     # "text": "Congratulations !!!!!, you just sent an email with Mailgun!  You are truly awesome!"}
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = [
         (
             "attachment",
@@ -53,6 +54,7 @@ def post_mime():
         "cc": os.environ["MESSAGES_CC"],
         "subject": "Hello HELLO",
     }
+    # TODO: Refactor this by using with context manager or pathlib.Path
     files = {"message": open("../doc_tests/files/test_mime.mime")}
 
     req = client.mimemessage.create(data=mime_data, files=files, domain=domain)
