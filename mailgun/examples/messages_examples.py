@@ -3,9 +3,9 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
-html = """<body style="margin: 0; padding: 0;">
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
+html: str = """<body style="margin: 0; padding: 0;">
  <table border="1" cellpadding="0" cellspacing="0" width="100%">
   <tr>
    <td>
@@ -14,10 +14,10 @@ html = """<body style="margin: 0; padding: 0;">
   </tr>
  </table>
 </body>"""
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def post_message():
+def post_message() -> None:
     # Messages
     # POST /<domain>/messages
     data = {
@@ -45,7 +45,7 @@ def post_message():
     print(req.json())
 
 
-def post_mime():
+def post_mime() -> None:
     # Mime messages
     # POST /<domain>/messages.mime
     mime_data = {
@@ -61,7 +61,7 @@ def post_mime():
     print(req.json())
 
 
-def post_no_tracking():
+def post_no_tracking() -> None:
     # Message no tracking
     data = {
         "from": os.environ["MESSAGES_FROM"],
@@ -76,7 +76,7 @@ def post_no_tracking():
     print(req.json())
 
 
-def post_scheduled():
+def post_scheduled() -> None:
     # Scheduled message
     data = {
         "from": os.environ["MESSAGES_FROM"],
@@ -91,7 +91,7 @@ def post_scheduled():
     print(req.json())
 
 
-def post_message_tags():
+def post_message_tags() -> None:
     # Message Tags
     data = {
         "from": os.environ["MESSAGES_FROM"],
@@ -106,7 +106,7 @@ def post_message_tags():
     print(req.json())
 
 
-def resend_message():
+def resend_message() -> None:
     data = {"to": ["spidlisn@gmail.com", "mailgun@2048.zeefarmer.com"]}
 
     params = {

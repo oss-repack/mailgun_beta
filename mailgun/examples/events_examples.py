@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_domain_events():
+def get_domain_events() -> None:
     """
     GET /<domain>/events
     :return:
@@ -18,7 +18,7 @@ def get_domain_events():
     print(req.json())
 
 
-def view_message_with_storage_url():
+def view_message_with_storage_url() -> None:
     """
     https://sw.api.mailgun.net/v3/domains/2048.zeefarmer.com/messages/{storage_url}
     :return:
@@ -32,7 +32,7 @@ def view_message_with_storage_url():
     print(req.json())
 
 
-def events_by_recipient():
+def events_by_recipient() -> None:
     """
     GET /<domain>/events
     :return:
@@ -48,7 +48,7 @@ def events_by_recipient():
     print(req.json())
 
 
-def events_rejected_or_failed():
+def events_rejected_or_failed() -> None:
     """
     GET /<domain>/events
     :return:

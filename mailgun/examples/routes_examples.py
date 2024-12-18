@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_routes():
+def get_routes() -> None:
     """
     GET /routes
     :return:
@@ -19,7 +19,7 @@ def get_routes():
     print(req.json())
 
 
-def get_route_by_id():
+def get_route_by_id() -> None:
     """
     GET /routes/<id>
     :return:
@@ -28,7 +28,7 @@ def get_route_by_id():
     print(req.json())
 
 
-def post_routes():
+def post_routes() -> None:
     """
     POST /routes
     :return:
@@ -43,7 +43,7 @@ def post_routes():
     print(req.json())
 
 
-def put_route():
+def put_route() -> None:
     """
     PUT /routes/<id>
     :return:
@@ -60,7 +60,7 @@ def put_route():
     print(req.json())
 
 
-def delete_route():
+def delete_route() -> None:
     """
     DELETE /routes/<id>
     :return:

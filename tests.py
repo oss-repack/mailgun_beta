@@ -1,5 +1,8 @@
+from __future__ import annotations
+
 import os
 import unittest
+from typing import Any
 
 import pytest
 
@@ -8,13 +11,13 @@ from mailgun.client import Client
 
 class MessagesTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.data: dict[str, str] = {
             "from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
             # TODO: Check 'Domain $DOMAIN is not allowed to send: Free accounts are for test purposes only. Please upgrade or add the address to authorized recipients in Account Settings.'
@@ -42,51 +45,51 @@ class DomainTests(unittest.TestCase):
     """
 
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.test_domain = "mailgun.wrapper.test2"
-        self.post_domain_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.test_domain: str = "mailgun.wrapper.test2"
+        self.post_domain_data: dict[str, str] = {
             "name": self.test_domain,
         }
-        self.post_domain_creds = {
+        self.post_domain_creds: dict[str, str] = {
             "login": f"alice_bob@{self.domain}",
             "password": "test_new_creds123",
         }
 
-        self.put_domain_creds = {
+        self.put_domain_creds: dict[str, str] = {
             "password": "test_new_creds",
         }
 
-        self.put_domain_connections_data = {
+        self.put_domain_connections_data: dict[str, str] = {
             "require_tls": "false",
             "skip_verification": "false",
         }
 
-        self.put_domain_tracking_data = {
+        self.put_domain_tracking_data: dict[str, str] = {
             "active": "yes",
             "skip_verification": "false",
         }
         # fmt: off
-        self.put_domain_unsubscribe_data = {
+        self.put_domain_unsubscribe_data: dict[str, str] = {
             "active": "yes",
             "html_footer": "\n<br>\n<p><a href=\"%unsubscribe_url%\">UnSuBsCrIbE</a></p>\n",
             "text_footer": "\n\nTo unsubscribe here click: <%unsubscribe_url%>\n\n",
         }
         # fmt: on
 
-        self.put_domain_dkim_authority_data = {
+        self.put_domain_dkim_authority_data: dict[str, str] = {
             "self": "false",
         }
 
-        self.put_domain_webprefix_data = {
+        self.put_domain_webprefix_data: dict[str, str] = {
             "web_prefix": "python",
         }
 
-        self.put_dkim_selector_data = {
+        self.put_dkim_selector_data: dict[str, str] = {
             "dkim_selector": "s",
         }
 
@@ -224,13 +227,13 @@ class DomainTests(unittest.TestCase):
 
 class IpTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.ip_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.ip_data: dict[str, str] = {
             "ip": os.environ["DOMAINS_DEDICATED_IP"],
         }
 
@@ -262,22 +265,22 @@ class IpTests(unittest.TestCase):
 
 class IpPoolsTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.data: dict[str, str] = {
             "name": "test_pool",
             "description": "Test",
             "add_ip": os.environ["DOMAINS_DEDICATED_IP"],
         }
-        self.patch_data = {
+        self.patch_data: dict[str, str] = {
             "name": "test_pool1",
             "description": "Test1",
         }
-        self.ippool_id = ""
+        self.ippool_id: Any = ""
 
     def test_get_ippools(self) -> None:
         self.client.ippools.create(domain=self.domain, data=self.data)
@@ -321,13 +324,13 @@ class IpPoolsTests(unittest.TestCase):
 
 class EventsTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.params = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.params: dict[str, str] = {
             "event": "rejected",
         }
 
@@ -345,13 +348,13 @@ class EventsTests(unittest.TestCase):
 
 class StatsTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.params = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.params: dict[str, str | list[str]] = {
             "event": ["accepted"],
             "duration": "1m",
         }
@@ -364,22 +367,22 @@ class StatsTests(unittest.TestCase):
 
 class TagsTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.data: dict[str, str] = {
             "description": "Tests running",
         }
-        self.put_tags_data = {
+        self.put_tags_data: dict[str, str] = {
             "description": "Python testtt",
         }
-        self.stats_params = {
+        self.stats_params: dict[str, str] = {
             "event": "accepted",
         }
-        self.tag_name = "Python test"
+        self.tag_name: str = "Python test"
 
     def test_get_tags(self) -> None:
         req = self.client.tags.get(domain=self.domain)
@@ -430,19 +433,19 @@ class TagsTests(unittest.TestCase):
 
 class BouncesTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.bounces_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.bounces_data: dict[str, int | str] = {
             "address": "test30@gmail.com",
             "code": 550,
             "error": "Test error",
         }
 
-        self.bounces_json_data = [
+        self.bounces_json_data: list[dict[str, str]] = [
             {
                 "address": "test40@gmail.com",
                 "code": "550",
@@ -500,18 +503,18 @@ class BouncesTests(unittest.TestCase):
 
 class UnsubscribesTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.unsub_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.unsub_data: dict[str, str] = {
             "address": "test@gmail.com",
             "tag": "unsub_test_tag",
         }
 
-        self.unsub_json_data = [
+        self.unsub_json_data: list[dict[str, str | list[str]]] = [
             {
                 "address": "test1@gmail.com",
                 "tags": ["some tag"],
@@ -573,18 +576,18 @@ class UnsubscribesTest(unittest.TestCase):
 
 class ComplaintsTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.compl_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.compl_data: dict[str, str] = {
             "address": "test@gmail.com",
             "tag": "compl_test_tag",
         }
 
-        self.compl_json_data = [
+        self.compl_json_data: list[dict[str, str | list[str]]] = [
             {
                 "address": "test1@gmail.com",
                 "tags": ["some tag"],
@@ -647,18 +650,18 @@ class ComplaintsTest(unittest.TestCase):
 
 class WhiteListTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.whitel_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.whitel_data: dict[str, str] = {
             "address": "test@gmail.com",
             "tag": "whitel_test",
         }
 
-        self.whitl_json_data = [
+        self.whitl_json_data: list[dict[str, str]] = [
             {
                 "address": "test1@gmail.com",
                 "domain": self.domain,
@@ -698,23 +701,23 @@ class WhiteListTest(unittest.TestCase):
 
 class RoutesTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.routes_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.routes_data: dict[str, int | str | list[str]] = {
             "priority": 0,
             "description": "Sample route",
             "expression": f"match_recipient('.*@{self.domain}')",
             "action": ["forward('http://myhost.com/messages/')", "stop()"],
         }
-        self.routes_params = {
+        self.routes_params: dict[str, int] = {
             "skip": 1,
             "limit": 1,
         }
-        self.routes_put_data = {
+        self.routes_put_data: dict[str, int] = {
             "priority": 2,
         }
 
@@ -766,18 +769,18 @@ class RoutesTest(unittest.TestCase):
 
 class WebhooksTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.webhooks_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.webhooks_data: dict[str, str | list[str]] = {
             "id": "clicked",
             "url": ["https://i.ua"],
         }
 
-        self.webhooks_data_put = {
+        self.webhooks_data_put: dict[str, str] = {
             "url": "https://twitter.com",
         }
 
@@ -822,23 +825,23 @@ class WebhooksTest(unittest.TestCase):
 
 class MailingListsTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.maillist_address = os.environ["MAILLIST_ADDRESS"]
-        self.mailing_lists_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.maillist_address: str = os.environ["MAILLIST_ADDRESS"]
+        self.mailing_lists_data: dict[str, str] = {
             "address": f"python_sdk@{self.domain}",
             "description": "Mailgun developers list",
         }
 
-        self.mailing_lists_data_update = {
+        self.mailing_lists_data_update: dict[str, str] = {
             "description": "Mailgun developers list 121212",
         }
 
-        self.mailing_lists_members_data = {
+        self.mailing_lists_members_data: dict[str, bool | str] = {
             "subscribed": True,
             "address": "bar@example.com",
             "name": "Bob Bar",
@@ -846,7 +849,7 @@ class MailingListsTest(unittest.TestCase):
             "vars": '{"age": 26}',
         }
 
-        self.mailing_lists_members_put_data = {
+        self.mailing_lists_members_put_data: dict[str, bool | str] = {
             "subscribed": True,
             "address": "bar@example.com",
             "name": "Bob Bar",
@@ -854,7 +857,7 @@ class MailingListsTest(unittest.TestCase):
             "vars": '{"age": 28}',
         }
 
-        self.mailing_lists_members_data_mult = {
+        self.mailing_lists_members_data_mult: dict[str, bool | str] = {
             "upsert": True,
             "members": '[{"address": "Alice <alice@example.com>", "vars": {"age": 26}},'
             '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]',
@@ -999,13 +1002,13 @@ class MailingListsTest(unittest.TestCase):
 
 class TemplatesTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.post_template_data = {
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.post_template_data: dict[str, str] = {
             "name": "template.name20",
             "description": "template description",
             "template": "{{fname}} {{lname}}",
@@ -1013,21 +1016,23 @@ class TemplatesTest(unittest.TestCase):
             "comment": "version comment",
         }
 
-        self.put_template_data = {"description": "new template description"}
+        self.put_template_data: dict[str, str] = {
+            "description": "new template description",
+        }
 
-        self.post_template_version_data = {
+        self.post_template_version_data: dict[str, str] = {
             "tag": "v11",
             "template": "{{fname}} {{lname}}",
             "engine": "handlebars",
             "active": "no",
         }
-        self.put_template_version_data = {
+        self.put_template_version_data: dict[str, str] = {
             "template": "{{fname}} {{lname}}",
             "comment": "Updated version comment",
             "active": "no",
         }
 
-        self.put_template_version = "v11"
+        self.put_template_version: str = "v11"
 
     def test_create_template(self) -> None:
         self.client.templates.delete(
@@ -1163,24 +1168,26 @@ class TemplatesTest(unittest.TestCase):
 
 class EmailValidationTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
-        self.validation_address_1 = os.environ["VALIDATION_ADDRESS_1"]
-        self.validation_address_2 = os.environ["VALIDATION_ADDRESS_2"]
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
+        self.validation_address_1: str = os.environ["VALIDATION_ADDRESS_1"]
+        self.validation_address_2: str = os.environ["VALIDATION_ADDRESS_2"]
 
-        self.get_params_address_validate = {
+        self.get_params_address_validate: dict[str, str] = {
             "address": self.validation_address_1,
             "provider_lookup": "false",
         }
 
-        self.post_params_address_validate = {
+        self.post_params_address_validate: dict[str, str] = {
             "provider_lookup": "false",
         }
-        self.post_address_validate = {"address": self.validation_address_1}
+        self.post_address_validate: dict[str, str] = {
+            "address": self.validation_address_1,
+        }
 
     def test_post_address_validate(self) -> None:
         req = self.client.addressvalidate.create(
@@ -1210,14 +1217,14 @@ class EmailValidationTest(unittest.TestCase):
 
 class InboxPlacementTest(unittest.TestCase):
     def setUp(self) -> None:
-        self.auth = (
+        self.auth: tuple[str, str] = (
             "api",
             os.environ["APIKEY"],
         )
-        self.client = Client(auth=self.auth)
-        self.domain = os.environ["DOMAIN"]
+        self.client: Client = Client(auth=self.auth)
+        self.domain: str = os.environ["DOMAIN"]
 
-        self.post_inbox_test = {
+        self.post_inbox_test: dict[str, str] = {
             "domain": "domain.com",
             "from": "user@sending_domain.com",
             "subject": "testSubject",

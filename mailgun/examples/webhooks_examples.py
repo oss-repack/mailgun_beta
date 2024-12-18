@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_webhooks():
+def get_webhooks() -> None:
     """
     GET /domains/<domain>/webhooks
     :return:
@@ -18,7 +18,7 @@ def get_webhooks():
     print(req.json())
 
 
-def create_webhook():
+def create_webhook() -> None:
     """
     POST /domains/<domain>/webhooks
     :return:
@@ -29,7 +29,7 @@ def create_webhook():
     print(req.json())
 
 
-def put_webhook():
+def put_webhook() -> None:
     """
     PUT /domains/<domain>/webhooks/<webhookname>
     :return:
@@ -40,7 +40,7 @@ def put_webhook():
     print(req.json())
 
 
-def delete_webhook():
+def delete_webhook() -> None:
     """
     DELETE /domains/<domain>/webhooks/<webhookname>
     :return:

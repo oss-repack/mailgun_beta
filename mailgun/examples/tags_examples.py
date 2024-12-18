@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_tags():
+def get_tags() -> None:
     """
     GET /<domain>/tags
     :return:
@@ -18,7 +18,7 @@ def get_tags():
     print(req.json())
 
 
-def get_single_tag():
+def get_single_tag() -> None:
     """
     GET /<domain>/tags/<tag>
     :return:
@@ -27,7 +27,7 @@ def get_single_tag():
     print(req.json())
 
 
-def put_single_tag():
+def put_single_tag() -> None:
     """
     PUT /<domain>/tags/<tag>
     :return:
@@ -38,7 +38,7 @@ def put_single_tag():
     print(req.json())
 
 
-def get_tag_stats():
+def get_tag_stats() -> None:
     """
     GET /<domain>/tags/<tag>/stats
     :return:
@@ -48,7 +48,7 @@ def get_tag_stats():
     print(req.json())
 
 
-def delete_tag():
+def delete_tag() -> None:
     """
     DELETE /<domain>/tags/<tag>
     :return:
@@ -57,7 +57,7 @@ def delete_tag():
     print(req.json())
 
 
-def get_aggregate_countries():
+def get_aggregate_countries() -> None:
     """
     GET /<domain>/tags/<tag>/stats/aggregates/countries
     :return:
@@ -68,7 +68,7 @@ def get_aggregate_countries():
     print(req.json())
 
 
-def get_aggregate_providers():
+def get_aggregate_providers() -> None:
     """
     GET /<domain>/tags/<tag>/stats/aggregates/providers
     :return:
@@ -79,7 +79,7 @@ def get_aggregate_providers():
     print(req.json())
 
 
-def get_aggregate_devices():
+def get_aggregate_devices() -> None:
     """
     GET /<domain>/tags/<tag>/stats/aggregates/devices
     :return:

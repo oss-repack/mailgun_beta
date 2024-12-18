@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_domains():
+def get_domains() -> None:
     """
     GET /domains
     :return:
@@ -21,7 +21,7 @@ def get_domains():
 # Get domain
 
 
-def get_simple_domain():
+def get_simple_domain() -> None:
     """
     GET /domains/<domain>
     :return:
@@ -31,7 +31,7 @@ def get_simple_domain():
     print(data.json())
 
 
-def verify_domain():
+def verify_domain() -> None:
     """
     PUT /domains/<domain>/verify
     :return:
@@ -41,7 +41,7 @@ def verify_domain():
     print(data.json())
 
 
-def add_domain():
+def add_domain() -> None:
     """
     POST /domains
     :return:
@@ -58,7 +58,7 @@ def add_domain():
     print(request.status_code)
 
 
-def delete_domain():
+def delete_domain() -> None:
     """
     DELETE /domains/<domain>
     :return:
@@ -69,7 +69,7 @@ def delete_domain():
     print(request.status_code)
 
 
-def get_credentials():
+def get_credentials() -> None:
     """
     GET /domains/<domain>/credentials
     :return:
@@ -78,7 +78,7 @@ def get_credentials():
     print(request.json())
 
 
-def post_credentials():
+def post_credentials() -> None:
     """
     POST /domains/<domain>/credentials
     :return:
@@ -88,7 +88,7 @@ def post_credentials():
     print(request.json())
 
 
-def put_credentials():
+def put_credentials() -> None:
     """
     PUT /domains/<domain>/credentials/<login>
     :return:
@@ -100,7 +100,7 @@ def put_credentials():
     print(request.json())
 
 
-def delete_credentials():
+def delete_credentials() -> None:
     """
     DELETE /domains/<domain>/credentials/<login>
     :return:
@@ -111,7 +111,7 @@ def delete_credentials():
     print(request.json())
 
 
-def get_connections():
+def get_connections() -> None:
     """
     GET /domains/<domain>/connection
     :return:
@@ -120,7 +120,7 @@ def get_connections():
     print(request.json())
 
 
-def put_connections():
+def put_connections() -> None:
     """
     PUT /domains/<domain>/connection
     :return:
@@ -130,7 +130,7 @@ def put_connections():
     print(request.json())
 
 
-def get_tracking():
+def get_tracking() -> None:
     """
     GET /domains/<domain>/tracking
     :return:
@@ -139,7 +139,7 @@ def get_tracking():
     print(request.json())
 
 
-def put_open_tracking():
+def put_open_tracking() -> None:
     """
     PUT /domains/<domain>/tracking/open
     :return:
@@ -149,7 +149,7 @@ def put_open_tracking():
     print(request.json())
 
 
-def put_click_tracking():
+def put_click_tracking() -> None:
     """
     PUT /domains/<domain>/tracking/click
     :return:
@@ -161,7 +161,7 @@ def put_click_tracking():
     print(request.json())
 
 
-def put_unsub_tracking():
+def put_unsub_tracking() -> None:
     """
     PUT /domains/<domain>/tracking/unsubscribe
     :return:
@@ -177,7 +177,7 @@ def put_unsub_tracking():
     print(request.json())
 
 
-def put_dkim_authority():
+def put_dkim_authority() -> None:
     """
     PUT /domains/<domain>/dkim_authority
     :return:
@@ -187,7 +187,7 @@ def put_dkim_authority():
     print(request.json())
 
 
-def put_dkim_selector():
+def put_dkim_selector() -> None:
     """
     PUT /domains/<domain>/dkim_selector
     :return:
@@ -197,7 +197,7 @@ def put_dkim_selector():
     print(request.json())
 
 
-def put_web_prefix():
+def put_web_prefix() -> None:
     """
     PUT /domains/<domain>/web_prefix
     :return:
