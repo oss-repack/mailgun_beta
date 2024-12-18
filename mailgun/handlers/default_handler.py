@@ -5,12 +5,20 @@ Messages doc: https://documentation.mailgun.com/en/latest/api-sending.html
 Stats doc: https://documentation.mailgun.com/en/latest/api-stats.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 from .error_handler import ApiError
 
 
-def handle_default(url, domain, _method, **_):
+def handle_default(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **_: Any,
+) -> Any:
     """Provide default handler for endpoints with single url pattern (events, messages, stats).
 
     :param url: Incoming URL dictionary

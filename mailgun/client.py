@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import json
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Callable
 from urllib.parse import urljoin
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 from mailgun.handlers.default_handler import handle_default
 from mailgun.handlers.domains_handler import handle_domainlist
@@ -22,7 +27,13 @@ from mailgun.handlers.tags_handler import handle_tags
 from mailgun.handlers.templates_handler import handle_templates
 
 
-HANDLERS = {
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from requests.models import Response  # type: ignore[import-untyped]
+
+
+HANDLERS: dict[str, Callable] = {  # type: ignore[type-arg]
     "resendmessage": handle_resend_message,
     "domains": handle_domains,
     "domainlist": handle_domainlist,
@@ -51,29 +62,29 @@ HANDLERS = {
 class Config:
     """Config class. Configure client with basic (urls, version, headers)."""
 
-    DEFAULT_API_URL = "https://api.mailgun.net/"
-    API_REF = "https://documentation.mailgun.com/en/latest/api_reference.html"
-    version = "v3"
-    user_agent = "mailgun-api-python/"
+    DEFAULT_API_URL: str = "https://api.mailgun.net/"
+    API_REF: str = "https://documentation.mailgun.com/en/latest/api_reference.html"
+    version: str = "v3"
+    user_agent: str = "mailgun-api-python/"
 
-    def __init__(self, version=None, api_url=None):
+    def __init__(self, version: str | None = None, api_url: str | None = None) -> None:
         """Initialize a new Config instance with specified or default API settings.
 
         This initializer sets the API version and base URL. If no version or URL
         is provided, it defaults to the predefined class values.
 
         :param version: API version (default: v3)
-        :type version: str
+        :type version: str | None
         :param api_url: API base url
-        :type api_url: str
+        :type api_url: str | None
         """
         if version is not None:
             self.version = version
 
-        self.ex_handler = True
+        self.ex_handler: bool = True
         self.api_url = api_url or self.DEFAULT_API_URL
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> tuple[Any, dict[str, str]]:
         """Parse incoming split attr name, check it and prepare endpoint url.
 
         Most urls generated here can't be generated dynamically as we are doing this
@@ -89,7 +100,7 @@ class Config:
         modified = False
         # Domains section
         if key.lower() == "domainlist":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["domainlist"],
             }
@@ -106,37 +117,37 @@ class Config:
             elif "webprefix" in split:
                 final_keys = ["web_prefix"]
 
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/domains/"),
                 "keys": final_keys,
             }
             modified = True
         # Messages section
         if key.lower() == "messages":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["messages"],
             }
         if key.lower() == "mimemessage":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["messages.mime"],
             }
             modified = True
         if key.lower() == "resendmessage":
-            url = {"keys": ["resendmessage"]}
+            url = {"keys": ["resendmessage"]}  # type: ignore[assignment]
             modified = True
 
         # IPpools section
         if key.lower() == "ippools":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["ip_pools"],
             }
             modified = True
         # Email Validation section
         if "addressvalidate" in key.lower():
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, "v4" + "/address/validate"),
                 "keys": key.split("_"),
             }
@@ -144,22 +155,27 @@ class Config:
 
         if not modified:
             url = urljoin(self.api_url, self.version + "/")
-            url = {"base": url, "keys": key.split("_")}
+            url = {"base": url, "keys": key.split("_")}  # type: ignore[assignment]
         return url, headers
 
 
 class Endpoint:
     """Generate request and return response."""
 
-    def __init__(self, url, headers, auth):
+    def __init__(
+        self,
+        url: dict[str, Any],
+        headers: dict[str, str],
+        auth: tuple[str, str] | None,
+    ):
         """Initialize a new Endpoint instance.
 
         :param url: URL dict with pairs {"base": "keys"}
-        :type url: dict
+        :type url: dict[str, Any]
         :param headers: Headers dict
-        :type headers: dict
+        :type headers: dict[str, str]
         :param auth: requests auth tuple
-        :type auth: tuple
+        :type auth: tuple[str, str] | None
         """
         self._url = url
         self.headers = headers
@@ -167,38 +183,39 @@ class Endpoint:
 
     def api_call(
         self,
-        auth,
-        method,
-        url,
-        headers,
-        data=None,
-        filters=None,
-        timeout=60,
-        files=None,
-        domain=None,
-        **kwargs,
-    ):
+        auth: tuple[str, str] | None,
+        method: str,
+        url: dict[str, Any],
+        headers: dict[str, str],
+        data: Any | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        timeout: int = 60,
+        files: dict[str, bytes] | None = None,
+        domain: str | None = None,
+        **kwargs: Any,
+    ) -> Response | Any:
         """Build URL and make a request.
 
         :param auth: auth data
-        :type auth: tuple
+        :type auth: tuple[str, str] | None
         :param method: request method
         :type method: str
         :param url: incoming url (base+keys)
-        :type url: dict
+        :type url: dict[str, Any]
         :param headers: incoming headers
-        :type headers: dict
+        :type headers: dict[str, str]
         :param data: incoming post/put data
-        :type data: dict
+        :type data: Any | None
         :param filters: incoming params
-        :type filters: dict
+        :type filters: dict | None
         :param timeout: requested timeout (60-default)
         :type timeout: int
         :param files: incoming files
-        :type files: dict
+        :type files: dict[str, bytes] | None
         :param domain: incoming domain
-        :type domain: str
+        :type domain: str | None
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: server response from API
         """
         url = self.build_url(url, domain=domain, method=method, **kwargs)
@@ -225,29 +242,41 @@ class Endpoint:
             raise e
 
     @staticmethod
-    def build_url(url, domain=None, method=None, **kwargs):
+    def build_url(
+        url: dict[str, Any],
+        domain: str | None = None,
+        method: str | None = None,
+        **kwargs: Any,
+    ) -> Any:
         """Build final request url using predefined handlers.
 
         Note: Some urls are being built in Config class, as they can't be generated dynamically.
         :param url: incoming url (base+keys)
-        :type url: dict
+        :type url: dict[str, Any]
         :param domain: incoming domain
         :type domain: str
         :param method: requested method
         :type method: str
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: built URL
         """
         return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
 
-    def get(self, filters=None, domain=None, **kwargs):
+    def get(
+        self,
+        filters: Mapping[str, str | Any] | None = None,
+        domain: str | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """GET method for API calls.
 
         :param filters: incoming params
-        :type filters: dict
+        :type filters: Mapping[str, str | Any] | None
         :param domain: incoming domain
-        :type domain: str
+        :type domain: str | None
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call GET request
         """
         return self.api_call(
@@ -262,26 +291,27 @@ class Endpoint:
 
     def create(
         self,
-        data=None,
-        filters=None,
-        domain=None,
-        headers=None,
-        files=None,
-        **kwargs,
-    ):
+        data: Any | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        domain: str | None = None,
+        headers: str | None = None,
+        files: dict[str, bytes] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """POST method for API calls.
 
         :param data: incoming post data
-        :type data: dict
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param domain: incoming domain
         :type domain: str
         :param headers: incoming headers
-        :type headers: dict
+        :type headers: str | None
         :param files: incoming files
-        :type files: file
+        :type files: dict[str, bytes] | None
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call POST request
         """
         if "Content-type" in self.headers:
@@ -306,14 +336,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def put(self, data=None, filters=None, **kwargs):
+    def put(
+        self,
+        data: Any | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call POST request
         """
         return self.api_call(
@@ -326,14 +362,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def patch(self, data=None, filters=None, **kwargs):
+    def patch(
+        self,
+        data: Any | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PATCH method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call PATCH request
         """
         return self.api_call(
@@ -346,14 +388,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def update(self, data, filters=None, **kwargs):
+    def update(
+        self,
+        data: Any | None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: dict[str, Any] | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call PUT request
         """
         if self.headers["Content-type"] == "application/json":
@@ -368,12 +416,13 @@ class Endpoint:
             **kwargs,
         )
 
-    def delete(self, domain=None, **kwargs):
+    def delete(self, domain: str | None = None, **kwargs: Any) -> Response:
         """DELETE method for API calls.
 
         :param domain: incoming domain
         :type domain: str
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call DELETE request
         """
         return self.api_call(
@@ -389,7 +438,7 @@ class Endpoint:
 class Client:
     """Client class."""
 
-    def __init__(self, auth=None, **kwargs):
+    def __init__(self, auth: tuple[str, str] | None = None, **kwargs: Any) -> None:
         """Initialize a new Client instance for API interaction.
 
         This method sets up API authentication and configuration. The `auth` parameter
@@ -405,7 +454,7 @@ class Client:
         api_url = kwargs.get("api_url")
         self.config = Config(version=version, api_url=api_url)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         """Get named attribute of an object, split it and execute.
 
         :param name: attribute name (Example: client.domains_ips. names: ["domains", "ips"])

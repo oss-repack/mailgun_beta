@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def post_inbox():
+def post_inbox() -> None:
     """
     POST /v3/inbox/tests
     :return:
@@ -25,7 +25,7 @@ def post_inbox():
     print(req.json())
 
 
-def get_all_inbox():
+def get_all_inbox() -> None:
     """
     GET /v3/inbox/tests
     :return:
@@ -34,7 +34,7 @@ def get_all_inbox():
     print(req.json())
 
 
-def get_inbox_placement_test():
+def get_inbox_placement_test() -> None:
     """
     GET /v3/inbox/tests/<test_id>
     :return:
@@ -43,7 +43,7 @@ def get_inbox_placement_test():
     print(req.json())
 
 
-def delete_inbox_placement_test():
+def delete_inbox_placement_test() -> None:
     """
     DELETE /v3/inbox/tests/<test_id>
     :return:
@@ -52,7 +52,7 @@ def delete_inbox_placement_test():
     print(req.json())
 
 
-def inbox_placement_test_counters():
+def inbox_placement_test_counters() -> None:
     """
     GET /v3/inbox/tests/<test_id>/counters
     :return:
@@ -63,7 +63,7 @@ def inbox_placement_test_counters():
     print(req.json())
 
 
-def get_inbox_placement_test_checks():
+def get_inbox_placement_test_checks() -> None:
     """
     GET /v3/inbox/tests/<test_id>/checks
     :return:
@@ -74,7 +74,7 @@ def get_inbox_placement_test_checks():
     print(req.json())
 
 
-def get_single_placement_check_test():
+def get_single_placement_check_test() -> None:
     """
     GET /v3/inbox/tests/<test_id>/checks/<address>
     :return:

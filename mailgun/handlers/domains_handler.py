@@ -3,13 +3,21 @@
 Doc: https://documentation.mailgun.com/en/latest/api-domains.html#
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 from urllib.parse import urljoin
 
 from .error_handler import ApiError
 
 
-def handle_domainlist(url, _domain, _method, **_):
+def handle_domainlist(
+    url: dict[str, Any],
+    _domain: str | None,
+    _method: str | None,
+    **_: Any,
+) -> Any:
     """Handle a list of domains.
 
     :param url: Incoming URL dictionary
@@ -24,7 +32,12 @@ def handle_domainlist(url, _domain, _method, **_):
     return url["base"] + "domains"
 
 
-def handle_domains(url, domain, method, **kwargs):
+def handle_domains(
+    url: Any,
+    domain: str | None,
+    method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle a domain endpoint.
 
     :param url: Incoming URL dictionary
@@ -36,6 +49,8 @@ def handle_domains(url, domain, method, **kwargs):
     :param kwargs: kwargs
     :return: final url for domain endpoint
     """
+    # TODO: Refactor this logic
+    # fmt: off
     if "domains" in url["keys"]:
         domains_index = url["keys"].index("domains")
         url["keys"].pop(domains_index)
@@ -53,8 +68,6 @@ def handle_domains(url, domain, method, **kwargs):
             url = kwargs["api_storage_url"]
         else:
             url = urljoin(url["base"], domain + final_keys)
-    # TODO: Refactor this logic
-    # fmt: off
     elif method in {"get", "post", "delete"}:
         if "domain_name" in kwargs:
             url = urljoin(url["base"], kwargs["domain_name"])

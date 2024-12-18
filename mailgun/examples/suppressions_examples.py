@@ -3,15 +3,15 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 # Bounces
 
 
-def get_bounces():
+def get_bounces() -> None:
     """
     GET /<domain>/bounces
     :return:
@@ -20,7 +20,7 @@ def get_bounces():
     print(req.json())
 
 
-def post_bounces():
+def post_bounces() -> None:
     """
     POST /<domain>/bounces
     :return:
@@ -30,7 +30,7 @@ def post_bounces():
     print(req.json())
 
 
-def get_single_bounce():
+def get_single_bounce() -> None:
     """
     GET /<domain>/bounces/<address>
     :return:
@@ -39,7 +39,7 @@ def get_single_bounce():
     print(req.json())
 
 
-def add_multiple_bounces():
+def add_multiple_bounces() -> None:
     """
     POST /<domain>/bounces, Content-Type: application/json
     :return:
@@ -52,7 +52,7 @@ def add_multiple_bounces():
     print(req.json())
 
 
-def import_bounce_list():
+def import_bounce_list() -> None:
     """
     POST /<domain>/bounces/import, Content-Type: multipart/form-data
     :return:
@@ -63,7 +63,7 @@ def import_bounce_list():
     print(req.json())
 
 
-def delete_single_bounce():
+def delete_single_bounce() -> None:
     """
     DELETE /<domain>/bounces/<address>
     :return:
@@ -72,7 +72,7 @@ def delete_single_bounce():
     print(req.json())
 
 
-def delete_bounce_list():
+def delete_bounce_list() -> None:
     """
     DELETE /<domain>/bounces
     :return:
@@ -84,7 +84,7 @@ def delete_bounce_list():
 # Unsubscribes
 
 
-def get_unsubs():
+def get_unsubs() -> None:
     """
     GET /<domain>/unsubscribes
     :return:
@@ -93,7 +93,7 @@ def get_unsubs():
     print(req.json())
 
 
-def get_single_unsub():
+def get_single_unsub() -> None:
     """
     GET /<domain>/unsubscribes/<address>
     :return:
@@ -102,7 +102,7 @@ def get_single_unsub():
     print(req.json())
 
 
-def create_single_unsub():
+def create_single_unsub() -> None:
     """
     POST /<domain>/unsubscribes
     :return:
@@ -112,7 +112,7 @@ def create_single_unsub():
     print(req.json())
 
 
-def create_multiple_unsub():
+def create_multiple_unsub() -> None:
     """
     POST /<domain>/unsubscribes, Content-Type: application/json
     :return:
@@ -136,7 +136,7 @@ def create_multiple_unsub():
     print(req.json())
 
 
-def import_list_unsubs():
+def import_list_unsubs() -> None:
     """
     POST /<domain>/unsubscribes/import, Content-Type: multipart/form-data
     :return:
@@ -149,7 +149,7 @@ def import_list_unsubs():
     print(req.json())
 
 
-def delete_single_unsub():
+def delete_single_unsub() -> None:
     """
     DELETE /<domain>/unsubscribes/<address>
     :return:
@@ -160,7 +160,7 @@ def delete_single_unsub():
     print(req.json())
 
 
-def delete_all_unsubs():
+def delete_all_unsubs() -> None:
     """
     DELETE /<domain>/unsubscribes/
     :return:
@@ -172,7 +172,7 @@ def delete_all_unsubs():
 # Complaints
 
 
-def get_complaints():
+def get_complaints() -> None:
     """
     GET /<domain>/complaints
 
@@ -182,7 +182,7 @@ def get_complaints():
     print(req.json())
 
 
-def add_complaints():
+def add_complaints() -> None:
     """
     POST /<domain>/complaints
     :return:
@@ -192,7 +192,7 @@ def add_complaints():
     print(req.json())
 
 
-def add_multiple_complaints():
+def add_multiple_complaints() -> None:
     """
     POST /<domain>/complaints, Content-Type: application/json
     :return:
@@ -210,7 +210,7 @@ def add_multiple_complaints():
     print(req.json())
 
 
-def import_complaint_list():
+def import_complaint_list() -> None:
     """
     POST /<domain>/complaints/import, Content-Type: multipart/form-data
     :return:
@@ -221,7 +221,7 @@ def import_complaint_list():
     print(req.json())
 
 
-def delete_single_complaint():
+def delete_single_complaint() -> None:
     """
     DELETE /<domain>/complaints/<address>
     :return:
@@ -232,7 +232,7 @@ def delete_single_complaint():
     print(req.json())
 
 
-def delete_all_complaints():
+def delete_all_complaints() -> None:
     """
     DELETE /<domain>/complaints/
     :return:
@@ -244,7 +244,7 @@ def delete_all_complaints():
 # Whitelists
 
 
-def get_whitelists():
+def get_whitelists() -> None:
     """
     GET /<domain>/whitelists
     :return:
@@ -253,7 +253,7 @@ def get_whitelists():
     print(req.json())
 
 
-def create_whitelist():
+def create_whitelist() -> None:
     """
     POST /<domain>/whitelists
     :return:
@@ -263,7 +263,7 @@ def create_whitelist():
     print(req.json())
 
 
-def get_single_whitelist():
+def get_single_whitelist() -> None:
     """
     GET /<domain>/whitelists/<address or domain>
     :return:
@@ -273,7 +273,7 @@ def get_single_whitelist():
     print(req.json())
 
 
-def import_list_whitelists():
+def import_list_whitelists() -> None:
     """
     POST /<domain>/whitelists/import, Content-Type: multipart/form-data
     :return:
@@ -284,7 +284,7 @@ def import_list_whitelists():
     print(req.json())
 
 
-def delete_single_whitelist():
+def delete_single_whitelist() -> None:
     """
     DELETE /<domain>/whitelists/<address or domain>
     :return:

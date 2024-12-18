@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_single_validate():
+def get_single_validate() -> None:
     """
     GET /v4/address/validate
     :return:
@@ -19,7 +19,7 @@ def get_single_validate():
     print(req.json())
 
 
-def post_single_validate():
+def post_single_validate() -> None:
     """
     POST /v4/address/validate
     :return:
@@ -30,7 +30,7 @@ def post_single_validate():
     print(req.json())
 
 
-def get_bulk_validate():
+def get_bulk_validate() -> None:
     """
     GET /v4/address/validate/bulk
     :return:
@@ -40,7 +40,7 @@ def get_bulk_validate():
     print(req.json())
 
 
-def post_bulk_list_validate():
+def post_bulk_list_validate() -> None:
     """
     POST /v4/address/validate/bulk/<list_id>
     :return:
@@ -53,7 +53,7 @@ def post_bulk_list_validate():
     print(req.json())
 
 
-def get_bulk_list_validate():
+def get_bulk_list_validate() -> None:
     """
     GET /v4/address/validate/bulk/<list_id>
     :return:
@@ -62,7 +62,7 @@ def get_bulk_list_validate():
     print(req.json())
 
 
-def delete_bulk_list_validate():
+def delete_bulk_list_validate() -> None:
     """
     DELETE /v4/address/validate/bulk/<list_id>
     :return:
@@ -71,7 +71,7 @@ def delete_bulk_list_validate():
     print(req.json())
 
 
-def get_preview():
+def get_preview() -> None:
     """
     GET /v4/address/validate/preview
     :return:
@@ -80,7 +80,7 @@ def get_preview():
     print(req.json())
 
 
-def post_preview():
+def post_preview() -> None:
     """
     POST /v4/address/validate/preview/<list_id>
     :return:
@@ -93,7 +93,7 @@ def post_preview():
     print(req.json())
 
 
-def delete_preview():
+def delete_preview() -> None:
     """
     DELETE /v4/address/validate/preview/<list_id>
     :return:

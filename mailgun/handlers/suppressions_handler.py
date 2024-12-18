@@ -3,10 +3,18 @@
 Doc: https://documentation.mailgun.com/en/latest/api-suppressions.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 
-def handle_bounces(url, domain, _method, **kwargs):
+def handle_bounces(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Bounces.
 
     :param url: Incoming URL dictionary
@@ -26,7 +34,12 @@ def handle_bounces(url, domain, _method, **kwargs):
     return url
 
 
-def handle_unsubscribes(url, domain, _method, **kwargs):
+def handle_unsubscribes(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Unsubscribes.
 
     :param url: Incoming URL dictionary
@@ -46,7 +59,12 @@ def handle_unsubscribes(url, domain, _method, **kwargs):
     return url
 
 
-def handle_complaints(url, domain, _method, **kwargs):
+def handle_complaints(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Complaints.
 
     :param url: Incoming URL dictionary
@@ -66,7 +84,12 @@ def handle_complaints(url, domain, _method, **kwargs):
     return url
 
 
-def handle_whitelists(url, domain, _method, **kwargs):
+def handle_whitelists(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Whitelists.
 
     :param url: Incoming URL dictionary

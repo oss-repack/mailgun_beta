@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_ips():
+def get_ips() -> None:
     """
     GET /ips
     :return:
@@ -18,7 +18,7 @@ def get_ips():
     print(req.json())
 
 
-def get_single_ip():
+def get_single_ip() -> None:
     """
     GET /ips/<ip>
     :return:
@@ -27,7 +27,7 @@ def get_single_ip():
     print(req.json())
 
 
-def get_domain_ips():
+def get_domain_ips() -> None:
     """
     GET /domains/<domain>/ips
     :return:
@@ -36,7 +36,7 @@ def get_domain_ips():
     print(request.json())
 
 
-def post_domains_ip():
+def post_domains_ip() -> None:
     """
     POST /domains/<domain>/ips
     :return:
@@ -46,7 +46,7 @@ def post_domains_ip():
     print(request.json())
 
 
-def delete_domain_ip():
+def delete_domain_ip() -> None:
     """
     DELETE /domains/<domain>/ips/<ip>
     :return:

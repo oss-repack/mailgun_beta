@@ -3,12 +3,20 @@
 Doc: https://documentation.mailgun.com/en/latest/api-inbox-placement.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 from .error_handler import ApiError
 
 
-def handle_inbox(url, _domain, _method, **kwargs):
+def handle_inbox(
+    url: dict[str, Any],
+    _domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle inbox placement.
 
     :param url: Incoming URL dictionary

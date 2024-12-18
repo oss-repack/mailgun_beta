@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_pages():
+def get_pages() -> None:
     """
     GET /lists/pages
     :return:
@@ -18,7 +18,7 @@ def get_pages():
     print(req.json())
 
 
-def get_lists_address():
+def get_lists_address() -> None:
     """
     GET /lists/<address>
     :return:
@@ -27,7 +27,7 @@ def get_lists_address():
     print(req.json())
 
 
-def post_lists():
+def post_lists() -> None:
     """
     POST /lists
     :return:
@@ -41,7 +41,7 @@ def post_lists():
     print(req.json())
 
 
-def put_lists():
+def put_lists() -> None:
     """
     PUT /lists/<address>
     :return:
@@ -52,7 +52,7 @@ def put_lists():
     print(req.json())
 
 
-def post_address_validate():
+def post_address_validate() -> None:
     """
     POST /lists/<address>/validate
     :return:
@@ -63,7 +63,7 @@ def post_address_validate():
     print(req.json())
 
 
-def get_validate_address():
+def get_validate_address() -> None:
     """
     GET /lists/<address>/validate
     :return:
@@ -74,7 +74,7 @@ def get_validate_address():
     print(req.json())
 
 
-def delete_validate_job():
+def delete_validate_job() -> None:
     """
     DELETE /lists/<address>/validate
     :return:
@@ -85,7 +85,7 @@ def delete_validate_job():
     print(req.json())
 
 
-def get_lists_members():
+def get_lists_members() -> None:
     """
     GET /lists/<address>/members/pages
     :return:
@@ -96,7 +96,7 @@ def get_lists_members():
     print(req.json())
 
 
-def get_member_from_list():
+def get_member_from_list() -> None:
     """
     GET /lists/<address>/members/<member_address>
     :return:
@@ -110,7 +110,7 @@ def get_member_from_list():
     print(req.json())
 
 
-def post_member_list():
+def post_member_list() -> None:
     """
     POST /lists/<address>/members
     :return:
@@ -128,7 +128,7 @@ def post_member_list():
     print(req.json())
 
 
-def put_member_list():
+def put_member_list() -> None:
     """
     PUT /lists/<address>/members/<member_address>
     :return:
@@ -151,7 +151,7 @@ def put_member_list():
     print(req.json())
 
 
-def post_members_json():
+def post_members_json() -> None:
     """
     POST /lists/<address>/members.json
     :return:
@@ -171,7 +171,7 @@ def post_members_json():
     print(req.json())
 
 
-def delete_members_list():
+def delete_members_list() -> None:
     """
     DELETE /lists/<address>/members/<member_address>
     :return:
@@ -184,7 +184,7 @@ def delete_members_list():
     print(req.json())
 
 
-def delete_lists_address():
+def delete_lists_address() -> None:
     """
     DELETE /lists/<address>
     :return:

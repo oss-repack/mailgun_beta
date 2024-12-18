@@ -70,17 +70,17 @@ linting = [
     "bandit",
     "black>=21.7",
     "autoflake",
-    "flake8>=3.7.8",
+    "flake8>=3.7.8",  # the modular source code checker: pep8 pyflakes and co
     "pep8-naming",
-    "isort",
-    "yapf",
+    "isort",  # A Python utility / library to sort Python imports.
+    "yapf",  # A formatter for Python code
     "pycodestyle",
     "pydocstyle",
     "pyupgrade",
     "refurb",  # refurb doesn't support py39
-    "pre-commit",
-    "ruff",
-    "mypy",
+    "pre-commit",  # A framework for managing and maintaining multi-language pre-commit hooks.
+    "ruff",  # An extremely fast Python linter and code formatter, written in Rust.
+    "mypy",  # Optional static typing for Python
     "types-requests",   # mypy requests stub
     "pandas-stubs",  # mypy pandas stub
     "types-PyYAML",
@@ -89,6 +89,7 @@ linting = [
     "pylint",
     "pytype",  # a static type checker for any type hints you have put in your code
     "radon",
+    "safety", # Checks installed dependencies for known vulnerabilities and licenses.
     "vulture",
     # env variables
     "python-dotenv>=0.19.2",
@@ -180,6 +181,8 @@ line-length = 88
 
 # Assume Python 3.9.
 target-version = "py39"
+# Enumerate all fixed violations.
+show-fixes = true
 
 [tool.ruff.lint]
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
@@ -196,6 +199,7 @@ exclude = ["mailgun/examples/*"]
 
 #extend-select = ["W", "N", "UP", "B", "A", "C4", "PT", "SIM", "PD", "PLE", "RUF"]
 # Never enforce `E501` (line length violations).
+
 ignore = [
     # TODO: Fix unused function argument: `debug`, `kwargs`, and `method` in class Client
     "ARG001",  #  ARG001 Unused function argument: `debug`, `kwargs`, and `method` in class Client
@@ -299,6 +303,17 @@ per-file-ignores = [
 max-line-length = 88
 count = true
 
+[tool.yapf]
+based_on_style = "facebook"
+SPLIT_BEFORE_BITWISE_OPERATOR = true
+SPLIT_BEFORE_ARITHMETIC_OPERATOR = true
+SPLIT_BEFORE_LOGICAL_OPERATOR = true
+SPLIT_BEFORE_DOT = true
+
+[tool.yapfignore]
+ignore_patterns = [
+]
+
 [tool.mypy]
 strict = true
 # Adapted from this StackOverflow post:
@@ -342,11 +357,10 @@ strict_equality = true
 #    (^|/)test[^/]*\.py$    # files named "test*.py"
 #  )'''
 exclude = [
-    "mailgun/examples",
+    "mailgun/examples/*",
 ]
 
 # Configuring error messages
-show-fixes = true
 show_error_context = false
 show_column_numbers = false
 show_error_codes = true
@@ -361,7 +375,7 @@ reportMissingImports = false
 
 [tool.bandit]
 # usage: bandit -c pyproject.toml -r .
-exclude_dirs = ["tests", "test.py"]
+exclude_dirs = ["tests", "tests.py"]
 tests = ["B201", "B301"]
 skips = ["B101", "B601"]
 
@@ -404,4 +418,22 @@ subprocess = [
   "subprocess.call",
   "subprocess.check_call",
   "subprocess.check_output"
+]
+
+[tool.coverage.run]
+source_pkgs = ["mailgun"]
+branch = true
+parallel = true
+omit = [
+    "mailgun/examples/*",
+]
+
+[tool.coverage.paths]
+tests = ["tests.py"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "no cov",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
 ]

@@ -3,10 +3,19 @@
 Doc: https://documentation.mailgun.com/en/latest/api-sending.html#
 """
 
+from __future__ import annotations
+
+from typing import Any
+
 from .error_handler import ApiError
 
 
-def handle_resend_message(_url, _domain, _method, **kwargs):
+def handle_resend_message(
+    _url: dict[str, Any],
+    _domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Resend message endpoint.
 
     :param _url: Incoming URL dictionary (it's not being used for this handler)

@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def post_template():
+def post_template() -> None:
     """
     POST /<domain>/templates
     :return:
@@ -26,7 +26,7 @@ def post_template():
     print(req.json())
 
 
-def get_template():
+def get_template() -> None:
     """
     GET /<domain>/templates/<name>
     :return:
@@ -38,7 +38,7 @@ def get_template():
     print(req.json())
 
 
-def update_template():
+def update_template() -> None:
     """
     PUT /<domain>/templates/<name>
     :return:
@@ -49,7 +49,7 @@ def update_template():
     print(req.json())
 
 
-def delete_template():
+def delete_template() -> None:
     """
     DELETE /<domain>/templates/<name>
     :return:
@@ -58,7 +58,7 @@ def delete_template():
     print(req.json())
 
 
-def get_domain_templates():
+def get_domain_templates() -> None:
     """
     GET /<domain>/templates
     :return:
@@ -68,7 +68,7 @@ def get_domain_templates():
     print(req.json())
 
 
-def delete_templates():
+def delete_templates() -> None:
     """
     DELETE /<domain>/templates
     :return:
@@ -77,7 +77,7 @@ def delete_templates():
     print(req.json())
 
 
-def create_new_template_version():
+def create_new_template_version() -> None:
     """
     POST /<domain>/templates/<template>/versions
     :return:
@@ -95,7 +95,7 @@ def create_new_template_version():
     print(req.json())
 
 
-def get_template_version():
+def get_template_version() -> None:
     """
     GET /<domain>/templates/<name>/versions/<tag>
     :return:
@@ -106,7 +106,7 @@ def get_template_version():
     print(req.json())
 
 
-def update_template_version():
+def update_template_version() -> None:
     """
     PUT /<domain>/templates/<name>/versions/<tag>
     :return:
@@ -123,7 +123,7 @@ def update_template_version():
     print(req.json())
 
 
-def delete_template_version():
+def delete_template_version() -> None:
     """
     DELETE /<domain>/templates/<template>/versions/<version>
     :return:
@@ -134,7 +134,7 @@ def delete_template_version():
     print(req.json())
 
 
-def get_all_versions():
+def get_all_versions() -> None:
     """
     GET /<domain>/templates/<template>/versions
     :return:

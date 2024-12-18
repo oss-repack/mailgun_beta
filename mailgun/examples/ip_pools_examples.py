@@ -3,13 +3,13 @@ import os
 from mailgun.client import Client
 
 
-key = os.environ["APIKEY"]
-domain = os.environ["DOMAIN"]
+key: str = os.environ["APIKEY"]
+domain: str = os.environ["DOMAIN"]
 
-client = Client(auth=("api", key))
+client: Client = Client(auth=("api", key))
 
 
-def get_ippools():
+def get_ippools() -> None:
     """
     GET /v1/ip_pools
     :return:
@@ -18,7 +18,7 @@ def get_ippools():
     print(req.json())
 
 
-def create_ippool():
+def create_ippool() -> None:
     """
     POST /v1/ip_pools
     :return:
@@ -28,7 +28,7 @@ def create_ippool():
     print(req_post.json())
 
 
-def update_ippool():
+def update_ippool() -> None:
     """
     PATCH /v1/ip_pools/{pool_id}
     :return:
@@ -43,7 +43,7 @@ def update_ippool():
     print(req.json())
 
 
-def delete_ippool():
+def delete_ippool() -> None:
     """
     DELETE /v1/ip_pools/{pool_id}
     :return:
@@ -52,7 +52,7 @@ def delete_ippool():
     print(req.json())
 
 
-def link_ippool():
+def link_ippool() -> None:
     """
     POST /v3/domains/{domain_name}/ips
     :return:
@@ -62,7 +62,7 @@ def link_ippool():
     print(req.json())
 
 
-def unlink_ippool():
+def unlink_ippool() -> None:
     """
     DELETE /v3/domains/{domain_name}/ips/ip_pool
     :return:
