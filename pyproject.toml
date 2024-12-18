@@ -375,7 +375,7 @@ reportMissingImports = false
 
 [tool.bandit]
 # usage: bandit -c pyproject.toml -r .
-exclude_dirs = ["tests", "test.py"]
+exclude_dirs = ["tests", "tests.py"]
 tests = ["B201", "B301"]
 skips = ["B101", "B601"]
 
