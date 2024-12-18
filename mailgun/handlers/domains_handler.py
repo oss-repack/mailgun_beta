@@ -49,6 +49,8 @@ def handle_domains(
     :param kwargs: kwargs
     :return: final url for domain endpoint
     """
+    # TODO: Refactor this logic
+    # fmt: off
     if "domains" in url["keys"]:
         domains_index = url["keys"].index("domains")
         url["keys"].pop(domains_index)
@@ -66,8 +68,6 @@ def handle_domains(
             url = kwargs["api_storage_url"]
         else:
             url = urljoin(url["base"], domain + final_keys)
-    # TODO: Refactor this logic
-    # fmt: off
     elif method in {"get", "post", "delete"}:
         if "domain_name" in kwargs:
             url = urljoin(url["base"], kwargs["domain_name"])
