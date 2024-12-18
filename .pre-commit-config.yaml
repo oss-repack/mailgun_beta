@@ -111,7 +111,7 @@ repos:
           - --exit-zero
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.19.0
+    rev: v3.19.1
     hooks:
       - id: pyupgrade
         args: [--py38-plus, --keep-runtime-typing]
@@ -143,7 +143,7 @@ repos:
         exclude: ^mailgun/examples/
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.390
+    rev: v1.1.391
     hooks:
     - id: pyright
 
@@ -157,7 +157,7 @@ repos:
         additional_dependencies: [".[toml]"]
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.28.3
+    rev: v1.28.4
     hooks:
       - id: typos
 
