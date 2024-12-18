@@ -1,4 +1,9 @@
+from __future__ import annotations
+
 import json
+from typing import TYPE_CHECKING
+from typing import Any
+from typing import Callable
 from urllib.parse import urljoin
 
 import requests
@@ -22,7 +27,13 @@ from mailgun.handlers.tags_handler import handle_tags
 from mailgun.handlers.templates_handler import handle_templates
 
 
-HANDLERS = {
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from requests.models import Response  # type: ignore[import-untyped]
+
+
+HANDLERS: dict[str, Callable] = {
     "resendmessage": handle_resend_message,
     "domains": handle_domains,
     "domainlist": handle_domainlist,
@@ -51,29 +62,29 @@ HANDLERS = {
 class Config:
     """Config class. Configure client with basic (urls, version, headers)."""
 
-    DEFAULT_API_URL = "https://api.mailgun.net/"
-    API_REF = "https://documentation.mailgun.com/en/latest/api_reference.html"
-    version = "v3"
-    user_agent = "mailgun-api-python/"
+    DEFAULT_API_URL: str = "https://api.mailgun.net/"
+    API_REF: str = "https://documentation.mailgun.com/en/latest/api_reference.html"
+    version: str = "v3"
+    user_agent: str = "mailgun-api-python/"
 
-    def __init__(self, version=None, api_url=None):
+    def __init__(self, version: str | None = None, api_url: str | None = None) -> None:
         """Initialize a new Config instance with specified or default API settings.
 
         This initializer sets the API version and base URL. If no version or URL
         is provided, it defaults to the predefined class values.
 
         :param version: API version (default: v3)
-        :type version: str
+        :type version: str | None
         :param api_url: API base url
-        :type api_url: str
+        :type api_url: str | None
         """
         if version is not None:
             self.version = version
 
-        self.ex_handler = True
+        self.ex_handler: bool = True
         self.api_url = api_url or self.DEFAULT_API_URL
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> tuple[dict[str, Sequence[str]], dict[str, str]]:
         """Parse incoming split attr name, check it and prepare endpoint url.
 
         Most urls generated here can't be generated dynamically as we are doing this
@@ -151,15 +162,20 @@ class Config:
 class Endpoint:
     """Generate request and return response."""
 
-    def __init__(self, url, headers, auth):
+    def __init__(
+        self,
+        url: dict[str, str],
+        headers: dict[str, str],
+        auth: tuple[str, str] | None,
+    ):
         """Initialize a new Endpoint instance.
 
         :param url: URL dict with pairs {"base": "keys"}
-        :type url: dict
+        :type url: dict[str, str]
         :param headers: Headers dict
-        :type headers: dict
+        :type headers: dict[str, str]
         :param auth: requests auth tuple
-        :type auth: tuple
+        :type auth: tuple[str, str] | None
         """
         self._url = url
         self.headers = headers
@@ -167,27 +183,27 @@ class Endpoint:
 
     def api_call(
         self,
-        auth,
-        method,
-        url,
-        headers,
-        data=None,
+        auth: tuple[str, str] | None,
+        method: str,
+        url: dict[str, str],
+        headers: dict[str, str],
+        data: dict | None = None,
         filters=None,
-        timeout=60,
+        timeout: int = 60,
         files=None,
-        domain=None,
-        **kwargs,
-    ):
+        domain: str | None = None,
+        **kwargs: Any,
+    ) -> Response | Any:
         """Build URL and make a request.
 
         :param auth: auth data
-        :type auth: tuple
+        :type auth: tuple[str, str]
         :param method: request method
         :type method: str
         :param url: incoming url (base+keys)
-        :type url: dict
+        :type url: dict[str, str]
         :param headers: incoming headers
-        :type headers: dict
+        :type headers: dict[str, str]
         :param data: incoming post/put data
         :type data: dict
         :param filters: incoming params
@@ -199,6 +215,7 @@ class Endpoint:
         :param domain: incoming domain
         :type domain: str
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: server response from API
         """
         url = self.build_url(url, domain=domain, method=method, **kwargs)
@@ -225,7 +242,12 @@ class Endpoint:
             raise e
 
     @staticmethod
-    def build_url(url, domain=None, method=None, **kwargs):
+    def build_url(
+        url: dict[str, str],
+        domain: dict | None = None,
+        method: str | None = None,
+        **kwargs: Any,
+    ):
         """Build final request url using predefined handlers.
 
         Note: Some urls are being built in Config class, as they can't be generated dynamically.
