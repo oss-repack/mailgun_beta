@@ -17,7 +17,8 @@ class MessagesTests(unittest.TestCase):
         self.data = {
             "from": os.environ["MESSAGES_FROM"],
             "to": os.environ["MESSAGES_TO"],
-            "cc": os.environ["MESSAGES_CC"],
+            # TODO: Check 'Domain $DOMAIN is not allowed to send: Free accounts are for test purposes only. Please upgrade or add the address to authorized recipients in Account Settings.'
+            # "cc": os.environ["MESSAGES_CC"],
             "subject": "Hello Vasyl Bodaj",
             "text": "Congratulations!, you just sent an email with Mailgun! You are truly awesome!",
             "o:tag": "Python test",
