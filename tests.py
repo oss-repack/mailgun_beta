@@ -7,7 +7,7 @@ from mailgun.client import Client
 
 
 class MessagesTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -24,11 +24,11 @@ class MessagesTests(unittest.TestCase):
             "o:tag": "Python test",
         }
 
-    def test_post_right_message(self):
+    def test_post_right_message(self) -> None:
         req = self.client.messages.create(data=self.data, domain=self.domain)
         self.assertEqual(req.status_code, 200)
 
-    def test_post_wrong_message(self):
+    def test_post_wrong_message(self) -> None:
         req = self.client.messages.create(data={"from": "sdsdsd"}, domain=self.domain)
         self.assertEqual(req.status_code, 400)
 
@@ -41,7 +41,7 @@ class DomainTests(unittest.TestCase):
     generator to avoid this problems.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -90,12 +90,12 @@ class DomainTests(unittest.TestCase):
             "dkim_selector": "s",
         }
 
-    def test_get_domain_list(self):
+    def test_get_domain_list(self) -> None:
         req = self.client.domainlist.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_post_domain(self):
+    def test_post_domain(self) -> None:
         #  ### Problem with smtp_password!!!!
         #
         self.client.domains.delete(domain=self.test_domain)
@@ -103,20 +103,20 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain DNS records have been created", request.json()["message"])
 
-    def test_get_single_domain(self):
+    def test_get_single_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.get(domain_name=self.post_domain_data["name"])
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
 
-    def test_verify_domain(self):
+    def test_verify_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.put(domain=self.post_domain_data["name"], verify=True)
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
 
-    def test_delete_domain(self):
+    def test_delete_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains.delete(domain=self.test_domain)
         self.assertEqual(
@@ -125,12 +125,12 @@ class DomainTests(unittest.TestCase):
         )
         self.assertEqual(request.status_code, 200)
 
-    def test_get_smtp_creds(self):
+    def test_get_smtp_creds(self) -> None:
         request = self.client.domains_credentials.get(domain=self.domain)
         self.assertEqual(request.status_code, 200)
         self.assertIn("items", request.json())
 
-    def test_post_domain_creds(self):
+    def test_post_domain_creds(self) -> None:
         request = self.client.domains_credentials.create(
             domain=self.domain,
             data=self.post_domain_creds,
@@ -138,7 +138,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_put_domain_creds(self):
+    def test_put_domain_creds(self) -> None:
         self.client.domains_credentials.create(
             domain=self.domain,
             data=self.post_domain_creds,
@@ -152,7 +152,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_delete_domain_creds(self):
+    def test_delete_domain_creds(self) -> None:
         self.client.domains_credentials.create(
             domain=self.domain,
             data=self.post_domain_creds,
@@ -164,7 +164,7 @@ class DomainTests(unittest.TestCase):
 
         self.assertEqual(request.status_code, 200)
 
-    def test_put_domain_connections(self):
+    def test_put_domain_connections(self) -> None:
         request = self.client.domains_connection.put(
             domain=self.domain,
             data=self.put_domain_connections_data,
@@ -173,7 +173,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_put_domain_tracking_open(self):
+    def test_put_domain_tracking_open(self) -> None:
         request = self.client.domains_tracking_open.put(
             domain=self.domain,
             data=self.put_domain_tracking_data,
@@ -181,7 +181,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_put_domain_tracking_click(self):
+    def test_put_domain_tracking_click(self) -> None:
         request = self.client.domains_tracking_click.put(
             domain=self.domain,
             data=self.put_domain_tracking_data,
@@ -189,7 +189,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_put_domain_unsubscribe(self):
+    def test_put_domain_unsubscribe(self) -> None:
         request = self.client.domains_tracking_unsubscribe.put(
             domain=self.domain,
             data=self.put_domain_unsubscribe_data,
@@ -197,7 +197,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("message", request.json())
 
-    def test_put_dkim_authority(self):
+    def test_put_dkim_authority(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains_dkimauthority.put(
             domain=self.test_domain,
@@ -205,7 +205,7 @@ class DomainTests(unittest.TestCase):
         )
         self.assertIn("message", request.json())
 
-    def test_put_webprefix(self):
+    def test_put_webprefix(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains_webprefix.put(
             domain=self.test_domain,
@@ -213,7 +213,7 @@ class DomainTests(unittest.TestCase):
         )
         self.assertIn("message", request.json())
 
-    def test_put_dkim_selector(self):
+    def test_put_dkim_selector(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         request = self.client.domains_dkimselector.put(
             domain=self.domain,
@@ -223,7 +223,7 @@ class DomainTests(unittest.TestCase):
 
 
 class IpTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -234,24 +234,24 @@ class IpTests(unittest.TestCase):
             "ip": os.environ["DOMAINS_DEDICATED_IP"],
         }
 
-    def test_get_ip_from_domain(self):
+    def test_get_ip_from_domain(self) -> None:
         req = self.client.ips.get(domain=self.domain, params={"dedicated": "true"})
         self.assertIn("items", req.json())
         self.assertEqual(req.status_code, 200)
 
-    def test_get_ip_by_address(self):
+    def test_get_ip_by_address(self) -> None:
         self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         req = self.client.ips.get(domain=self.domain, ip=self.ip_data["ip"])
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
     @pytest.mark.skip(reason="TODO: check this test")
-    def test_create_ip(self):
+    def test_create_ip(self) -> None:
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         self.assertEqual("success", request.json()["message"])
         self.assertEqual(request.status_code, 200)
 
-    def test_delete_ip(self):
+    def test_delete_ip(self) -> None:
         request = self.client.domains_ips.delete(
             domain=self.domain,
             ip=self.ip_data["ip"],
@@ -261,7 +261,7 @@ class IpTests(unittest.TestCase):
 
 
 class IpPoolsTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -279,13 +279,13 @@ class IpPoolsTests(unittest.TestCase):
         }
         self.ippool_id = ""
 
-    def test_get_ippools(self):
+    def test_get_ippools(self) -> None:
         self.client.ippools.create(domain=self.domain, data=self.data)
         req = self.client.ippools.get(domain=self.domain)
         self.assertIn("ip_pools", req.json())
         self.assertEqual(req.status_code, 200)
 
-    def test_patch_ippool(self):
+    def test_patch_ippool(self) -> None:
         req_post = self.client.ippools.create(domain=self.domain, data=self.data)
         self.ippool_id = req_post.json()["pool_id"]
 
@@ -297,7 +297,7 @@ class IpPoolsTests(unittest.TestCase):
         self.assertEqual("success", req.json()["message"])
         self.assertEqual(req.status_code, 200)
 
-    def test_link_domain_ippool(self):
+    def test_link_domain_ippool(self) -> None:
         pool_create = self.client.ippools.create(domain=self.domain, data=self.data)
         self.ippool_id = pool_create.json()["pool_id"]
         self.client.ippools.patch(
@@ -312,7 +312,7 @@ class IpPoolsTests(unittest.TestCase):
 
         self.assertIn("message", req.json())
 
-    def test_delete_ippool(self):
+    def test_delete_ippool(self) -> None:
         req = self.client.ippools.create(domain=self.domain, data=self.data)
         self.ippool_id = req.json()["pool_id"]
         req_del = self.client.ippools.delete(domain=self.domain, pool_id=self.ippool_id)
@@ -320,7 +320,7 @@ class IpPoolsTests(unittest.TestCase):
 
 
 class EventsTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -331,12 +331,12 @@ class EventsTests(unittest.TestCase):
             "event": "rejected",
         }
 
-    def test_events_get(self):
+    def test_events_get(self) -> None:
         req = self.client.events.get(domain=self.domain)
         self.assertIn("items", req.json())
         self.assertEqual(req.status_code, 200)
 
-    def test_event_params(self):
+    def test_event_params(self) -> None:
         req = self.client.events.get(domain=self.domain, filters=self.params)
 
         self.assertIn("items", req.json())
@@ -344,7 +344,7 @@ class EventsTests(unittest.TestCase):
 
 
 class StatsTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -356,14 +356,14 @@ class StatsTests(unittest.TestCase):
             "duration": "1m",
         }
 
-    def test_stats_total_get(self):
+    def test_stats_total_get(self) -> None:
         req = self.client.stats_total.get(filters=self.params, domain=self.domain)
         self.assertIn("stats", req.json())
         self.assertEqual(req.status_code, 200)
 
 
 class TagsTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -381,17 +381,17 @@ class TagsTests(unittest.TestCase):
         }
         self.tag_name = "Python test"
 
-    def test_get_tags(self):
+    def test_get_tags(self) -> None:
         req = self.client.tags.get(domain=self.domain)
         self.assertIn("items", req.json())
         self.assertEqual(req.status_code, 200)
 
-    def test_tag_get_by_name(self):
+    def test_tag_get_by_name(self) -> None:
         req = self.client.tags.get(domain=self.domain, tag_name=self.tag_name)
         self.assertIn("tag", req.json())
         self.assertEqual(req.status_code, 200)
 
-    def test_tag_put(self):
+    def test_tag_put(self) -> None:
         req = self.client.tags.put(
             domain=self.domain,
             tag_name=self.tag_name,
@@ -401,7 +401,7 @@ class TagsTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_tags_stats_get(self):
+    def test_tags_stats_get(self) -> None:
         req = self.client.tags_stats.get(
             domain=self.domain,
             filters=self.stats_params,
@@ -411,7 +411,7 @@ class TagsTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("tag", req.json())
 
-    def test_tags_stats_aggregate_get(self):
+    def test_tags_stats_aggregate_get(self) -> None:
         req = self.client.tags_stats_aggregates_devices.get(
             domain=self.domain,
             filters=self.stats_params,
@@ -429,7 +429,7 @@ class TagsTests(unittest.TestCase):
 
 
 class BouncesTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -455,17 +455,17 @@ class BouncesTests(unittest.TestCase):
             },
         ]
 
-    def test_bounces_get(self):
+    def test_bounces_get(self) -> None:
         req = self.client.bounces.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_bounces_create(self):
+    def test_bounces_create(self) -> None:
         req = self.client.bounces.create(data=self.bounces_data, domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_bounces_get_address(self):
+    def test_bounces_get_address(self) -> None:
         self.client.bounces.create(data=self.bounces_data, domain=self.domain)
         req = self.client.bounces.get(
             domain=self.domain,
@@ -474,7 +474,7 @@ class BouncesTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_bounces_create_json(self):
+    def test_bounces_create_json(self) -> None:
         req = self.client.bounces.create(
             data=self.bounces_json_data,
             domain=self.domain,
@@ -483,7 +483,7 @@ class BouncesTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_bounces_delete_single(self):
+    def test_bounces_delete_single(self) -> None:
         self.client.bounces.create(data=self.bounces_data, domain=self.domain)
         req = self.client.bounces.delete(
             domain=self.domain,
@@ -492,14 +492,14 @@ class BouncesTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_bounces_delete_all(self):
+    def test_bounces_delete_all(self) -> None:
         req = self.client.bounces.delete(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
 
 class UnsubscribesTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -527,17 +527,17 @@ class UnsubscribesTest(unittest.TestCase):
             },
         ]
 
-    def test_unsub_create(self):
+    def test_unsub_create(self) -> None:
         req = self.client.unsubscribes.create(data=self.unsub_data, domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_unsub_get(self):
+    def test_unsub_get(self) -> None:
         req = self.client.unsubscribes.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_unsub_get_single(self):
+    def test_unsub_get_single(self) -> None:
         req = self.client.unsubscribes.get(
             domain=self.domain,
             unsubscribe_address=self.unsub_data["address"],
@@ -545,7 +545,7 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_unsub_create_multiple(self):
+    def test_unsub_create_multiple(self) -> None:
         req = self.client.unsubscribes.create(
             data=self.unsub_json_data,
             domain=self.domain,
@@ -555,7 +555,7 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_unsub_delete(self):
+    def test_unsub_delete(self) -> None:
         req = self.client.bounces.delete(
             domain=self.domain,
             unsubscribe_address=self.unsub_data["address"],
@@ -564,7 +564,7 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_unsub_delete_all(self):
+    def test_unsub_delete_all(self) -> None:
         req = self.client.bounces.delete(domain=self.domain)
 
         self.assertEqual(req.status_code, 200)
@@ -572,7 +572,7 @@ class UnsubscribesTest(unittest.TestCase):
 
 
 class ComplaintsTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -595,18 +595,18 @@ class ComplaintsTest(unittest.TestCase):
             },
         ]
 
-    def test_compl_create(self):
+    def test_compl_create(self) -> None:
         req = self.client.complaints.create(data=self.compl_data, domain=self.domain)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_compl_get_all(self):
+    def test_compl_get_all(self) -> None:
         req = self.client.complaints.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_compl_get_single(self):
+    def test_compl_get_single(self) -> None:
         self.client.complaints.create(data=self.compl_data, domain=self.domain)
         req = self.client.complaints.get(
             domain=self.domain,
@@ -615,7 +615,7 @@ class ComplaintsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_compl_create_multiple(self):
+    def test_compl_create_multiple(self) -> None:
         req = self.client.complaints.create(
             data=self.compl_json_data,
             domain=self.domain,
@@ -625,7 +625,7 @@ class ComplaintsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_compl_delete_single(self):
+    def test_compl_delete_single(self) -> None:
         self.client.complaints.create(
             data=self.compl_json_data,
             domain=self.domain,
@@ -639,14 +639,14 @@ class ComplaintsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_compl_delete_all(self):
+    def test_compl_delete_all(self) -> None:
         req = self.client.complaints.delete(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
 
 class WhiteListTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -669,12 +669,12 @@ class WhiteListTest(unittest.TestCase):
             },
         ]
 
-    def test_whitel_create(self):
+    def test_whitel_create(self) -> None:
         req = self.client.whitelists.create(data=self.whitel_data, domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_whitel_get_simple(self):
+    def test_whitel_get_simple(self) -> None:
         self.client.whitelists.create(data=self.whitel_data, domain=self.domain)
 
         req = self.client.whitelists.get(
@@ -685,7 +685,7 @@ class WhiteListTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("value", req.json())
 
-    def test_whitel_delete_simple(self):
+    def test_whitel_delete_simple(self) -> None:
         self.client.whitelists.create(data=self.whitel_data, domain=self.domain)
         req = self.client.whitelists.delete(
             domain=self.domain,
@@ -697,7 +697,7 @@ class WhiteListTest(unittest.TestCase):
 
 
 class RoutesTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -718,20 +718,20 @@ class RoutesTest(unittest.TestCase):
             "priority": 2,
         }
 
-    def test_routes_create(self):
+    def test_routes_create(self) -> None:
         req = self.client.routes.create(domain=self.domain, data=self.routes_data)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_routes_get_all(self):
+    def test_routes_get_all(self) -> None:
         self.client.routes.create(domain=self.domain, data=self.routes_data)
         req = self.client.routes.get(domain=self.domain, filters=self.routes_params)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_get_route_by_id(self):
+    def test_get_route_by_id(self) -> None:
         req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
         self.client.routes.create(domain=self.domain, data=self.routes_data)
         req = self.client.routes.get(
@@ -742,7 +742,7 @@ class RoutesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("route", req.json())
 
-    def test_routes_put(self):
+    def test_routes_put(self) -> None:
         req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
         req = self.client.routes.put(
             domain=self.domain,
@@ -753,7 +753,7 @@ class RoutesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
-    def test_routes_delete(self):
+    def test_routes_delete(self) -> None:
         req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
         req = self.client.routes.delete(
             domain=self.domain,
@@ -765,7 +765,7 @@ class RoutesTest(unittest.TestCase):
 
 
 class WebhooksTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -781,7 +781,7 @@ class WebhooksTest(unittest.TestCase):
             "url": "https://twitter.com",
         }
 
-    def test_webhooks_create(self):
+    def test_webhooks_create(self) -> None:
         req = self.client.domains_webhooks.create(
             domain=self.domain,
             data=self.webhooks_data,
@@ -791,12 +791,12 @@ class WebhooksTest(unittest.TestCase):
         self.assertIn("message", req.json())
         self.client.domains_webhooks_clicked.delete(domain=self.domain)
 
-    def test_webhooks_get(self):
+    def test_webhooks_get(self) -> None:
         req = self.client.domains_webhooks.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("webhooks", req.json())
 
-    def test_webhook_put(self):
+    def test_webhook_put(self) -> None:
         self.client.domains_webhooks.create(domain=self.domain, data=self.webhooks_data)
         req = self.client.domains_webhooks_clicked.put(
             domain=self.domain,
@@ -806,14 +806,14 @@ class WebhooksTest(unittest.TestCase):
         self.assertIn("message", req.json())
         self.client.domains_webhooks_clicked.delete(domain=self.domain)
 
-    def test_webhook_get_simple(self):
+    def test_webhook_get_simple(self) -> None:
         self.client.domains_webhooks.create(domain=self.domain, data=self.webhooks_data)
         req = self.client.domains_webhooks_clicked.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("webhook", req.json())
         self.client.domains_webhooks_clicked.delete(domain=self.domain)
 
-    def test_webhook_delete(self):
+    def test_webhook_delete(self) -> None:
         self.client.domains_webhooks.create(domain=self.domain, data=self.webhooks_data)
         req = self.client.domains_webhooks_clicked.delete(domain=self.domain)
         self.assertEqual(req.status_code, 200)
@@ -821,7 +821,7 @@ class WebhooksTest(unittest.TestCase):
 
 
 class MailingListsTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -860,17 +860,17 @@ class MailingListsTest(unittest.TestCase):
             '{"name": "Bob", "address": "bob2@example.com", "vars": {"age": 34}}]',
         }
 
-    def test_maillist_pages_get(self):
+    def test_maillist_pages_get(self) -> None:
         req = self.client.lists_pages.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_maillist_lists_get(self):
+    def test_maillist_lists_get(self) -> None:
         req = self.client.lists.get(domain=self.domain, address=self.maillist_address)
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
-    def test_maillist_lists_create(self):
+    def test_maillist_lists_create(self) -> None:
         self.client.lists.delete(
             domain=self.domain,
             address=f"python_sdk@{self.domain}",
@@ -879,7 +879,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
-    def test_maillists_lists_put(self):
+    def test_maillists_lists_put(self) -> None:
         self.client.lists.create(domain=self.domain, data=self.mailing_lists_data)
         req = self.client.lists.put(
             domain=self.domain,
@@ -889,7 +889,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("list", req.json())
 
-    def test_maillists_lists_delete(self):
+    def test_maillists_lists_delete(self) -> None:
         self.client.lists.create(domain=self.domain, data=self.mailing_lists_data)
         req = self.client.lists.delete(
             domain=self.domain,
@@ -897,7 +897,7 @@ class MailingListsTest(unittest.TestCase):
         )
         self.assertEqual(req.status_code, 200)
 
-    def test_maillists_lists_validate_create(self):
+    def test_maillists_lists_validate_create(self) -> None:
         req = self.client.lists.create(
             domain=self.domain,
             address=self.maillist_address,
@@ -907,7 +907,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 202)
         self.assertIn("message", req.json())
 
-    def test_maillists_lists_validate_get(self):
+    def test_maillists_lists_validate_get(self) -> None:
         req = self.client.lists.get(
             domain=self.domain,
             address=self.maillist_address,
@@ -917,7 +917,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("id", req.json())
 
-    def test_maillists_lists_validate_delete(self):
+    def test_maillists_lists_validate_delete(self) -> None:
         self.client.lists.create(
             domain=self.domain,
             address=self.maillist_address,
@@ -931,7 +931,7 @@ class MailingListsTest(unittest.TestCase):
 
         self.assertEqual(req.status_code, 200)
 
-    def test_maillists_lists_members_pages_get(self):
+    def test_maillists_lists_members_pages_get(self) -> None:
         req = self.client.lists_members_pages.get(
             domain=self.domain,
             address=self.maillist_address,
@@ -939,7 +939,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
-    def test_maillists_lists_members_create(self):
+    def test_maillists_lists_members_create(self) -> None:
         self.client.lists_members.delete(
             domain=self.domain,
             address=self.maillist_address,
@@ -954,7 +954,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("member", req.json())
 
-    def test_maillists_lists_members_update(self):
+    def test_maillists_lists_members_update(self) -> None:
         self.client.lists_members.create(
             domain=self.domain,
             address=self.maillist_address,
@@ -971,7 +971,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("member", req.json())
 
-    def test_maillists_lists_members_delete(self):
+    def test_maillists_lists_members_delete(self) -> None:
         self.client.lists_members.create(
             domain=self.domain,
             address=self.maillist_address,
@@ -985,7 +985,7 @@ class MailingListsTest(unittest.TestCase):
         )
         self.assertEqual(req.status_code, 200)
 
-    def test_maillists_lists_members_create_mult(self):
+    def test_maillists_lists_members_create_mult(self) -> None:
         req = self.client.lists_members.create(
             domain=self.domain,
             address=self.maillist_address,
@@ -998,7 +998,7 @@ class MailingListsTest(unittest.TestCase):
 
 
 class TemplatesTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -1029,7 +1029,7 @@ class TemplatesTest(unittest.TestCase):
 
         self.put_template_version = "v11"
 
-    def test_create_template(self):
+    def test_create_template(self) -> None:
         self.client.templates.delete(
             domain=self.domain,
             template_name=self.post_template_data["name"],
@@ -1042,7 +1042,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_get_template(self):
+    def test_get_template(self) -> None:
         params = {"active": "yes"}
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
         req = self.client.templates.get(
@@ -1054,7 +1054,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_put_template(self):
+    def test_put_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
         req = self.client.templates.put(
             domain=self.domain,
@@ -1064,7 +1064,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_delete_template(self):
+    def test_delete_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
         req = self.client.templates.delete(
             domain=self.domain,
@@ -1073,7 +1073,7 @@ class TemplatesTest(unittest.TestCase):
 
         self.assertEqual(req.status_code, 200)
 
-    def test_post_version_template(self):
+    def test_post_version_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
 
         self.client.templates.delete(
@@ -1092,7 +1092,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_get_version_template(self):
+    def test_get_version_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
 
         self.client.templates.create(
@@ -1111,7 +1111,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_put_version_template(self):
+    def test_put_version_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
 
         self.client.templates.create(
@@ -1132,7 +1132,7 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("template", req.json())
 
-    def test_delete_version_template(self):
+    def test_delete_version_template(self) -> None:
         self.client.templates.create(data=self.post_template_data, domain=self.domain)
 
         self.post_template_version_data["tag"] = "v0"
@@ -1162,7 +1162,7 @@ class TemplatesTest(unittest.TestCase):
 
 
 class EmailValidationTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -1182,7 +1182,7 @@ class EmailValidationTest(unittest.TestCase):
         }
         self.post_address_validate = {"address": self.validation_address_1}
 
-    def test_post_address_validate(self):
+    def test_post_address_validate(self) -> None:
         req = self.client.addressvalidate.create(
             domain=self.domain,
             data=self.post_address_validate,
@@ -1192,7 +1192,7 @@ class EmailValidationTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_get_address_validate(self):
+    def test_get_address_validate(self) -> None:
         req = self.client.addressvalidate.get(
             domain=self.domain,
             filters=self.get_params_address_validate,
@@ -1201,7 +1201,7 @@ class EmailValidationTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("address", req.json())
 
-    def test_get_bulk_address_validate_status(self):
+    def test_get_bulk_address_validate_status(self) -> None:
         params = {"limit": 1}
         req = self.client.addressvalidate_bulk.get(domain=self.domain, filters=params)
         self.assertEqual(req.status_code, 200)
@@ -1209,7 +1209,7 @@ class EmailValidationTest(unittest.TestCase):
 
 
 class InboxPlacementTest(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.auth = (
             "api",
             os.environ["APIKEY"],
@@ -1224,7 +1224,7 @@ class InboxPlacementTest(unittest.TestCase):
             "html": "<html>HTML version of the body</html>",
         }
 
-    def test_post_inbox_tests(self):
+    def test_post_inbox_tests(self) -> None:
         req = self.client.inbox_tests.create(
             domain=self.domain,
             data=self.post_inbox_test,
@@ -1233,14 +1233,14 @@ class InboxPlacementTest(unittest.TestCase):
         self.assertEqual(req.status_code, 201)
         self.assertIn("tid", req.json())
 
-    def test_get_inbox_tests(self):
+    def test_get_inbox_tests(self) -> None:
         self.client.inbox_tests.create(domain=self.domain, data=self.post_inbox_test)
         req = self.client.inbox_tests.get(domain=self.domain)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("tests", req.json())
 
-    def test_get_simple_inbox_tests(self):
+    def test_get_simple_inbox_tests(self) -> None:
         test_id = self.client.inbox_tests.create(
             domain=self.domain,
             data=self.post_inbox_test,
@@ -1253,7 +1253,7 @@ class InboxPlacementTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertEqual(req.json()["tid"], test_id.json()["tid"])
 
-    def test_delete_inbox_tests(self):
+    def test_delete_inbox_tests(self) -> None:
         test_id = self.client.inbox_tests.create(
             domain=self.domain,
             data=self.post_inbox_test,
@@ -1266,7 +1266,7 @@ class InboxPlacementTest(unittest.TestCase):
 
         self.assertEqual(req.status_code, 200)
 
-    def test_get_counters_inbox_tests(self):
+    def test_get_counters_inbox_tests(self) -> None:
         test_id = self.client.inbox_tests.create(
             domain=self.domain,
             data=self.post_inbox_test,
@@ -1281,7 +1281,7 @@ class InboxPlacementTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("counters", req.json())
 
-    def test_get_checks_inbox_tests(self):
+    def test_get_checks_inbox_tests(self) -> None:
         test_id = self.client.inbox_tests.create(
             domain=self.domain,
             data=self.post_inbox_test,
