@@ -6,7 +6,7 @@ from typing import Any
 from typing import Callable
 from urllib.parse import urljoin
 
-import requests  # type: ignore[import-untyped]
+import requests
 
 from mailgun.handlers.default_handler import handle_default
 from mailgun.handlers.domains_handler import handle_domainlist
@@ -31,10 +31,10 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from collections.abc import Sequence
 
-    from requests.models import Response  # type: ignore[import-untyped]
+    from requests.models import Response
 
 
-HANDLERS: dict[str, Callable] = {
+HANDLERS: dict[str, Callable] = {  # type: ignore[type-arg]
     "resendmessage": handle_resend_message,
     "domains": handle_domains,
     "domainlist": handle_domainlist,
@@ -96,13 +96,14 @@ class Config:
         """
         # Append version to URL.
         # Forward slash is ignored if present in self.version.
-        url = urljoin(self.api_url, self.version + "/")
+        base_url: str = urljoin(self.api_url, self.version + "/")
         headers = {"User-agent": self.user_agent}
         modified = False
+        endpoint_url: dict[str, Sequence[str]]
         # Domains section
         if key.lower() == "domainlist":
-            url = {
-                "base": urljoin(self.api_url, self.version + "/"),
+            endpoint_url = {
+                "base": base_url,
                 "keys": ["domainlist"],
             }
             modified = True
@@ -118,46 +119,45 @@ class Config:
             elif "webprefix" in split:
                 final_keys = ["web_prefix"]
 
-            url = {
+            endpoint_url = {
                 "base": urljoin(self.api_url, self.version + "/domains/"),
                 "keys": final_keys,
             }
             modified = True
         # Messages section
         if key.lower() == "messages":
-            url = {
-                "base": urljoin(self.api_url, self.version + "/"),
+            endpoint_url = {
+                "base": base_url,
                 "keys": ["messages"],
             }
         if key.lower() == "mimemessage":
-            url = {
-                "base": urljoin(self.api_url, self.version + "/"),
+            endpoint_url = {
+                "base": base_url,
                 "keys": ["messages.mime"],
             }
             modified = True
         if key.lower() == "resendmessage":
-            url = {"keys": ["resendmessage"]}
+            endpoint_url = {"keys": ["resendmessage"]}
             modified = True
 
         # IPpools section
         if key.lower() == "ippools":
-            url = {
-                "base": urljoin(self.api_url, self.version + "/"),
+            endpoint_url = {
+                "base": base_url,
                 "keys": ["ip_pools"],
             }
             modified = True
         # Email Validation section
         if "addressvalidate" in key.lower():
-            url = {
+            endpoint_url = {
                 "base": urljoin(self.api_url, "v4" + "/address/validate"),
                 "keys": key.split("_"),
             }
             modified = True
 
         if not modified:
-            url = urljoin(self.api_url, self.version + "/")
-            url = {"base": url, "keys": key.split("_")}
-        return url, headers
+            endpoint_url = {"base": base_url, "keys": key.split("_")}
+        return endpoint_url, headers
 
 
 class Endpoint:
@@ -188,10 +188,10 @@ class Endpoint:
         method: str,
         url: dict[str, str],
         headers: dict[str, str],
-        data: dict | None = None,
+        data: Any | None = None,
         filters: Mapping[str, str | Any] | None = None,
         timeout: int = 60,
-        files: dict | None = None,
+        files: dict[str, bytes] | None = None,
         domain: str | None = None,
         **kwargs: Any,
     ) -> Response | Any:
@@ -206,25 +206,25 @@ class Endpoint:
         :param headers: incoming headers
         :type headers: dict[str, str]
         :param data: incoming post/put data
-        :type data: dict | None
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict | None
         :param timeout: requested timeout (60-default)
         :type timeout: int
         :param files: incoming files
-        :type files: dict | None
+        :type files: dict[str, bytes] | None
         :param domain: incoming domain
         :type domain: str | None
         :param kwargs: kwargs
         :type kwargs: Any
         :return: server response from API
         """
-        url: str = self.build_url(url, domain=domain, method=method, **kwargs)
+        built_url: str = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)
 
         try:
             return req_method(
-                url,
+                built_url,
                 data=data,
                 params=filters,
                 headers=headers,
@@ -245,10 +245,10 @@ class Endpoint:
     @staticmethod
     def build_url(
         url: dict[str, str],
-        domain: dict | None = None,
+        domain: str | None = None,
         method: str | None = None,
         **kwargs: Any,
-    ) -> str:
+    ) -> Any:
         """Build final request url using predefined handlers.
 
         Note: Some urls are being built in Config class, as they can't be generated dynamically.
@@ -292,35 +292,36 @@ class Endpoint:
 
     def create(
         self,
-        data: dict | None = None,
+        data: Any | None = None,
         filters: Mapping[str, str | Any] | None = None,
         domain: str | None = None,
-        headers: dict[str, str] | None = None,
-        files=None,
+        headers: str | None = None,
+        files: dict[str, bytes] | None = None,
         **kwargs: Any,
     ) -> Response:
         """POST method for API calls.
 
         :param data: incoming post data
-        :type data: dict | None
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param domain: incoming domain
         :type domain: str
         :param headers: incoming headers
-        :type headers: dict[str, str]
+        :type headers: str | None
         :param files: incoming files
-        :type files: file
+        :type files: dict[str, bytes] | None
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call POST request
         """
-        if "Content-type" in self.headers:
-            if self.headers["Content-type"] == "application/json":
-                data = json.dumps(data)
+        json_data: str | bytes | None = None
+        if "Content-type" in self.headers and data is not None:
+            if self.headers.get("Content-type") == "application/json":
+                json_data = json.dumps(data)
         elif headers:
             if headers == "application/json":
-                data = json.dumps(data)
+                json_data = json.dumps(data)
                 self.headers["Content-type"] = "application/json"
             elif headers == "multipart/form-data":
                 self.headers["Content-type"] = "multipart/form-data"
@@ -332,21 +333,21 @@ class Endpoint:
             files=files,
             domain=domain,
             headers=self.headers,
-            data=data,
+            data=json_data,
             filters=filters,
             **kwargs,
         )
 
     def put(
         self,
-        data: dict | None = None,
+        data: Any | None = None,
         filters: Mapping[str, str | Any] | None = None,
         **kwargs: Any,
     ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict | None
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
@@ -365,14 +366,14 @@ class Endpoint:
 
     def patch(
         self,
-        data: dict | None = None,
+        data: Any | None = None,
         filters: Mapping[str, str | Any] | None = None,
         **kwargs: Any,
     ) -> Response:
         """PATCH method for API calls.
 
         :param data: incoming data
-        :type data: dict | None
+        :type data: Any | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
@@ -391,28 +392,29 @@ class Endpoint:
 
     def update(
         self,
-        data: dict | None,
+        data: Any | None,
         filters: Mapping[str, str | Any] | None = None,
         **kwargs: Any,
     ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict | None
+        :type data: dict[str, Any] | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call PUT request
         """
+        json_data: str | bytes | None = None
         if self.headers["Content-type"] == "application/json":
-            data = json.dumps(data)
+            json_data = json.dumps(data)
         return self.api_call(
             self._auth,
             "put",
             self._url,
             headers=self.headers,
-            data=data,
+            data=json_data,
             filters=filters,
             **kwargs,
         )
