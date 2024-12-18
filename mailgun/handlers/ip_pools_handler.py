@@ -11,7 +11,7 @@ from typing import Any
 
 def handle_ippools(
     url: dict[str, Any],
-    domain: str | None,
+    _domain: str | None,
     _method: str | None,
     **kwargs: Any,
 ) -> Any:
