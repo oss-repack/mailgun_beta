@@ -21,6 +21,7 @@ dependencies:
   - flake8
   - isort
   - make
+  - conda-forge::monkeytype
   - mypy
   - pandas-stubs
   - pep8-naming
@@ -44,7 +45,6 @@ dependencies:
       - autoflake8
       - bandit
       - docconvert
-      - monkeytype
       - pyment >=0.3.3
       - pytype
       - pyupgrade

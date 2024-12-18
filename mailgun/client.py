@@ -6,7 +6,7 @@ from typing import Any
 from typing import Callable
 from urllib.parse import urljoin
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 from mailgun.handlers.default_handler import handle_default
 from mailgun.handlers.domains_handler import handle_domainlist
@@ -28,6 +28,7 @@ from mailgun.handlers.templates_handler import handle_templates
 
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from collections.abc import Sequence
 
     from requests.models import Response  # type: ignore[import-untyped]
@@ -188,16 +189,16 @@ class Endpoint:
         url: dict[str, str],
         headers: dict[str, str],
         data: dict | None = None,
-        filters=None,
+        filters: Mapping[str, str | Any] | None = None,
         timeout: int = 60,
-        files=None,
+        files: dict | None = None,
         domain: str | None = None,
         **kwargs: Any,
     ) -> Response | Any:
         """Build URL and make a request.
 
         :param auth: auth data
-        :type auth: tuple[str, str]
+        :type auth: tuple[str, str] | None
         :param method: request method
         :type method: str
         :param url: incoming url (base+keys)
@@ -205,20 +206,20 @@ class Endpoint:
         :param headers: incoming headers
         :type headers: dict[str, str]
         :param data: incoming post/put data
-        :type data: dict
+        :type data: dict | None
         :param filters: incoming params
-        :type filters: dict
+        :type filters: dict | None
         :param timeout: requested timeout (60-default)
         :type timeout: int
         :param files: incoming files
-        :type files: dict
+        :type files: dict | None
         :param domain: incoming domain
-        :type domain: str
+        :type domain: str | None
         :param kwargs: kwargs
         :type kwargs: Any
         :return: server response from API
         """
-        url = self.build_url(url, domain=domain, method=method, **kwargs)
+        url: str = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)
 
         try:
@@ -247,7 +248,7 @@ class Endpoint:
         domain: dict | None = None,
         method: str | None = None,
         **kwargs: Any,
-    ):
+    ) -> str:
         """Build final request url using predefined handlers.
 
         Note: Some urls are being built in Config class, as they can't be generated dynamically.
@@ -258,18 +259,25 @@ class Endpoint:
         :param method: requested method
         :type method: str
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: built URL
         """
         return HANDLERS[url["keys"][0]](url, domain, method, **kwargs)
 
-    def get(self, filters=None, domain=None, **kwargs):
+    def get(
+        self,
+        filters: Mapping[str, str | Any] | None = None,
+        domain: str | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """GET method for API calls.
 
         :param filters: incoming params
-        :type filters: dict
+        :type filters: Mapping[str, str | Any] | None
         :param domain: incoming domain
-        :type domain: str
+        :type domain: str | None
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call GET request
         """
         return self.api_call(
@@ -284,26 +292,27 @@ class Endpoint:
 
     def create(
         self,
-        data=None,
-        filters=None,
-        domain=None,
-        headers=None,
+        data: dict | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        domain: str | None = None,
+        headers: dict[str, str] | None = None,
         files=None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Response:
         """POST method for API calls.
 
         :param data: incoming post data
-        :type data: dict
+        :type data: dict | None
         :param filters: incoming params
         :type filters: dict
         :param domain: incoming domain
         :type domain: str
         :param headers: incoming headers
-        :type headers: dict
+        :type headers: dict[str, str]
         :param files: incoming files
         :type files: file
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call POST request
         """
         if "Content-type" in self.headers:
@@ -328,14 +337,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def put(self, data=None, filters=None, **kwargs):
+    def put(
+        self,
+        data: dict | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: dict | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call POST request
         """
         return self.api_call(
@@ -348,14 +363,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def patch(self, data=None, filters=None, **kwargs):
+    def patch(
+        self,
+        data: dict | None = None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PATCH method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: dict | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call PATCH request
         """
         return self.api_call(
@@ -368,14 +389,20 @@ class Endpoint:
             **kwargs,
         )
 
-    def update(self, data, filters=None, **kwargs):
+    def update(
+        self,
+        data: dict | None,
+        filters: Mapping[str, str | Any] | None = None,
+        **kwargs: Any,
+    ) -> Response:
         """PUT method for API calls.
 
         :param data: incoming data
-        :type data: dict
+        :type data: dict | None
         :param filters: incoming params
         :type filters: dict
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call PUT request
         """
         if self.headers["Content-type"] == "application/json":
@@ -390,12 +417,13 @@ class Endpoint:
             **kwargs,
         )
 
-    def delete(self, domain=None, **kwargs):
+    def delete(self, domain: str | None = None, **kwargs: Any) -> Response:
         """DELETE method for API calls.
 
         :param domain: incoming domain
         :type domain: str
         :param kwargs: kwargs
+        :type kwargs: Any
         :return: api_call DELETE request
         """
         return self.api_call(
@@ -411,7 +439,7 @@ class Endpoint:
 class Client:
     """Client class."""
 
-    def __init__(self, auth=None, **kwargs):
+    def __init__(self, auth: tuple[str, str] | None = None, **kwargs: Any) -> None:
         """Initialize a new Client instance for API interaction.
 
         This method sets up API authentication and configuration. The `auth` parameter
@@ -427,7 +455,7 @@ class Client:
         api_url = kwargs.get("api_url")
         self.config = Config(version=version, api_url=api_url)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         """Get named attribute of an object, split it and execute.
 
         :param name: attribute name (Example: client.domains_ips. names: ["domains", "ips"])
