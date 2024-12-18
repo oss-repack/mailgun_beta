@@ -95,13 +95,15 @@ class Config:
         """
         # Append version to URL.
         # Forward slash is ignored if present in self.version.
-        base_url: str = urljoin(self.api_url, self.version + "/")
+        url = urljoin(self.api_url, self.version + "/")
         headers = {"User-agent": self.user_agent}
         modified = False
-        url: dict[str, Any]
         # Domains section
         if key.lower() == "domainlist":
-            url = {"base": base_url, "keys": ["domainlist"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["domainlist"],
+            }
             modified = True
         if "domains" in key.lower():
             split = [key.lower()]
@@ -122,9 +124,15 @@ class Config:
             modified = True
         # Messages section
         if key.lower() == "messages":
-            url = {"base": base_url, "keys": ["messages"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["messages"],
+            }
         if key.lower() == "mimemessage":
-            url = {"base": base_url, "keys": ["messages.mime"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["messages.mime"],
+            }
             modified = True
         if key.lower() == "resendmessage":
             url = {"keys": ["resendmessage"]}
@@ -132,7 +140,10 @@ class Config:
 
         # IPpools section
         if key.lower() == "ippools":
-            url = {"base": base_url, "keys": ["ip_pools"]}
+            url = {
+                "base": urljoin(self.api_url, self.version + "/"),
+                "keys": ["ip_pools"],
+            }
             modified = True
         # Email Validation section
         if "addressvalidate" in key.lower():
@@ -143,7 +154,8 @@ class Config:
             modified = True
 
         if not modified:
-            url = {"base": base_url, "keys": key.split("_")}
+            url = urljoin(self.api_url, self.version + "/")
+            url = {"base": url, "keys": key.split("_")}
         return url, headers
 
 
@@ -206,12 +218,12 @@ class Endpoint:
         :type kwargs: Any
         :return: server response from API
         """
-        built_url: Any = self.build_url(url, domain=domain, method=method, **kwargs)
+        url = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)
 
         try:
             return req_method(
-                built_url,
+                url,
                 data=data,
                 params=filters,
                 headers=headers,
@@ -302,13 +314,12 @@ class Endpoint:
         :type kwargs: Any
         :return: api_call POST request
         """
-        json_data: str | bytes | None = None
-        if "Content-type" in self.headers and data is not None:
-            if self.headers.get("Content-type") == "application/json":
-                json_data = json.dumps(data)
+        if "Content-type" in self.headers:
+            if self.headers["Content-type"] == "application/json":
+                data = json.dumps(data)
         elif headers:
             if headers == "application/json":
-                json_data = json.dumps(data)
+                data = json.dumps(data)
                 self.headers["Content-type"] = "application/json"
             elif headers == "multipart/form-data":
                 self.headers["Content-type"] = "multipart/form-data"
@@ -320,7 +331,7 @@ class Endpoint:
             files=files,
             domain=domain,
             headers=self.headers,
-            data=json_data,
+            data=data,
             filters=filters,
             **kwargs,
         )
@@ -393,15 +404,14 @@ class Endpoint:
         :type kwargs: Any
         :return: api_call PUT request
         """
-        json_data: str | bytes | None = None
         if self.headers["Content-type"] == "application/json":
-            json_data = json.dumps(data)
+            data = json.dumps(data)
         return self.api_call(
             self._auth,
             "put",
             self._url,
             headers=self.headers,
-            data=json_data,
+            data=data,
             filters=filters,
             **kwargs,
         )
