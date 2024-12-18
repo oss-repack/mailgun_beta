@@ -84,7 +84,7 @@ class Config:
         self.ex_handler: bool = True
         self.api_url = api_url or self.DEFAULT_API_URL
 
-    def __getitem__(self, key: str) -> tuple[dict[str, Any], dict[str, str]]:
+    def __getitem__(self, key: str) -> tuple[Any, dict[str, str]]:
         """Parse incoming split attr name, check it and prepare endpoint url.
 
         Most urls generated here can't be generated dynamically as we are doing this
@@ -100,7 +100,7 @@ class Config:
         modified = False
         # Domains section
         if key.lower() == "domainlist":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["domainlist"],
             }
@@ -117,37 +117,37 @@ class Config:
             elif "webprefix" in split:
                 final_keys = ["web_prefix"]
 
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/domains/"),
                 "keys": final_keys,
             }
             modified = True
         # Messages section
         if key.lower() == "messages":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["messages"],
             }
         if key.lower() == "mimemessage":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["messages.mime"],
             }
             modified = True
         if key.lower() == "resendmessage":
-            url = {"keys": ["resendmessage"]}
+            url = {"keys": ["resendmessage"]}  # type: ignore[assignment]
             modified = True
 
         # IPpools section
         if key.lower() == "ippools":
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, self.version + "/"),
                 "keys": ["ip_pools"],
             }
             modified = True
         # Email Validation section
         if "addressvalidate" in key.lower():
-            url = {
+            url = {  # type: ignore[assignment]
                 "base": urljoin(self.api_url, "v4" + "/address/validate"),
                 "keys": key.split("_"),
             }
@@ -155,7 +155,7 @@ class Config:
 
         if not modified:
             url = urljoin(self.api_url, self.version + "/")
-            url = {"base": url, "keys": key.split("_")}
+            url = {"base": url, "keys": key.split("_")}  # type: ignore[assignment]
         return url, headers
 
 
