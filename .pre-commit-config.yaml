@@ -131,21 +131,21 @@ repos:
       hooks:
       -   id: refurb
           language_version: python3.12
-#
-#  - repo: https://github.com/pre-commit/mirrors-mypy
-#    rev: v1.13.0
-#    hooks:
-#    -   id: mypy
-#        args:
-#          [
-#            --config-file=./pyproject.toml,
-#          ]
-#        exclude: ^samples/
-#
-#  - repo: https://github.com/RobertCraigie/pyright-python
-#    rev: v1.1.390
-#    hooks:
-#    - id: pyright
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+    -   id: mypy
+        args:
+          [
+            --config-file=./pyproject.toml,
+          ]
+        exclude: ^mailgun/examples/
+
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.390
+    hooks:
+    - id: pyright
 
   - repo: https://github.com/PyCQA/bandit
     rev: 1.8.0

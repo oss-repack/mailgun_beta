@@ -6,7 +6,7 @@ from typing import Any
 from typing import Callable
 from urllib.parse import urljoin
 
-import requests
+import requests  # type: ignore[import-untyped]
 
 from mailgun.handlers.default_handler import handle_default
 from mailgun.handlers.domains_handler import handle_domainlist
@@ -30,7 +30,7 @@ from mailgun.handlers.templates_handler import handle_templates
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from requests.models import Response
+    from requests.models import Response  # type: ignore[import-untyped]
 
 
 HANDLERS: dict[str, Callable] = {  # type: ignore[type-arg]
