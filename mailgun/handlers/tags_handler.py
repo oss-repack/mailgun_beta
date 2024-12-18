@@ -3,11 +3,19 @@
 Doc: https://documentation.mailgun.com/en/latest/api-tags.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 from urllib.parse import quote
 
 
-def handle_tags(url, domain, _method, **kwargs):
+def handle_tags(
+    url: Any,
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Tags.
 
     :param url: Incoming URL dictionary

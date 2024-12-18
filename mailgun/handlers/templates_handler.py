@@ -3,12 +3,20 @@
 Doc: https://documentation.mailgun.com/en/latest/api-templates.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 from .error_handler import ApiError
 
 
-def handle_templates(url, domain, _method, **kwargs):
+def handle_templates(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Templates.
 
     :param url: Incoming URL dictionary

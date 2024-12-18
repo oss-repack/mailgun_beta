@@ -3,10 +3,18 @@
 Doc: https://documentation.mailgun.com/en/latest/api-ips.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 
-def handle_ips(url, _domain, _method, **kwargs):
+def handle_ips(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle IPs.
 
     :param url: Incoming URL dictionary

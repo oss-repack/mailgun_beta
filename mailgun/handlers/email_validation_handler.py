@@ -3,10 +3,18 @@
 Doc: https://documentation.mailgun.com/en/latest/api-email-validation.html#email-validation
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 
-def handle_address_validate(url, _domain, _method, **kwargs):
+def handle_address_validate(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle email validation.
 
     :param url: Incoming URL dictionary

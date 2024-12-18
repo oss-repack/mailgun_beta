@@ -3,10 +3,18 @@
 Doc: https://documentation.mailgun.com/en/latest/api-ip-pools.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 
-def handle_ippools(url, _domain, _method, **kwargs):
+def handle_ippools(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle IP pools.
 
     :param url: Incoming URL dictionary

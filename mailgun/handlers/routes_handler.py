@@ -3,10 +3,18 @@
 Doc: https://documentation.mailgun.com/en/latest/api-routes.html
 """
 
+from __future__ import annotations
+
 from os import path
+from typing import Any
 
 
-def handle_routes(url, _domain, _method, **kwargs):
+def handle_routes(
+    url: dict[str, Any],
+    domain: str | None,
+    _method: str | None,
+    **kwargs: Any,
+) -> Any:
     """Handle Routes.
 
     :param url: Incoming URL dictionary

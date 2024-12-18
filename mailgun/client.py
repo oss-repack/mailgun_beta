@@ -206,7 +206,7 @@ class Endpoint:
         :type kwargs: Any
         :return: server response from API
         """
-        built_url: str = self.build_url(url, domain=domain, method=method, **kwargs)
+        built_url: Any = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)
 
         try:
