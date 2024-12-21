@@ -292,6 +292,11 @@ ignore-overlong-task-comments = true
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.pydocstyle]
+convention = "google"
+match = ".*.py"
+match_dir = '^examples/'
+
 [tool.flake8]
 exclude = ["mailgun/examples/*"]
 # TODO: D100 - create docstrings for modules; D101 Missing docstring in public class; D102 Missing docstring in public method; D104 Missing docstring in public package

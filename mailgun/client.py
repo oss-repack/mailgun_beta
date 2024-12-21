@@ -1,3 +1,15 @@
+"""This module provides the main client and helper classes for interacting with the Mailgun API.
+
+The `mailgun.client` module includes the core `Client` class for managing
+API requests, configuration, and error handling, as well as utility functions
+and classes for building request headers, URLs, and parsing responses.
+Classes:
+    - Config: Manages configuration settings for the Mailgun API.
+    - Endpoint: Represents specific API endpoints and provides methods for
+      common HTTP operations like GET, POST, PUT, and DELETE.
+    - Client: The main API client for authenticating and making requests.
+"""
+
 from __future__ import annotations
 
 import json
