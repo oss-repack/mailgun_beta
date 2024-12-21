@@ -103,6 +103,7 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 dev: clean		## install the package's development version to a fresh environment
+	conda env create -f environment.yaml --name $(CONDA_ENV_NAME) --yes
 	conda run --name $(CONDA_ENV_NAME) pip install -e .
 
 dev-full: clean		## install the package's development version to a fresh environment
