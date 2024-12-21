@@ -2,7 +2,6 @@
 name: mailgun-dev
 channels:
   - defaults
-  - conda-forge
 dependencies:
   - python >=3.9
   # build & host deps
@@ -37,7 +36,7 @@ dependencies:
   - yapf
   # other
   - conda
-  #- conda-build
+  - conda-build
   - jsonschema
   - pre-commit
   - python-dotenv >=0.19.2
