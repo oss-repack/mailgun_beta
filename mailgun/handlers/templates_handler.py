@@ -27,6 +27,7 @@ def handle_templates(
     :type _method: str
     :param kwargs: kwargs
     :return: final url for Templates endpoint
+    :raises: ApiError
     """
     final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
     if "template_name" in kwargs:

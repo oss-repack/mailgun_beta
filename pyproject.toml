@@ -207,6 +207,9 @@ ignore = [
     "B904",  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None`
     # pycodestyle (E, W)
     "CPY001",   # Missing copyright notice at top of file
+    "DOC201",  # DOC201 `return` is not documented in docstring
+    # TODO: Enable when the upstream issue is fixed, see https://github.com/astral-sh/ruff/issues/12520
+    "DOC501",  # DOC501 Raised exception `ApiError` missing from docstring
     "E501",
     "PLR0913",  # PLR0913 Too many arguments in function definition (6 > 5)
 ]
@@ -244,14 +247,14 @@ line-ending = "auto"
 #
 # This is currently disabled by default, but it is planned for this
 # to be opt-out in the future.
-#docstring-code-format = false
+docstring-code-format = false
 
 # Set the line length limit used when formatting code snippets in
 # docstrings.
 #
 # This only has an effect when the `docstring-code-format` setting is
 # enabled.
-#docstring-code-line-length = "dynamic"
+docstring-code-line-length = "dynamic"
 
 # Ignore `E402` (import violations) in all `__init__.py` files, and in `path/to/file.py`.
 [tool.ruff.lint.per-file-ignores]

@@ -229,6 +229,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: server response from API
+        :raises: TimeoutError, ApiError
         """
         url = self.build_url(url, domain=domain, method=method, **kwargs)
         req_method = getattr(requests, method)

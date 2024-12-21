@@ -48,6 +48,7 @@ def handle_domains(
     :type method: str
     :param kwargs: kwargs
     :return: final url for domain endpoint
+    :raises: ApiError
     """
     # TODO: Refactor this logic
     # fmt: off
