@@ -179,7 +179,7 @@ class Endpoint:
         url: dict[str, Any],
         headers: dict[str, str],
         auth: tuple[str, str] | None,
-    ):
+    ) -> None:
         """Initialize a new Endpoint instance.
 
         :param url: URL dict with pairs {"base": "keys"}
