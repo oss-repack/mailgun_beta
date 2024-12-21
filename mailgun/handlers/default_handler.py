@@ -29,6 +29,7 @@ def handle_default(
     :type _method: str
     :param kwargs: kwargs
     :return: final url for default endpoint
+    :raises: ApiError
     """
     if not domain:
         raise ApiError("Domain is missing!")

@@ -27,6 +27,7 @@ def handle_inbox(
     :type _method: str
     :param kwargs: kwargs
     :return: final url for inbox placement endpoint
+    :raises: ApiError
     """
     final_keys = path.join("/", *url["keys"]) if url["keys"] else ""
     if "test_id" in kwargs:

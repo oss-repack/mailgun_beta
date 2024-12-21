@@ -195,40 +195,24 @@ select = ["ALL"]
 
 external = ["DOC", "PLR"]
 
-exclude = ["mailgun/examples/*"]
+exclude = ["mailgun/examples/*", "tests.py"]
 
 #extend-select = ["W", "N", "UP", "B", "A", "C4", "PT", "SIM", "PD", "PLE", "RUF"]
 # Never enforce `E501` (line length violations).
 
 ignore = [
-    # TODO: Fix unused function argument: `debug`, `kwargs`, and `method` in class Client
-    "ARG001",  #  ARG001 Unused function argument: `debug`, `kwargs`, and `method` in class Client
-    # TODO: Fix A001 Variable `TimeoutError` is shadowing a Python builtin
-    "A001" ,
-    # TODO: Enable A, ANN, D, C901, TRY201, TRY003, EM101, PTH118, PLR0917 later
-    "A", "ANN", "D", "C901", "TRY201", "TRY003", "EM101", "PTH118", "PLR0912", "ERA001", "PLR0917", "TD002", "TD003", "FIX002",
+    # TODO: Enable C901, TRY201, TRY003, EM101, PTH118, PLR0917 later
+    "C901", "TRY201", "TRY003", "EM101", "PTH118", "PLR0912", "PLR0917", "TD002", "TD003", "FIX002",
     "ANN401",  # ANN401 Dynamically typed expressions (typing.Any) are disallowed in `**kwargs`
     "B904",  # Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None`
     # pycodestyle (E, W)
     "CPY001",   # Missing copyright notice at top of file
-    #"DOC501",  # DOC501 Raised exception `TimeoutError` and `ApiError` missing from docstring
-    # TODO: Fix D104 Missing docstring in public package
-    "D104",
+    "DOC201",  # DOC201 `return` is not documented in docstring
+    # TODO: Enable DOC501 when the upstream issue is fixed, see https://github.com/astral-sh/ruff/issues/12520
+    "DOC501",  # DOC501 Raised exception `ApiError` missing from docstring
     "E501",
-    "FBT001",  # Boolean-typed positional argument in function definition
-    "FBT002",  # Boolean default positional argument in function definition
-    # TODO: Replace with http.HTTPStatus, see https://docs.python.org/3/library/http.html#http-status-codes
-    "PLR2004",  # PLR2004 Magic value used in comparison, consider replacing `XXX` with a constant variable
     "PLR0913",  # PLR0913 Too many arguments in function definition (6 > 5)
-    #"PLR0917",  # PLR0917 Too many positional arguments
-    "Q003",   # Checks for avoidable escaped quotes ("\"" -> '"')
-    # TODO:" PT009 Use a regular `assert` instead of unittest-style `assertTrue`
-    "PT009",
-    "S311",  # S311 Standard pseudo-random generators are not suitable for cryptographic purposes
-    # TODO: T201 Replace `print` with logging functions
-    "T201",  # T201 `print` found
 ]
-
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
@@ -263,14 +247,14 @@ line-ending = "auto"
 #
 # This is currently disabled by default, but it is planned for this
 # to be opt-out in the future.
-#docstring-code-format = false
+docstring-code-format = true
 
 # Set the line length limit used when formatting code snippets in
 # docstrings.
 #
 # This only has an effect when the `docstring-code-format` setting is
 # enabled.
-#docstring-code-line-length = "dynamic"
+docstring-code-line-length = "dynamic"
 
 # Ignore `E402` (import violations) in all `__init__.py` files, and in `path/to/file.py`.
 [tool.ruff.lint.per-file-ignores]
@@ -290,12 +274,17 @@ max-complexity = 10
 ignore-overlong-task-comments = true
 
 [tool.ruff.lint.pydocstyle]
+# TODO: Enable the 'sphinx' style when it will be available, see https://github.com/astral-sh/ruff/pull/13286
 convention = "google"
 
+[tool.pydocstyle]
+convention = "google"
+match = ".*.py"
+match_dir = '^examples/'
+
 [tool.flake8]
-exclude = ["mailgun/examples/*"]
-# TODO: D100 - create docstrings for modules; D101 Missing docstring in public class; D102 Missing docstring in public method; D104 Missing docstring in public package
-ignore = ['E501', "D100", "D101", "D102", "D104"]
+exclude = ["mailgun/examples/*", "tests.py"]
+ignore = ['E501']
 extend-ignore = "W503"
 per-file-ignores = [
     '__init__.py:F401',

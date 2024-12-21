@@ -1,3 +1,5 @@
+"""A suite of tests for Mailgun Python SDK functionality."""
+
 from __future__ import annotations
 
 import os
