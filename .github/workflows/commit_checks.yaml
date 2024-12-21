@@ -26,7 +26,7 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         # TODO": Enable py313 support when all packages will be available on the main channel
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     #environment: mailgun
     env:
       APIKEY: ${{ secrets.APIKEY }}
