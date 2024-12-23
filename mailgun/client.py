@@ -223,12 +223,13 @@ class Endpoint:
         :param timeout: requested timeout (60-default)
         :type timeout: int
         :param files: incoming files
-        :type files: dict[str, bytes] | None
+        :type files: dict[str, Any] | None
         :param domain: incoming domain
         :type domain: str | None
         :param kwargs: kwargs
         :type kwargs: Any
         :return: server response from API
+        :rtype: requests.models.Response
         :raises: TimeoutError, ApiError
         """
         url = self.build_url(url, domain=domain, method=method, **kwargs)
@@ -291,6 +292,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call GET request
+        :rtype: requests.models.Response
         """
         return self.api_call(
             self._auth,
@@ -322,10 +324,11 @@ class Endpoint:
         :param headers: incoming headers
         :type headers: str | None
         :param files: incoming files
-        :type files: dict[str, bytes] | None
+        :type files: dict[str, Any] | None
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call POST request
+        :rtype: requests.models.Response
         """
         if "Content-type" in self.headers:
             if self.headers["Content-type"] == "application/json":
@@ -364,6 +367,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call POST request
+        :rtype: requests.models.Response
         """
         return self.api_call(
             self._auth,
@@ -390,6 +394,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call PATCH request
+        :rtype: requests.models.Response
         """
         return self.api_call(
             self._auth,
@@ -416,6 +421,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call PUT request
+        :rtype: requests.models.Response
         """
         if self.headers["Content-type"] == "application/json":
             data = json.dumps(data)
@@ -437,6 +443,7 @@ class Endpoint:
         :param kwargs: kwargs
         :type kwargs: Any
         :return: api_call DELETE request
+        :rtype: requests.models.Response
         """
         return self.api_call(
             self._auth,

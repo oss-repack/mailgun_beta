@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from mailgun.client import Client
 
@@ -45,8 +46,11 @@ def post_bulk_list_validate() -> None:
     POST /v4/address/validate/bulk/<list_id>
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"file": open("../doc_tests/files/email_validation.csv", "rb")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {"file": Path("mailgun/doc_tests/files/email_validation.csv").read_bytes()}
     req = client.addressvalidate_bulk.create(
         domain=domain, files=files, list_name="python2_list"
     )
@@ -85,8 +89,11 @@ def post_preview() -> None:
     POST /v4/address/validate/preview/<list_id>
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"file": open("../doc_tests/files/email_previews.csv", "rb")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {"file": Path("mailgun/doc_tests/files/email_previews.csv").read_bytes()}
     req = client.addressvalidate_preview.create(
         domain=domain, files=files, list_name="python_list"
     )

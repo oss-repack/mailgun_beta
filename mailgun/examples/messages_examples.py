@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from mailgun.client import Client
 
@@ -28,16 +29,18 @@ def post_message() -> None:
         "html": html,
         "o:tag": "Python test",
     }
-    # "text": "Congratulations !!!!!, you just sent an email with Mailgun!  You are truly awesome!"}
-    # TODO: Refactor this by using with context manager or pathlib.Path
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
     files = [
         (
             "attachment",
-            ("test1.txt", open("../doc_tests/files/test1.txt", "rb").read()),
+            ("test1.txt", Path("mailgun/doc_tests/files/test1.txt").read_bytes()),
         ),
         (
             "attachment",
-            ("test2.txt", open("../doc_tests/files/test2.txt", "rb").read()),
+            ("test2.txt", Path("mailgun/doc_tests/files/test2.txt").read_bytes()),
         ),
     ]
 
@@ -54,8 +57,11 @@ def post_mime() -> None:
         "cc": os.environ["MESSAGES_CC"],
         "subject": "Hello HELLO",
     }
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"message": open("../doc_tests/files/test_mime.mime")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {"message": Path("mailgun/doc_tests/files/test_mime.mime").read_bytes()}
 
     req = client.mimemessage.create(data=mime_data, files=files, domain=domain)
     print(req.json())
