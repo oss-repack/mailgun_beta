@@ -1,12 +1,8 @@
-![alt text](https://documentation.mailgun.com/ "Mailgun")
-
 # Mailgun Python SDK (DEMO)
-
-![Current Version](<>)
 
 ## Overview
 
-Welcome to the [Mailgun] official Python SDK!
+Welcome to the official Python SDK for [Mailgun]!
 
 Check out all the resources and Python code examples in the official [Mailgun Documentation][doc].
 
