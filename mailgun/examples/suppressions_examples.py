@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from mailgun.client import Client
 
@@ -57,8 +58,15 @@ def import_bounce_list() -> None:
     POST /<domain>/bounces/import, Content-Type: multipart/form-data
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"bounce_csv": open("../doc_tests/files/mailgun_bounces_test.csv", "rb")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {
+        "bounce_csv": Path(
+            "mailgun/doc_tests/files/mailgun_bounces_test.csv"
+        ).read_bytes()
+    }
     req = client.bounces_import.create(domain=domain, files=files)
     print(req.json())
 
@@ -141,9 +149,14 @@ def import_list_unsubs() -> None:
     POST /<domain>/unsubscribes/import, Content-Type: multipart/form-data
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
     files = {
-        "unsubscribe2_csv": open("../doc_tests/files/mailgun_unsubscribes.csv", "rb")
+        "unsubscribe2_csv": Path(
+            "mailgun/doc_tests/files/mailgun_unsubscribes.csv"
+        ).read_bytes()
     }
     req = client.unsubscribes_import.create(domain=domain, files=files)
     print(req.json())
@@ -215,8 +228,15 @@ def import_complaint_list() -> None:
     POST /<domain>/complaints/import, Content-Type: multipart/form-data
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"complaints_csv": open("../doc_tests/files/mailgun_complaints.csv", "rb")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {
+        "complaints_csv": Path(
+            "mailgun/doc_tests/files/mailgun_complaints.csv"
+        ).read_bytes()
+    }
     req = client.complaints_import.create(domain=domain, files=files)
     print(req.json())
 
@@ -278,8 +298,15 @@ def import_list_whitelists() -> None:
     POST /<domain>/whitelists/import, Content-Type: multipart/form-data
     :return:
     """
-    # TODO: Refactor this by using with context manager or pathlib.Path
-    files = {"whitelist_csv": open("../doc_tests/files/mailgun_whitelists.csv", "rb")}
+    # It is strongly recommended that you open files in binary mode.
+    # Because the Content-Length header may be provided for you,
+    # and if it does this value will be set to the number of bytes in the file.
+    # Errors may occur if you open the file in text mode.
+    files = {
+        "whitelist_csv": Path(
+            "mailgun/doc_tests/files/mailgun_whitelists.csv"
+        ).read_bytes()
+    }
     req = client.whitelists_import.create(domain=domain, files=files)
     print(req.json())
 
