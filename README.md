@@ -12,7 +12,7 @@ Check out all the resources and Python code examples in the official [Mailgun Do
 - [Installation](#installation)
 - [Authentication](#authentication)
 - [Make your first call](#make-your-first-call)
-- [Client / Call configuration specifics](#client--call-configuration-specifics)
+- [Overview](#overview)
   - [Base URL](#base-url)
   - [Authentication](#authentication)
   - [API Response Codes](#api-response-codes)
@@ -69,7 +69,9 @@ Use the below code to install the Mailgun SDK for Python:
 pip install mailgun
 ```
 
-## Client / Call Configuration Specifics
+## Overview
+
+The Mailgun API is part of the Sinch family and enables you to send, track, and receive email effortlessly.
 
 ### Base URL
 
