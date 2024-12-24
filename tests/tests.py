@@ -276,6 +276,9 @@ class IpTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
 
 
+@pytest.mark.skip(
+    "This feature can be disabled for the account, see https://app.mailgun.com/settings/ip-pools"
+)
 class IpPoolsTests(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (
@@ -436,12 +439,12 @@ class TagsTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("tag", req.json())
 
-    # def test_delete_tags(self):
-    #     req = self.client.tags.delete(domain=self.domain,
-    #                                   tag_name=self.tag_name)
-    #
-    #     self.assertEqual(req.status_code, 200)
-    #     self.assertIn("message", req.json())
+    @pytest.mark.skip("it deletes tags and test_tag_get_by_name will fail")
+    def test_delete_tags(self) -> None:
+        req = self.client.tags.delete(domain=self.domain, tag_name=self.tag_name)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("message", req.json())
 
 
 class BouncesTests(unittest.TestCase):
