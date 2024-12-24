@@ -14,7 +14,7 @@ def get_routes() -> None:
     GET /routes
     :return:
     """
-    params = {"skip": 1, "limit": 1}
+    params = {"skip": 0, "limit": 1}
     req = client.routes.get(domain=domain, filters=params)
     print(req.json())
 

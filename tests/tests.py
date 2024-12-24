@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import os
+import string
 import unittest
+import random
 from typing import Any
 
 import pytest
@@ -39,11 +42,10 @@ class MessagesTests(unittest.TestCase):
 
 
 class DomainTests(unittest.TestCase):
-    """All the tests of this part will work only on fresh setup, or you have to change self.test_domain variable every time you're running this again.
+    """All the tests of this part will work only on fresh setup, or if you change self.test_domain variable every time you're running this again.
 
     It's happening because domain name is not deleting permanently after API call, so every new create will cause an error,
-    as that domain is still exists. Maybe in this case it's good to implement something like random name
-    generator to avoid this problems.
+    as that domain is still exists. To avoid the problems we use a random domain name generator.
     """
 
     def setUp(self) -> None:
@@ -53,7 +55,10 @@ class DomainTests(unittest.TestCase):
         )
         self.client: Client = Client(auth=self.auth)
         self.domain: str = os.environ["DOMAIN"]
-        self.test_domain: str = "mailgun.wrapper.test2"
+        random_domain_name = "".join(
+            random.choice(string.ascii_lowercase + string.digits) for _ in range(10)
+        )
+        self.test_domain: str = f"mailgun.wrapper.{random_domain_name}"
         self.post_domain_data: dict[str, str] = {
             "name": self.test_domain,
         }
@@ -95,6 +100,11 @@ class DomainTests(unittest.TestCase):
             "dkim_selector": "s",
         }
 
+    def tearDown(self) -> None:
+        # We should be confident that the test domain has been deleted after DomainTests are complete,
+        # otherwise, test_delete_domain and test_verify_domain will fail with a new run of tests
+        self.client.domains.delete(domain=self.test_domain)
+
     def test_get_domain_list(self) -> None:
         req = self.client.domainlist.get(domain=self.domain)
         self.assertEqual(req.status_code, 200)
@@ -108,6 +118,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain DNS records have been created", request.json()["message"])
 
+    @pytest.mark.skip("The test can fail because the domain name is a random string")
     def test_get_single_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.get(domain_name=self.post_domain_data["name"])
@@ -115,6 +126,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
 
+    @pytest.mark.skip("The test can fail because the domain name is a random string")
     def test_verify_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.put(domain=self.post_domain_data["name"], verify=True)
@@ -227,6 +239,9 @@ class DomainTests(unittest.TestCase):
         self.assertIn("message", request.json())
 
 
+@pytest.mark.skip(
+    "Dedicated IPs should be enabled for the domain, see https://app.mailgun.com/settings/dedicated-ips"
+)
 class IpTests(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (
@@ -250,7 +265,6 @@ class IpTests(unittest.TestCase):
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
-    @pytest.mark.skip(reason="TODO: check this test")
     def test_create_ip(self) -> None:
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         self.assertEqual("success", request.json()["message"])
@@ -265,6 +279,9 @@ class IpTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
 
 
+@pytest.mark.skip(
+    "This feature can be disabled for the account, see https://app.mailgun.com/settings/ip-pools"
+)
 class IpPoolsTests(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (
@@ -425,12 +442,12 @@ class TagsTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("tag", req.json())
 
-    # def test_delete_tags(self):
-    #     req = self.client.tags.delete(domain=self.domain,
-    #                                   tag_name=self.tag_name)
-    #
-    #     self.assertEqual(req.status_code, 200)
-    #     self.assertIn("message", req.json())
+    @pytest.mark.skip("it deletes tags and test_tag_get_by_name will fail")
+    def test_delete_tags(self) -> None:
+        req = self.client.tags.delete(domain=self.domain, tag_name=self.tag_name)
+
+        self.assertEqual(req.status_code, 200)
+        self.assertIn("message", req.json())
 
 
 class BouncesTests(unittest.TestCase):
@@ -447,18 +464,16 @@ class BouncesTests(unittest.TestCase):
             "error": "Test error",
         }
 
-        self.bounces_json_data: list[dict[str, str]] = [
-            {
-                "address": "test40@gmail.com",
-                "code": "550",
-                "error": "Test error2312",
-            },
-            {
-                "address": "test50@gmail.com",
-                "code": "550",
-                "error": "Test error",
-            },
-        ]
+        self.bounces_json_data: str = """[{
+        "address": "test121@i.ua",
+        "code": "550",
+        "error": "Test error2312"
+    },
+        {
+            "address": "test122@gmail.com",
+            "code": "550",
+            "error": "Test error"
+        }]"""
 
     def test_bounces_get(self) -> None:
         req = self.client.bounces.get(domain=self.domain)
@@ -480,13 +495,15 @@ class BouncesTests(unittest.TestCase):
         self.assertIn("address", req.json())
 
     def test_bounces_create_json(self) -> None:
-        req = self.client.bounces.create(
-            data=self.bounces_json_data,
-            domain=self.domain,
-            headers="application/json",
-        )
-        self.assertEqual(req.status_code, 200)
-        self.assertIn("message", req.json())
+        json_data = json.loads(self.bounces_json_data)
+        for address in json_data:
+            req = self.client.bounces.create(
+                data=address,
+                domain=self.domain,
+                headers={"Content-type": "application/json"},
+            )
+            self.assertEqual(req.status_code, 200)
+            self.assertIn("message", req.json())
 
     def test_bounces_delete_single(self) -> None:
         self.client.bounces.create(data=self.bounces_data, domain=self.domain)
@@ -516,21 +533,19 @@ class UnsubscribesTest(unittest.TestCase):
             "tag": "unsub_test_tag",
         }
 
-        self.unsub_json_data: list[dict[str, str | list[str]]] = [
-            {
+        self.unsub_json_data: str = """[{
                 "address": "test1@gmail.com",
                 "tags": ["some tag"],
-                "error": "Test error2312",
+                "error": "Test error2312"
             },
             {
                 "address": "test2@gmail.com",
                 "code": ["*"],
-                "error": "Test error",
+                "error": "Test error"
             },
             {
-                "address": "test3@gmail.com",
-            },
-        ]
+                "address": "test3@gmail.com"
+            }]"""
 
     def test_unsub_create(self) -> None:
         req = self.client.unsubscribes.create(data=self.unsub_data, domain=self.domain)
@@ -551,14 +566,16 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertIn("address", req.json())
 
     def test_unsub_create_multiple(self) -> None:
-        req = self.client.unsubscribes.create(
-            data=self.unsub_json_data,
-            domain=self.domain,
-            headers="application/json",
-        )
+        json_data = json.loads(self.unsub_json_data)
+        for address in json_data:
+            req = self.client.unsubscribes.create(
+                data=address,
+                domain=self.domain,
+                headers={"Content-type": "application/json"},
+            )
 
-        self.assertEqual(req.status_code, 200)
-        self.assertIn("message", req.json())
+            self.assertEqual(req.status_code, 200)
+            self.assertIn("message", req.json())
 
     def test_unsub_delete(self) -> None:
         req = self.client.bounces.delete(
@@ -589,16 +606,13 @@ class ComplaintsTest(unittest.TestCase):
             "tag": "compl_test_tag",
         }
 
-        self.compl_json_data: list[dict[str, str | list[str]]] = [
-            {
+        self.compl_json_data: str = """[{
                 "address": "test1@gmail.com",
                 "tags": ["some tag"],
-                "error": "Test error2312",
+                "error": "Test error2312"
             },
             {
-                "address": "test3@gmail.com",
-            },
-        ]
+                "address": "test3@gmail.com"}]"""
 
     def test_compl_create(self) -> None:
         req = self.client.complaints.create(data=self.compl_data, domain=self.domain)
@@ -621,14 +635,16 @@ class ComplaintsTest(unittest.TestCase):
         self.assertIn("address", req.json())
 
     def test_compl_create_multiple(self) -> None:
-        req = self.client.complaints.create(
-            data=self.compl_json_data,
-            domain=self.domain,
-            headers="application/json",
-        )
+        json_data = json.loads(self.compl_json_data)
+        for address in json_data:
+            req = self.client.complaints.create(
+                data=address,
+                domain=self.domain,
+                headers={"Content-type": "application/json"},
+            )
 
-        self.assertEqual(req.status_code, 200)
-        self.assertIn("message", req.json())
+            self.assertEqual(req.status_code, 200)
+            self.assertIn("message", req.json())
 
     def test_compl_delete_single(self) -> None:
         self.client.complaints.create(
@@ -723,47 +739,117 @@ class RoutesTest(unittest.TestCase):
             "priority": 2,
         }
 
+    # 'Routes quota (1) is exceeded for a free plan
     def test_routes_create(self) -> None:
+        params = {"skip": 0, "limit": 1}
+        req1 = self.client.routes.get(domain=self.domain, filters=params)
+        self.client.routes.delete(
+            domain=self.domain,
+            route_id=req1.json()["items"][0]["id"],
+        )
         req = self.client.routes.create(domain=self.domain, data=self.routes_data)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
     def test_routes_get_all(self) -> None:
-        self.client.routes.create(domain=self.domain, data=self.routes_data)
-        req = self.client.routes.get(domain=self.domain, filters=self.routes_params)
+        params = {"skip": 0, "limit": 1}
+        req1 = self.client.routes.get(domain=self.domain, filters=params)
+        #  IndexError: list index out of range
+        if len(req1.json()["items"]) > 0:
+            self.client.routes.delete(
+                domain=self.domain,
+                route_id=req1.json()["items"][0]["id"],
+            )
+            self.client.routes.create(domain=self.domain, data=self.routes_data)
+            req = self.client.routes.get(domain=self.domain, filters=self.routes_params)
+        else:
+            self.client.routes.create(domain=self.domain, data=self.routes_data)
+            req = self.client.routes.get(domain=self.domain, filters=self.routes_params)
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("items", req.json())
 
     def test_get_route_by_id(self) -> None:
-        req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
-        self.client.routes.create(domain=self.domain, data=self.routes_data)
-        req = self.client.routes.get(
-            domain=self.domain,
-            route_id=req_post.json()["route"]["id"],
-        )
+        params = {"skip": 0, "limit": 1}
+        req1 = self.client.routes.get(domain=self.domain, filters=params)
+        if len(req1.json()["items"]) > 0:
+            self.client.routes.delete(
+                domain=self.domain,
+                route_id=req1.json()["items"][0]["id"],
+            )
+
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+            self.client.routes.create(domain=self.domain, data=self.routes_data)
+            req = self.client.routes.get(
+                domain=self.domain, route_id=req_post.json()["route"]["id"]
+            )
+        else:
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+            self.client.routes.create(domain=self.domain, data=self.routes_data)
+            req = self.client.routes.get(
+                domain=self.domain, route_id=req_post.json()["route"]["id"]
+            )
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("route", req.json())
 
     def test_routes_put(self) -> None:
-        req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
-        req = self.client.routes.put(
-            domain=self.domain,
-            data=self.routes_put_data,
-            route_id=req_post.json()["route"]["id"],
-        )
+        params = {"skip": 0, "limit": 1}
+        req1 = self.client.routes.get(domain=self.domain, filters=params)
+        if len(req1.json()["items"]) > 0:
+            self.client.routes.delete(
+                domain=self.domain,
+                route_id=req1.json()["items"][0]["id"],
+            )
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+            req = self.client.routes.put(
+                domain=self.domain,
+                data=self.routes_put_data,
+                route_id=req_post.json()["route"]["id"],
+            )
+        else:
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+            req = self.client.routes.put(
+                domain=self.domain,
+                data=self.routes_put_data,
+                route_id=req_post.json()["route"]["id"],
+            )
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
 
     def test_routes_delete(self) -> None:
-        req_post = self.client.routes.create(domain=self.domain, data=self.routes_data)
-        req = self.client.routes.delete(
-            domain=self.domain,
-            route_id=req_post.json()["route"]["id"],
-        )
+        params = {"skip": 0, "limit": 1}
+        req1 = self.client.routes.get(domain=self.domain, filters=params)
+        if len(req1.json()["items"]) > 0:
+            self.client.routes.delete(
+                domain=self.domain,
+                route_id=req1.json()["items"][0]["id"],
+            )
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+
+            req = self.client.routes.delete(
+                domain=self.domain, route_id=req_post.json()["route"]["id"]
+            )
+        else:
+            req_post = self.client.routes.create(
+                domain=self.domain, data=self.routes_data
+            )
+
+            req = self.client.routes.delete(
+                domain=self.domain, route_id=req_post.json()["route"]["id"]
+            )
 
         self.assertEqual(req.status_code, 200)
         self.assertIn("message", req.json())
@@ -901,7 +987,10 @@ class MailingListsTest(unittest.TestCase):
             address=f"python_sdk@{self.domain}",
         )
         self.assertEqual(req.status_code, 200)
+        # Recreate the mailing list so the other member lists tests succeed
+        self.client.lists.create(domain=self.domain, data=self.mailing_lists_data)
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_create(self) -> None:
         req = self.client.lists.create(
             domain=self.domain,
@@ -912,6 +1001,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 202)
         self.assertIn("message", req.json())
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_get(self) -> None:
         req = self.client.lists.get(
             domain=self.domain,
@@ -922,6 +1012,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("id", req.json())
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_delete(self) -> None:
         self.client.lists.create(
             domain=self.domain,
@@ -1168,6 +1259,9 @@ class TemplatesTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
 
 
+@pytest.mark.skip(
+    "Email Validation is only available through Mailgun paid plans, see https://www.mailgun.com/pricing/"
+)
 class EmailValidationTest(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (
@@ -1217,6 +1311,9 @@ class EmailValidationTest(unittest.TestCase):
         self.assertIn("jobs", req.json())
 
 
+@pytest.mark.skip(
+    "Inbox Placement is only available through Mailgun Optimize plans, see https://help.mailgun.com/hc/en-us/articles/360034702773-Inbox-Placement"
+)
 class InboxPlacementTest(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (

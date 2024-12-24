@@ -3,8 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-# TODO: Move tests to the 'tests' folder
-include = ["mailgun", "mailgun.handlers", "mailgun.*", "tests.py"]
+include = ["mailgun", "mailgun.handlers", "mailgun.*", "tests"]
 
 [tool.setuptools.package-data]
 mailgun = ["py.typed", "*.pyi"]
@@ -195,7 +194,7 @@ select = ["ALL"]
 
 external = ["DOC", "PLR"]
 
-exclude = ["mailgun/examples/*", "tests.py"]
+exclude = ["mailgun/examples/*", "tests"]
 
 #extend-select = ["W", "N", "UP", "B", "A", "C4", "PT", "SIM", "PD", "PLE", "RUF"]
 # Never enforce `E501` (line length violations).
@@ -283,7 +282,7 @@ match = ".*.py"
 match_dir = '^examples/'
 
 [tool.flake8]
-exclude = ["mailgun/examples/*", "tests.py"]
+exclude = ["mailgun/examples/*", "tests"]
 ignore = ['E501']
 extend-ignore = "W503"
 per-file-ignores = [
@@ -418,7 +417,7 @@ omit = [
 ]
 
 [tool.coverage.paths]
-tests = ["tests.py"]
+tests = ["tests"]
 
 [tool.coverage.report]
 exclude_lines = [
