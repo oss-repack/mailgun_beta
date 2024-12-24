@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import os
+import string
 import unittest
+import random
 from typing import Any
 
 import pytest
@@ -39,11 +41,10 @@ class MessagesTests(unittest.TestCase):
 
 
 class DomainTests(unittest.TestCase):
-    """All the tests of this part will work only on fresh setup, or you have to change self.test_domain variable every time you're running this again.
+    """All the tests of this part will work only on fresh setup, or if you change self.test_domain variable every time you're running this again.
 
     It's happening because domain name is not deleting permanently after API call, so every new create will cause an error,
-    as that domain is still exists. Maybe in this case it's good to implement something like random name
-    generator to avoid this problems.
+    as that domain is still exists. To avoid the problems we use a random domain name generator.
     """
 
     def setUp(self) -> None:
@@ -53,7 +54,10 @@ class DomainTests(unittest.TestCase):
         )
         self.client: Client = Client(auth=self.auth)
         self.domain: str = os.environ["DOMAIN"]
-        self.test_domain: str = "mailgun.wrapper.test2"
+        random_domain_name = "".join(
+            random.choice(string.ascii_lowercase + string.digits) for _ in range(10)
+        )
+        self.test_domain: str = f"mailgun.wrapper.{random_domain_name}"
         self.post_domain_data: dict[str, str] = {
             "name": self.test_domain,
         }
@@ -94,6 +98,11 @@ class DomainTests(unittest.TestCase):
         self.put_dkim_selector_data: dict[str, str] = {
             "dkim_selector": "s",
         }
+
+    def tearDown(self) -> None:
+        # We should be confident that the test domain has been deleted after DomainTests are complete,
+        # otherwise, test_delete_domain and test_verify_domain will fail with a new run of tests
+        self.client.domains.delete(domain=self.test_domain)
 
     def test_get_domain_list(self) -> None:
         req = self.client.domainlist.get(domain=self.domain)
