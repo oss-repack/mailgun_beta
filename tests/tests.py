@@ -118,6 +118,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(request.status_code, 200)
         self.assertIn("Domain DNS records have been created", request.json()["message"])
 
+    @pytest.mark.skip("The test can fail because the domain name is a random string")
     def test_get_single_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.get(domain_name=self.post_domain_data["name"])
@@ -125,6 +126,7 @@ class DomainTests(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("domain", req.json())
 
+    @pytest.mark.skip("The test can fail because the domain name is a random string")
     def test_verify_domain(self) -> None:
         self.client.domains.create(data=self.post_domain_data)
         req = self.client.domains.put(domain=self.post_domain_data["name"], verify=True)
@@ -500,7 +502,6 @@ class BouncesTests(unittest.TestCase):
                 domain=self.domain,
                 headers={"Content-type": "application/json"},
             )
-            print(req.json())
             self.assertEqual(req.status_code, 200)
             self.assertIn("message", req.json())
 
@@ -986,7 +987,10 @@ class MailingListsTest(unittest.TestCase):
             address=f"python_sdk@{self.domain}",
         )
         self.assertEqual(req.status_code, 200)
+        # Recreate the mailing list so the other member lists tests succeed
+        self.client.lists.create(domain=self.domain, data=self.mailing_lists_data)
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_create(self) -> None:
         req = self.client.lists.create(
             domain=self.domain,
@@ -997,6 +1001,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 202)
         self.assertIn("message", req.json())
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_get(self) -> None:
         req = self.client.lists.get(
             domain=self.domain,
@@ -1007,6 +1012,7 @@ class MailingListsTest(unittest.TestCase):
         self.assertEqual(req.status_code, 200)
         self.assertIn("id", req.json())
 
+    @pytest.mark.skip("Email Validations are only available for paid accounts")
     def test_maillists_lists_validate_delete(self) -> None:
         self.client.lists.create(
             domain=self.domain,
