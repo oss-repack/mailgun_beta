@@ -221,17 +221,18 @@ def add_multiple_complaints() -> None:
     POST /<domain>/complaints, Content-Type: application/json
     :return:
     """
-    data = [
-        {
+    data = """[{
             "address": "alice1@example.com",
             "tags": ["some tag"],
-            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC",
+            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC"
         },
-        {"address": "carol1@example.com"},
-    ]
-
-    req = client.complaints.create(data=data, domain=domain, headers="application/json")
-    print(req.json())
+        {"address": "carol1@example.com"}]"""
+    json_data = json.loads(data)
+    for address in json_data:
+        req = client.complaints.create(
+            data=address, domain=domain, headers={"Content-type": "application/json"}
+        )
+        print(req.json())
 
 
 def import_complaint_list() -> None:
@@ -332,5 +333,4 @@ def delete_single_whitelist() -> None:
 
 
 if __name__ == "__main__":
-    create_multiple_unsub()
-    # delete_single_whitelist()
+    delete_single_whitelist()
