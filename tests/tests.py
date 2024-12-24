@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import string
 import unittest
@@ -461,18 +462,16 @@ class BouncesTests(unittest.TestCase):
             "error": "Test error",
         }
 
-        self.bounces_json_data: list[dict[str, str]] = [
-            {
-                "address": "test40@gmail.com",
-                "code": "550",
-                "error": "Test error2312",
-            },
-            {
-                "address": "test50@gmail.com",
-                "code": "550",
-                "error": "Test error",
-            },
-        ]
+        self.bounces_json_data: str = """[{
+        "address": "test121@i.ua",
+        "code": "550",
+        "error": "Test error2312"
+    },
+        {
+            "address": "test122@gmail.com",
+            "code": "550",
+            "error": "Test error"
+        }]"""
 
     def test_bounces_get(self) -> None:
         req = self.client.bounces.get(domain=self.domain)
@@ -494,13 +493,16 @@ class BouncesTests(unittest.TestCase):
         self.assertIn("address", req.json())
 
     def test_bounces_create_json(self) -> None:
-        req = self.client.bounces.create(
-            data=self.bounces_json_data,
-            domain=self.domain,
-            headers="application/json",
-        )
-        self.assertEqual(req.status_code, 200)
-        self.assertIn("message", req.json())
+        json_data = json.loads(self.bounces_json_data)
+        for address in json_data:
+            req = self.client.bounces.create(
+                data=address,
+                domain=self.domain,
+                headers={"Content-type": "application/json"},
+            )
+            print(req.json())
+            self.assertEqual(req.status_code, 200)
+            self.assertIn("message", req.json())
 
     def test_bounces_delete_single(self) -> None:
         self.client.bounces.create(data=self.bounces_data, domain=self.domain)

@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 
@@ -45,12 +46,22 @@ def add_multiple_bounces() -> None:
     POST /<domain>/bounces, Content-Type: application/json
     :return:
     """
-    data = [
-        {"address": "test121@i.ua", "code": "550", "error": "Test error2312"},
-        {"address": "test122@gmail.com", "code": "550", "error": "Test error"},
-    ]
-    req = client.bounces.create(data=data, domain=domain, headers="application/json")
-    print(req.json())
+    data = """[{
+        "address": "test121@i.ua",
+        "code": "550",
+        "error": "Test error2312"
+    },
+        {
+            "address": "test122@gmail.com",
+            "code": "550",
+            "error": "Test error"
+        }]"""
+    json_data = json.loads(data)
+    for address in json_data:
+        req = client.bounces.create(
+            data=address, domain=domain, headers={"Content-type": "application/json"}
+        )
+        print(req.json())
 
 
 def import_bounce_list() -> None:
@@ -278,7 +289,7 @@ def create_whitelist() -> None:
     POST /<domain>/whitelists
     :return:
     """
-    data = {"address": "bob@gmail.com", "tag": "whitel_test"}
+    data = {"address": "test122@gmail.com", "tag": "whitel_test"}
     req = client.whitelists.create(data=data, domain=domain)
     print(req.json())
 
