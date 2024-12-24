@@ -64,7 +64,7 @@ repos:
     hooks:
       - id: codespell
         args: [--write]
-        exclude: ^tests.py
+        exclude: ^tests
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.30.0
@@ -100,8 +100,8 @@ repos:
           - radon
           - flake8-docstrings
           - Flake8-pyproject
-        # TODO: Remove tests.py when we will be ready to process tests
-        exclude: ^tests.py
+        # TODO: Remove tests when we will be ready to process tests
+        exclude: ^tests
 
   - repo: https://github.com/PyCQA/pylint
     rev: v3.3.2
