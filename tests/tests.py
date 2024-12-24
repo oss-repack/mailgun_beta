@@ -236,6 +236,9 @@ class DomainTests(unittest.TestCase):
         self.assertIn("message", request.json())
 
 
+@pytest.mark.skip(
+    "Dedicated IPs should be enabled for the domain, see https://app.mailgun.com/settings/dedicated-ips"
+)
 class IpTests(unittest.TestCase):
     def setUp(self) -> None:
         self.auth: tuple[str, str] = (
@@ -259,7 +262,6 @@ class IpTests(unittest.TestCase):
         self.assertIn("ip", req.json())
         self.assertEqual(req.status_code, 200)
 
-    @pytest.mark.skip(reason="TODO: check this test")
     def test_create_ip(self) -> None:
         request = self.client.domains_ips.create(domain=self.domain, data=self.ip_data)
         self.assertEqual("success", request.json()["message"])
