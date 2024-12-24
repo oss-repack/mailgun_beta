@@ -532,21 +532,19 @@ class UnsubscribesTest(unittest.TestCase):
             "tag": "unsub_test_tag",
         }
 
-        self.unsub_json_data: list[dict[str, str | list[str]]] = [
-            {
+        self.unsub_json_data: str = """[{
                 "address": "test1@gmail.com",
                 "tags": ["some tag"],
-                "error": "Test error2312",
+                "error": "Test error2312"
             },
             {
                 "address": "test2@gmail.com",
                 "code": ["*"],
-                "error": "Test error",
+                "error": "Test error"
             },
             {
-                "address": "test3@gmail.com",
-            },
-        ]
+                "address": "test3@gmail.com"
+            }]"""
 
     def test_unsub_create(self) -> None:
         req = self.client.unsubscribes.create(data=self.unsub_data, domain=self.domain)
@@ -567,14 +565,16 @@ class UnsubscribesTest(unittest.TestCase):
         self.assertIn("address", req.json())
 
     def test_unsub_create_multiple(self) -> None:
-        req = self.client.unsubscribes.create(
-            data=self.unsub_json_data,
-            domain=self.domain,
-            headers="application/json",
-        )
+        json_data = json.loads(self.unsub_json_data)
+        for address in json_data:
+            req = self.client.unsubscribes.create(
+                data=address,
+                domain=self.domain,
+                headers={"Content-type": "application/json"},
+            )
 
-        self.assertEqual(req.status_code, 200)
-        self.assertIn("message", req.json())
+            self.assertEqual(req.status_code, 200)
+            self.assertIn("message", req.json())
 
     def test_unsub_delete(self) -> None:
         req = self.client.bounces.delete(

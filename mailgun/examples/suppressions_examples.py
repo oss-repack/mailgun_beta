@@ -136,23 +136,23 @@ def create_multiple_unsub() -> None:
     POST /<domain>/unsubscribes, Content-Type: application/json
     :return:
     """
-    data = [
-        {
+    data = """[{
             "address": "alice@example.com",
             "tags": ["some tag"],
-            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC",
+            "created_at": "Thu, 13 Oct 2011 18:02:00 UTC"
         },
         {
             "address": "bob@example.com",
-            "tags": ["*"],
+            "tags": ["*"]
         },
-        {"address": "carol@example.com"},
-    ]
+        {"address": "carol@example.com"}]"""
 
-    req = client.unsubscribes.create(
-        data=data, domain=domain, headers="application/json"
-    )
-    print(req.json())
+    json_data = json.loads(data)
+    for address in json_data:
+        req = client.unsubscribes.create(
+            data=address, domain=domain, headers={"Content-type": "application/json"}
+        )
+        print(req.json())
 
 
 def import_list_unsubs() -> None:
@@ -332,4 +332,5 @@ def delete_single_whitelist() -> None:
 
 
 if __name__ == "__main__":
-    delete_single_whitelist()
+    create_multiple_unsub()
+    # delete_single_whitelist()
