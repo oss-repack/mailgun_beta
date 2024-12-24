@@ -5,6 +5,7 @@ from mailgun.client import Client
 
 key: str = os.environ["APIKEY"]
 domain: str = os.environ["DOMAIN"]
+mailing_list_address: str = os.environ["MAILLIST_ADDRESS"]
 
 client: Client = Client(auth=("api", key))
 
@@ -90,9 +91,7 @@ def get_lists_members() -> None:
     GET /lists/<address>/members/pages
     :return:
     """
-    req = client.lists_members_pages.get(
-        domain=domain, address="everyone@mailgun.zeefarmer.com"
-    )
+    req = client.lists_members_pages.get(domain=domain, address=mailing_list_address)
     print(req.json())
 
 
@@ -103,8 +102,8 @@ def get_member_from_list() -> None:
     """
     req = client.lists_members.get(
         domain=domain,
-        address="everyone@mailgun.zeefarmer.com",
-        member_address="zerreissen@hotmail.com",
+        address=mailing_list_address,
+        member_address="everyone@zeefarmer.mailgun.com",
     )
 
     print(req.json())
@@ -123,7 +122,7 @@ def post_member_list() -> None:
         "vars": '{"age": 26}',
     }
     req = client.lists_members.create(
-        domain=domain, address="everyone@mailgun.zeefarmer.com", data=data
+        domain=domain, address=mailing_list_address, data=data
     )
     print(req.json())
 
@@ -143,7 +142,7 @@ def put_member_list() -> None:
 
     req = client.lists_members.put(
         domain=domain,
-        address="everyone@mailgun.zeefarmer.com",
+        address=mailing_list_address,
         data=data,
         member_address="bar2@example.com",
     )
@@ -164,21 +163,21 @@ def post_members_json() -> None:
 
     req = client.lists_members.create(
         domain=domain,
-        address="everyone@mailgun.zeefarmer.com",
+        address=mailing_list_address,
         data=data,
         multiple=True,
     )
     print(req.json())
 
 
-def delete_members_list() -> None:
+def delete_mailing_list_member() -> None:
     """
     DELETE /lists/<address>/members/<member_address>
     :return:
     """
     req = client.lists_members.delete(
         domain=domain,
-        address="everyone@mailgun.zeefarmer.com",
+        address=mailing_list_address,
         member_address="bob2@example.com",
     )
     print(req.json())
